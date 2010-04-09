@@ -34,12 +34,12 @@ struct _Messages
 
 static _Messages _GossipMessage[]=
 {
-{"Вы готовы пройти Испытание Крестоносца?",GOSSIP_ACTION_INFO_DEF+1,false,TYPE_BEASTS}, //
-{"Вы готовы к следующему этапу?",GOSSIP_ACTION_INFO_DEF+2,false,TYPE_JARAXXUS},  //
-{"Вы готовы драться с чемпионами Серебряного авангарда?",GOSSIP_ACTION_INFO_DEF+3,false,TYPE_CRUSADERS}, //
-{"Вы готовы к следующему этапу?",GOSSIP_ACTION_INFO_DEF+4,false,TYPE_VALKIRIES}, //
-{"Вы готовы продолжить бой с Ануб-Араком?",GOSSIP_ACTION_INFO_DEF+5,false,TYPE_ANUBARAK}, //
-{"Не надо сюда тыкать. На сегодня арена закрыта.",GOSSIP_ACTION_INFO_DEF+6,true,TYPE_ANUBARAK}, //
+{"¿Estas listo para la Prueba de Cruzado?",GOSSIP_ACTION_INFO_DEF+1,false,TYPE_BEASTS}, //
+{"¿Estas listo para la proxima etapa?",GOSSIP_ACTION_INFO_DEF+2,false,TYPE_JARAXXUS},  //
+{"¿Estás listo para combatir contra los Campeones de la Vanguardia de Plata?",GOSSIP_ACTION_INFO_DEF+3,false,TYPE_CRUSADERS}, //
+{"¿Estas listo para la proxima etapa?",GOSSIP_ACTION_INFO_DEF+4,false,TYPE_VALKIRIES}, //
+{"¿Estas listo para continuar la batalla con Anub-Arak?",GOSSIP_ACTION_INFO_DEF+5,false,TYPE_ANUBARAK}, //
+{"La arena esta hoy cerrada.",GOSSIP_ACTION_INFO_DEF+6,true,TYPE_ANUBARAK}, //
 };
 enum
 {

@@ -6,6 +6,10 @@
 
 //battlegrounds
 extern void AddSC_battleground();
+extern void AddSC_boss_balinda();                       // alterac valley
+extern void AddSC_boss_drekthar();
+extern void AddSC_boss_galvangar();
+extern void AddSC_boss_vanndar();
 
 //custom
 extern void AddSC_npc_arena_honor();

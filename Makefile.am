@@ -52,6 +52,10 @@ include/sc_boss_spell_worker.h \
 scripts/battlegrounds/battleground.cpp \
 scripts/custom/npc_arena_honor.cpp \
 scripts/custom/teleguy.cpp \
+scripts/battlegrounds/alterac_valley/boss_balinda.cpp \
+scripts/battlegrounds/alterac_valley/boss_drekthar.cpp \
+scripts/battlegrounds/alterac_valley/boss_galvangar.cpp \
+scripts/battlegrounds/alterac_valley/boss_vanndar.cpp \
 scripts/eastern_kingdoms/alterac_mountains.cpp \
 scripts/eastern_kingdoms/arathi_highlands.cpp \
 scripts/eastern_kingdoms/blasted_lands.cpp \

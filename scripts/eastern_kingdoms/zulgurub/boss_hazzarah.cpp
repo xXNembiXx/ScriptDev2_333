@@ -81,7 +81,7 @@ struct MANGOS_DLL_DECL boss_hazzarahAI : public ScriptedAI
             //We will just use one model for the beginning
             for(int i = 0; i < 3; ++i)
             {
-                if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0)) 
+                if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0)) 
                 { 
                     if (Creature* pIllusion = m_creature->SummonCreature(NPC_NIGHTMARE_ILLUSION, pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 30000)) 
                         pIllusion->AI()->AttackStart(pTarget); 

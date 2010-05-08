@@ -26,6 +26,7 @@ EndScriptData
 #include "escort_ai.h"
 #include "ObjectMgr.h"
 #include "GameEventMgr.h"
+#include "Spell.h"
 
 /* ContentData
 npc_air_force_bots       80%    support for misc (invisible) guard bots in areas where player allowed to fly. Summon guards after a preset time if tagged by spell

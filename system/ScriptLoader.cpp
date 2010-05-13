@@ -680,16 +680,16 @@ void AddScripts()
     AddSC_wetlands();
 
     //kalimdor
-    AddSC_instance_blackfathom_deeps();                     //blackfathom_deeps
-    AddSC_boss_aeonus();                                    //COT, dark_portal
+    AddSC_instance_blackfathom_deeps();                     // blackfathom deeps
+    AddSC_boss_aeonus();                                    // Opening the Dark Portal
     AddSC_boss_chrono_lord_deja();
     AddSC_boss_temporus();
     AddSC_dark_portal();
     AddSC_instance_dark_portal();
-    AddSC_hyjal();                                          //COT, hyjal
+    AddSC_hyjal();                                          // Battle of Mount Hyjal
     AddSC_boss_archimonde();
     AddSC_instance_mount_hyjal();
-    AddSC_boss_captain_skarloc();                           //COT, old_hillsbrad
+    AddSC_boss_captain_skarloc();                           // Escape from Durnholde Keep
     AddSC_boss_epoch_hunter();
     AddSC_boss_lieutenant_drake();
     AddSC_instance_old_hillsbrad();

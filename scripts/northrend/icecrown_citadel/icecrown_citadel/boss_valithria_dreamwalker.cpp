@@ -86,7 +86,7 @@ struct MANGOS_DLL_DECL boss_valithria_dreamwalkerAI : public ScriptedAI
     void Reset()
     {
         if(!pInstance) return;
-        m_creature->SetHealth(m_creature->GetMaxHealth()/2);
+        m_creature->SetHealth(m_creature->GetMaxHealth()/2.0f);
         pInstance->SetData(TYPE_VALITHRIA, NOT_STARTED);
         bsw->resetTimers();
         m_creature->SetRespawnDelay(7*DAY);
@@ -221,7 +221,7 @@ struct MANGOS_DLL_DECL boss_valithria_dreamwalkerAI : public ScriptedAI
                      intro = true;
                      bsw->doCast(SPELL_IMMUNITY);
                      }
-        if (!battlestarted && pWho->isAlive() && pWho->IsWithinDistInMap(m_creature, 15.0f))  {
+        if (!battlestarted && pWho->isAlive() && pWho->IsWithinDistInMap(m_creature, 40.0f))  {
                      DoScriptText(-1631401,m_creature,pWho);
                      battlestarted = true;
                      pInstance->SetData(TYPE_VALITHRIA, IN_PROGRESS);

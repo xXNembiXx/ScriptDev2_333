@@ -1717,123 +1717,6 @@ bool GossipSelect_npc_locksmith(Player* pPlayer, Creature* pCreature, uint32 uiS
     return true;
 }
 
-/*######
-## npc_mirror_image
-######*/
-
-struct MANGOS_DLL_DECL npc_mirror_imageAI : public ScriptedAI
-{
-    npc_mirror_imageAI(Creature* pCreature) : ScriptedAI(pCreature) {Reset();}
-
-    uint32 m_uiFrostboltTimer;
-    uint32 m_uiFireblastTimer;
-    bool inCombat;
-    Unit *owner;
-
-    void Reset() 
-    {
-     owner = m_creature->GetOwner();
-     if (!owner) return;
-
-     m_creature->SetLevel(owner->getLevel());
-     m_creature->setFaction(owner->getFaction());
-
-     if (owner && !m_creature->hasUnitState(UNIT_STAT_FOLLOW))
-        {
-            m_creature->GetMotionMaster()->Clear(false);
-            m_creature->GetMotionMaster()->MoveFollow(owner, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
-        }
-        // Inherit Master's Threat List (not yet implemented)
-        //owner->CastSpell((Unit*)NULL, 58838, true);
-        // here mirror image casts on summoner spell (not present in client dbc) 49866
-        // here should be auras (not present in client dbc): 35657, 35658, 35659, 35660 selfcasted by mirror images (stats related?)
-        // Clone Me!
-        m_uiFrostboltTimer = 0;
-        m_uiFireblastTimer = 0;
-        inCombat = false;
-        uint32 equipmain = 0;
-        uint32 equipoffhand = 0;
-        // Add visible weapon
-        if (Item const * item = ((Player *)owner)->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND))
-            m_creature->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID, item->GetProto()->ItemId);
-    }
-
-    void AttackStart(Unit* pWho)
-    {
-      if (!pWho) return;
-
-      if (m_creature->Attack(pWho, true))
-        {
-            m_creature->clearUnitState(UNIT_STAT_FOLLOW);
-            // TMGs call CreatureRelocation which via MoveInLineOfSight can call this function
-            // thus with the following clear the original TMG gets invalidated and crash, doh
-            // hope it doesn't start to leak memory without this :-/
-            //i_pet->Clear();
-//            m_creature->GetMotionMaster()->MoveChase(pWho);
-            m_creature->SetInCombatWith(pWho);
-            m_creature->AddThreat(pWho, 100.0f);
-            DoStartMovement(pWho, 20.0f);
-            inCombat = true;
-        }
-    }
-
-    void EnterEvadeMode()
-    {
-     if (m_creature->IsInEvadeMode() || !m_creature->isAlive())
-          return;
-
-        inCombat = false;
-
-        m_creature->AttackStop();
-        m_creature->CombatStop(true);
-        if (owner && !m_creature->hasUnitState(UNIT_STAT_FOLLOW))
-        {
-            m_creature->GetMotionMaster()->Clear(false);
-            m_creature->GetMotionMaster()->MoveFollow(owner, PET_FOLLOW_DIST,PET_FOLLOW_ANGLE);
-        }
-    }
-
-    void UpdateAI(const uint32 diff)
-    {
-        if (owner && !(m_creature->HasAura(45204)))
-            m_creature->CastSpell(m_creature, 45204, true, NULL, NULL, owner->GetGUID());
-
-        if (owner && !(m_creature->HasAura(58836)))
-                 m_creature->CastSpell(m_creature, 58836, true, NULL, NULL, owner->GetGUID());
-
-        if (!m_creature->getVictim())
-            if (owner && owner->getVictim())
-                m_creature->AI()->AttackStart(owner->getVictim());
-
-        if (inCombat && !m_creature->getVictim())
-        {
-            EnterEvadeMode();
-            return;
-        }
-
-        if (!inCombat) return;
-
-        if (m_uiFrostboltTimer <= diff)
-        {
-            DoCast(m_creature->getVictim(),59638);
-            m_uiFrostboltTimer = 3100;
-        }else m_uiFrostboltTimer -= diff;
-
-        if (m_uiFireblastTimer <= diff)
-        {
-            DoCast(m_creature->getVictim(),59637);
-            m_uiFireblastTimer = 6000;
-        }else m_uiFireblastTimer -= diff;
-
-        DoMeleeAttackIfReady();
-    }
-};
-
-CreatureAI* GetAI_npc_mirror_image(Creature* pCreature)
-{
-    return new npc_mirror_imageAI(pCreature);
-};
-
 /*####
  ## npc_snake_trap_serpents - Summonned snake id are 19921 and 19833
  ####*/
@@ -2059,11 +1942,6 @@ void AddSC_npcs_special()
     newscript->Name = "npc_locksmith";
     newscript->pGossipHello =  &GossipHello_npc_locksmith;
     newscript->pGossipSelect = &GossipSelect_npc_locksmith;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_mirror_image";
-    newscript->GetAI = &GetAI_npc_mirror_image;
     newscript->RegisterSelf();
 
     newscript = new Script;

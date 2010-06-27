@@ -44,7 +44,6 @@ npc_rogue_trainer        80%    Scripted trainers, so they are able to offer ite
 npc_sayge               100%    Darkmoon event fortune teller, buff player based on answers given
 npc_tabard_vendor        50%    allow recovering quest related tabards, achievement related ones need core support
 npc_locksmith            75%    list of keys needs to be confirmed
-mob_mirror_image         60%    AI for mage spell Mirror Image
 EndContentData */
 
 /*########
@@ -1718,124 +1717,6 @@ bool GossipSelect_npc_locksmith(Player* pPlayer, Creature* pCreature, uint32 uiS
     return true;
 }
 
-/*########
-# mob_mirror_image AI
-#########*/
-
-enum MirrorImage
-{
-    SPELL_FROSTBOLT = 59638,
-    SPELL_FIREBLAST = 59637
-};
-
-struct MANGOS_DLL_DECL mob_mirror_imageAI : public ScriptedAI
-{
-    mob_mirror_imageAI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        bLocked = false;
-        Reset();
-    }
-    uint64 m_uiCreatorGUID;
-    uint32 m_uiFrostboltTimer;
-    uint32 m_uiFireBlastTimer;
-    float fDist;
-    float fAngle;
-    bool bLocked;
-
-    void Reset()
-    {
-        m_creature->SetUInt32Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_NONE);
-        m_creature->SetUInt32Value(UNIT_FIELD_BYTES_0, 2048);
-        m_creature->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
-        m_creature->SetUInt32Value(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE);
-
-        m_uiFrostboltTimer = 1000;
-        m_uiFireBlastTimer = urand(4500, 6000);
-    }
-    void AttackStart(Unit *pWho)
-    {
-        if (m_creature->Attack(pWho, true))
-        {
-            m_creature->AddThreat(pWho);
-            m_creature->SetInCombatWith(pWho);
-            pWho->SetInCombatWith(m_creature);
-            m_creature->GetMotionMaster()->MoveChase(pWho, 35.0f);
-        }
-    }
-
-    void UpdateAI(const uint32 uiDiff)
-    {
-        if (!bLocked)
-        {
-            m_uiCreatorGUID = m_creature->GetCreatorGUID();
-            if (Player* pOwner = (Player*)Unit::GetUnit(*m_creature, m_uiCreatorGUID))
-            {
-                fDist = m_creature->GetDistance(pOwner);
-                fAngle = m_creature->GetAngle(pOwner);
-
-                if(pOwner->IsPvP())
-                    m_creature->SetPvP(true);
-                if(pOwner->IsFFAPvP())
-                    m_creature->SetFFAPvP(true);
-
-                pOwner->CastSpell(m_creature, 57507, true); // Not right spell, but it has both auras we need
-            }
-            bLocked = true;
-        }
-
-        Player* pOwner = (Player*)Unit::GetUnit(*m_creature, m_uiCreatorGUID);
-        if (!pOwner || !pOwner->IsInWorld())
-        {
-            m_creature->ForcedDespawn();
-            return;
-        }
-        
-        uint64 targetGUID = 0;
-
-        if (Spell* pSpell = pOwner->GetCurrentSpell(CURRENT_GENERIC_SPELL))
-            targetGUID = pSpell->m_targets.getUnitTargetGUID();
-        else if (pOwner->getVictim())
-            targetGUID = pOwner->getVictim()->GetGUID();
-
-        Unit* pTarget = Unit::GetUnit(*m_creature, targetGUID);
-
-        if (!pTarget || !m_creature->CanInitiateAttack() || !pTarget->isTargetableForAttack() ||
-        !m_creature->IsHostileTo(pTarget) || !pTarget->isInAccessablePlaceFor(m_creature))
-        {
-            if (m_creature->GetMotionMaster()->GetCurrentMovementGeneratorType() != FOLLOW_MOTION_TYPE)
-            {
-                m_creature->InterruptNonMeleeSpells(false);
-                m_creature->GetMotionMaster()->Clear();
-                m_creature->GetMotionMaster()->MoveFollow(pOwner, fDist, fAngle);
-            }
-            return;
-        }
-        //It cant cast spell if target is polymorphed or controled
-        if(pTarget->isCharmed() || pTarget->isFeared() || pTarget->IsPolymorphed())
-        {
-            if(m_creature->IsNonMeleeSpellCasted(false))
-                m_creature->InterruptNonMeleeSpells(false);
-            return;
-        }
-        if (m_uiFrostboltTimer <= uiDiff)
-        {
-            m_creature->CastSpell(pTarget, SPELL_FROSTBOLT, false, NULL, NULL, pOwner->GetGUID());
-            m_uiFrostboltTimer = 3500;
-        } else m_uiFrostboltTimer -= uiDiff;
-
-        if (m_uiFireBlastTimer <= uiDiff)
-        {
-            m_creature->CastSpell(pTarget, SPELL_FIREBLAST, false, NULL, NULL, pOwner->GetGUID());
-            m_uiFireBlastTimer = urand(9000, 12000);
-        } else m_uiFireBlastTimer -= uiDiff;
-    }
-};
-
-CreatureAI* GetAI_mob_mirror_image(Creature* pCreature)
-{
-    return new mob_mirror_imageAI(pCreature);
-}
-
 /*####
  ## npc_snake_trap_serpents - Summonned snake id are 19921 and 19833
  ####*/
@@ -2062,11 +1943,7 @@ void AddSC_npcs_special()
     newscript->pGossipHello =  &GossipHello_npc_locksmith;
     newscript->pGossipSelect = &GossipSelect_npc_locksmith;
     newscript->RegisterSelf();
-	
-	newscript = new Script;
-    newscript->Name = "mob_mirror_image";
-    newscript->GetAI = &GetAI_mob_mirror_image;
-    newscript->RegisterSelf();
+
     newscript = new Script;
     newscript->Name = "npc_snake_trap_serpents";
     newscript->GetAI = &GetAI_npc_snake_trap_serpents;

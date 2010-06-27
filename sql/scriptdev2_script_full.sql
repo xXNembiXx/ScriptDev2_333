@@ -603,7 +603,7 @@ INSERT INTO script_texts (entry,content_default,sound,type,language,emote,commen
 (-1000575,'Together we will fight our way out of here. Are you ready?',0,0,0,0,'Lurgglbr - SAY_START_1'),
 (-1000576,'Then we leave.',0,0,0,0,'Lurgglbr - SAY_START_2'),
 (-1000577,'This is far enough. I can make it on my own from here.',0,0,0,0,'Lurgglbr - SAY_END_1'),
-(-1000578,'Thank You for helping me $c. Please tell the king I am back.',0,0,0,0,'Lurgglbr - SAY_END_2'),
+(-1000578,'Thank you for helping me $r. Please tell the king I am back.',0,0,0,0,'Lurgglbr - SAY_END_2'),
 
 (-1000579,'Insolent fool! You thought to steal Zelemar\'s blood? You shall pay with your own!',0,1,0,0,'Zelemar the Wrathful - Aggro'),
 
@@ -1251,7 +1251,11 @@ INSERT INTO script_texts (entry,content_default,sound,type,language,emote,commen
 
 (-1533143,'An aura of necrotic energy blocks all healing!',0,3,0,0,'Loatheb EMOTE_AURA_BLOCKING'),
 (-1533144,'The power of Necrotic Aura begins to wane!',0,3,0,0,'Loatheb EMOTE_AURA_WANE'),
-(-1533145,'The aura fades away, allowing healing once more!',0,3,0,0,'Loatheb EMOTE_AURA_FADING');
+(-1533145,'The aura fades away, allowing healing once more!',0,3,0,0,'Loatheb EMOTE_AURA_FADING'),
+
+(-1533146,'%s spins her web into a cocoon!',0,3,0,0,'maexxna EMOTE_SPIN_WEB'),
+(-1533147,'Spiderlings appear on the web!',0,3,0,0,'maexxna EMOTE_SPIDERLING'),
+(-1533148,'%s sprays strands of web everywhere!',0,3,0,0,'maexxna EMOTE_SPRAY');
 
 -- -1 534 000 THE BATTLE OF MT. HYJAL
 INSERT INTO script_texts (entry,content_default,sound,type,language,emote,comment) VALUES
@@ -4063,6 +4067,23 @@ INSERT INTO script_waypoint VALUES
 (20129, 24, -8375.42,-4250.41, -205.14,5000, ''),
 (20129, 25, -8375.42,-4250.41, -205.14,5000, '');
 
+DELETE FROM script_waypoint WHERE entry=20415;
+INSERT INTO script_waypoint VALUES 
+(20415, 0, 2488.77, 2184.89, 104.64, 0, ""),
+(20415, 1, 2478.72, 2184.77, 98.58, 0, ""),
+(20415, 2, 2473.52, 2184.71, 99.00, 0, ""),
+(20415, 3, 2453.15, 2184.96, 97.09,4000, ""),
+(20415, 4, 2424.18, 2184.15, 94.11, 0, ""),
+(20415, 5, 2413.18, 2184.15, 93.42, 0, ""),
+(20415, 6, 2402.02, 2183.90, 87.59, 0, ""),
+(20415, 7, 2333.31, 2181.63, 90.03,4000, ""),
+(20415, 8, 2308.73, 2184.34, 92.04, 0, ""),
+(20415, 9, 2303.10, 2196.89, 94.94, 0, ""),
+(20415, 10, 2304.58, 2272.23, 96.67, 0, ""),
+(20415, 11, 2297.09, 2271.40, 95.16, 0, ""),
+(20415, 12, 2297.68, 2266.79, 95.07,4000, ""),
+(20415, 13, 2297.67, 2266.76, 95.07,4000, "");
+
 DELETE FROM script_waypoint WHERE entry=21027;
 INSERT INTO script_waypoint VALUES
 (21027, 0, -2714.697266, 1326.879395, 34.306953, 0, ''),
@@ -4463,7 +4484,6 @@ INSERT INTO script_waypoint VALUES
 (25208,22,4256.81,6230.74,-0.090,0,''),
 (25208,23,4241.09,6217.87,-0.140,0,''),
 (25208,24,4254.66,6205.16,-0.170,0,''),
-(25208,25,4261.82,6186.47,-0.140,30000,'Lurgglbr - final point'),
-(25208,26,4300.55,6140.35,-2.70,0,'');
+(25208,25,4270.07,6188.42,0.059,15000,'Lurgglbr - final point');
 -- EOF
 

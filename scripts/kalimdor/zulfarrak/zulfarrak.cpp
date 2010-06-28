@@ -24,6 +24,14 @@ EndScriptData */
 /* ContentData
 npc_sergeant_bly
 npc_weegli_blastfuse
+go_shallow_grave
+boss_antusul
+npc_servant
+go_gong_of_ghazrilla
+boss_ghazrilla
+boss_velratha
+boss_ruzzlu
+boss_ukorz
 EndContentData */
 
 #include "precompiled.h"
@@ -217,6 +225,451 @@ bool GossipSelect_npc_weegli_blastfuse(Player* pPlayer, Creature* pCreature, uin
     return true;
 }
 
+/*######
+## go_shallow_grave
+######*/
+
+enum
+{
+    ZOMBIE = 7286,
+    DEAD_HERO = 7276,
+    ZOMBIE_CHANCE = 65,
+    DEAD_HERO_CHANCE = 10
+};
+
+bool GOHello_go_shallow_grave(Player* pPlayer, GameObject* pGo)
+{
+    // randomly summon a zombie or dead hero the first time a grave is used
+    if (pGo->GetUseCount() == 0)
+    {
+        uint32 randomchance = urand(0,100);
+        if (randomchance < ZOMBIE_CHANCE)
+            pGo->SummonCreature(ZOMBIE, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 30000);
+        else if ((randomchance-ZOMBIE_CHANCE) < DEAD_HERO_CHANCE)
+            pGo->SummonCreature(DEAD_HERO, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 30000);
+    }
+    pGo->AddUse();
+    return false;
+}
+
+/*######
+## boss_antusul
+######*/
+
+#define SPELL_SUMMON				11894
+#define SPELL_CHAIN_LIGHTNING		2860
+#define SPELL_EARTH_SHOCK			10413
+#define SPELL_FIRE_NOVA				11314
+
+#define SPELL_TOTEM_EARTHGRAB		8376
+#define SPELL_TOTEM_HEALING_WARD	11899
+
+#define SPELL_PETRIFY				11020
+
+struct MANGOS_DLL_DECL boss_antusulAI : public ScriptedAI
+{
+    boss_antusulAI(Creature* pCreature) : ScriptedAI(pCreature) {Reset();}
+
+	uint32 Summon_Timer;
+	uint32 ChainLightning_Timer;
+	uint32 EarthShock_Timer;
+	uint32 FireNova_Timer;
+	uint32 TotemEarthgrab_Timer;
+	uint32 TotemHealing_Timer;
+	uint32 Rand;
+    uint32 RandX;
+    uint32 RandY;
+
+	Creature* Summoned;
+
+    void Reset()
+    {
+		Summon_Timer = 15000;
+		ChainLightning_Timer = 11000;
+		EarthShock_Timer = 20000;
+		FireNova_Timer = 18000;
+		TotemEarthgrab_Timer = 30000;
+		TotemHealing_Timer = 60000;
+	}
+
+    void SummonHounds(Unit* victim)
+    {
+        Rand = rand()%10;
+
+        switch(urand(0, 1))
+        {	
+            case 0: RandX = 0 - Rand; break;
+            case 1: RandX = 0 + Rand; break;
+        }
+
+        Rand = 0;
+        Rand = rand()%10;
+
+        switch(urand(0, 1))
+        {
+            case 0: RandY = 0 - Rand; break;
+            case 1: RandY = 0 + Rand; break;
+        }
+
+        Rand = 0;
+        Summoned = DoSpawnCreature(8156, RandX, RandY, 0, 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);    // Servant of Antu'sul
+
+        if (Summoned)
+            ((CreatureAI*)Summoned->AI())->AttackStart(victim);
+    }
+
+    void UpdateAI(const uint32 diff)
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+        if (ChainLightning_Timer < diff)
+        {
+            DoCast(m_creature->getVictim(), SPELL_CHAIN_LIGHTNING);
+            ChainLightning_Timer = 11000;
+        }else ChainLightning_Timer -= diff;
+
+        if (EarthShock_Timer < diff)
+        {
+			DoCast(m_creature->getVictim(),SPELL_EARTH_SHOCK);
+            EarthShock_Timer = 20000;
+        }else EarthShock_Timer -= diff;
+
+        if (FireNova_Timer < diff)
+        {
+			if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+                DoCast(pTarget, SPELL_FIRE_NOVA);
+            FireNova_Timer = 18000;
+        }else FireNova_Timer -= diff;
+
+        if (TotemEarthgrab_Timer < diff)
+        {
+			if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+                DoCast(pTarget, SPELL_TOTEM_EARTHGRAB);
+            TotemEarthgrab_Timer = 60000;
+        }else TotemEarthgrab_Timer -= diff;
+
+        if (TotemHealing_Timer < diff)
+        {
+			DoCast(m_creature, SPELL_TOTEM_HEALING_WARD);
+            TotemHealing_Timer = 60000;
+        }else TotemHealing_Timer -= diff;
+
+        if (Summon_Timer < diff)
+        {
+		    SummonHounds(m_creature->getVictim());
+			SummonHounds(m_creature->getVictim());
+            Summon_Timer = 15000;
+        }else Summon_Timer -= diff;
+
+		DoMeleeAttackIfReady();
+    }
+};
+
+CreatureAI* GetAI_boss_antusul(Creature* pCreature)
+{
+    return new boss_antusulAI(pCreature);
+}
+
+/*######
+## npc_servant
+######*/
+
+struct MANGOS_DLL_DECL npc_servantAI : public ScriptedAI
+{
+    npc_servantAI(Creature* pCreature) : ScriptedAI(pCreature) {Reset();}
+
+	uint32 Petrify_Timer;
+
+    void Reset()
+    {
+		Petrify_Timer = 15000;
+	}
+
+    void UpdateAI(const uint32 diff)
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+        if (Petrify_Timer < diff)
+        {
+			DoCast(m_creature->getVictim(), SPELL_PETRIFY);
+            Petrify_Timer = 11000;
+        }else Petrify_Timer -= diff;
+
+		DoMeleeAttackIfReady();
+    }
+};
+
+CreatureAI* GetAI_npc_servant(Creature* pCreature)
+{
+    return new npc_servantAI(pCreature);
+}
+
+/*######
+## go_gong_of_ghazrilla
+######*/
+
+// TODO: Gong should be non selectable after using it
+bool ZF_Gong = true;
+
+bool GOHello_go_gong_of_ghazrilla(Player* pPlayer, GameObject* pGo)
+{
+	if (ZF_Gong)
+	{
+		pGo->SummonCreature(7273, 1663.542358f, 1186.532f, 6.469f, 0.785f, TEMPSUMMON_TIMED_DESPAWN, 180000);
+		ZF_Gong = false;
+	}
+    
+	return false;
+}
+
+/*######
+## boss_ghazrilla
+######*/
+
+#define SPELL_ICICLE			11131
+#define	SPELL_FREEZE_SOLID		11836
+#define	SPELL_GHAZRILLA_SLAM	11902
+
+struct MANGOS_DLL_DECL boss_ghazrillaAI : public ScriptedAI
+{
+    boss_ghazrillaAI(Creature* pCreature) : ScriptedAI(pCreature) {Reset();}
+
+	uint32 Icicle_Timer;
+	uint32 FreezeSolid_Timer;
+	uint32 GhazrillaSlam_Timer;
+
+	void Reset()
+	{
+		Icicle_Timer = 8000;
+		FreezeSolid_Timer = 13000;
+		GhazrillaSlam_Timer = 18000;
+		ZF_Gong = true;
+	}
+
+    void UpdateAI(const uint32 diff)
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+        if (Icicle_Timer < diff)
+        {
+			DoCast(m_creature->getVictim(), SPELL_ICICLE);
+            Icicle_Timer = 8000;
+        }else Icicle_Timer -= diff;
+
+		if (GhazrillaSlam_Timer < diff)
+        {
+			DoCast(m_creature->getVictim(), SPELL_GHAZRILLA_SLAM);
+            GhazrillaSlam_Timer = 18000;
+        }else GhazrillaSlam_Timer -= diff;
+
+		if (FreezeSolid_Timer < diff)
+        {
+			if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+				 DoCast(m_creature->getVictim(), SPELL_FREEZE_SOLID);
+            FreezeSolid_Timer = 13000;
+        }else FreezeSolid_Timer -= diff;
+
+		DoMeleeAttackIfReady();
+    }
+};
+
+CreatureAI* GetAI_boss_ghazrilla(Creature* pCreature)
+{
+    return new boss_ghazrillaAI(pCreature);
+}
+
+/*######
+## boss_velratha
+######*/
+
+#define SPELL_HEALING_WAVE			12491
+#define	SPELL_SHADOW_BOLT			12739
+#define SPELL_SHADOW_BOLT_VOLLEY	15245
+#define	SPELL_WARD					11086
+
+struct MANGOS_DLL_DECL boss_velrathaAI : public ScriptedAI
+{
+    boss_velrathaAI(Creature* pCreature) : ScriptedAI(pCreature) {Reset();}
+
+	uint32 HealingWave_Timer;
+	uint32 ShadowBolt_Timer;
+	uint32 ShadowBoltVolley_Timer;
+	uint32 Ward_Timer;
+
+	void Reset()
+	{
+		HealingWave_Timer = 20000;
+		ShadowBolt_Timer = 8000;
+		ShadowBoltVolley_Timer = 12000;
+		Ward_Timer = 35000;
+	}
+
+    void UpdateAI(const uint32 diff)
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+        if (HealingWave_Timer < diff)
+        {
+			DoCast(m_creature, SPELL_HEALING_WAVE);
+            HealingWave_Timer = 20000;
+        }else HealingWave_Timer -= diff;
+
+		if (ShadowBolt_Timer < diff)
+        {
+			DoCast(m_creature->getVictim(), SPELL_SHADOW_BOLT);
+            ShadowBolt_Timer = 18000;
+        }else ShadowBolt_Timer -= diff;
+
+		if (ShadowBoltVolley_Timer < diff)
+        {
+			if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+				 DoCast(m_creature->getVictim(), SPELL_SHADOW_BOLT_VOLLEY);
+            ShadowBoltVolley_Timer = 12000;
+        }else ShadowBoltVolley_Timer -= diff;
+
+        if (Ward_Timer < diff)
+        {
+			DoCast(m_creature, SPELL_WARD);
+            Ward_Timer = 30000;
+        }else Ward_Timer -= diff;
+
+		DoMeleeAttackIfReady();
+    }
+};
+
+CreatureAI* GetAI_boss_velratha(Creature* pCreature)
+{
+    return new boss_velrathaAI(pCreature);
+}
+
+/*######
+## boss_ruzzlu
+######*/
+
+#define SPELL_BESERK_STANCE		7366
+#define	SPELL_CLEAVE			15496
+#define	SPELL_EXECUTE			7160
+
+struct MANGOS_DLL_DECL boss_ruzzluAI : public ScriptedAI
+{
+    boss_ruzzluAI(Creature* pCreature) : ScriptedAI(pCreature) {Reset();}
+
+	uint32 Cleave_Timer;
+	uint32 Execute_Timer;
+
+	bool m_bBerserk;
+
+	void Reset()
+	{
+		Cleave_Timer = 10000;
+		Execute_Timer = 35000;
+		m_bBerserk = false;
+	}
+
+    void UpdateAI(const uint32 diff)
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+        if (Cleave_Timer < diff)
+        {
+			DoCast(m_creature->getVictim(), SPELL_CLEAVE);
+            Cleave_Timer = 10000;
+        }else Cleave_Timer -= diff;
+
+		if (Execute_Timer < diff)
+        {
+			DoCast(m_creature->getVictim(), SPELL_EXECUTE);
+            Execute_Timer = 35000;
+        }else Execute_Timer -= diff;
+
+	    if (!m_bBerserk && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) < 10)
+        {
+            DoCast(m_creature, SPELL_BESERK_STANCE);
+            m_bBerserk = true;
+        }else;
+
+		DoMeleeAttackIfReady();
+    }
+};
+
+CreatureAI* GetAI_boss_ruzzlu(Creature* pCreature)
+{
+    return new boss_ruzzluAI(pCreature);
+}
+
+/*######
+## boss_ukorz
+######*/
+
+#define SPELL_CLEAVE			15496
+#define SPELL_WIDE_SLASH		11837
+#define SPELL_FRENCY			8289
+#define SPELL_BESERK_STANCE2	7366
+
+struct MANGOS_DLL_DECL boss_ukorzAI : public ScriptedAI
+{
+    boss_ukorzAI(Creature* pCreature) : ScriptedAI(pCreature) {Reset();}
+
+	uint32 Cleave_Timer;
+	uint32 WideSlash_Timer;
+
+	bool m_bBerserk2;
+	bool m_bFrency;
+
+	void Reset()
+	{
+		Cleave_Timer = 10000;
+		WideSlash_Timer = 18000;
+
+		m_bBerserk2 = false;
+		m_bFrency = false;
+	}
+
+    void UpdateAI(const uint32 diff)
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+        if (Cleave_Timer < diff)
+        {
+			DoCast(m_creature->getVictim(), SPELL_CLEAVE);
+            Cleave_Timer = 10000;
+        }else Cleave_Timer -= diff;
+
+		if (WideSlash_Timer < diff)
+        {
+			if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+				DoCast(m_creature->getVictim(), SPELL_WIDE_SLASH);
+            WideSlash_Timer = 18000;
+        }else WideSlash_Timer -= diff;
+
+	    if (!m_bBerserk2 && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) < 60)
+        {
+            DoCast(m_creature, SPELL_BESERK_STANCE2);
+            m_bBerserk2 = true;
+        }else;
+
+		if (!m_bFrency && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) < 10)
+        {
+            DoCast(m_creature, SPELL_FRENCY);
+            m_bFrency = true;
+        }else;
+
+		DoMeleeAttackIfReady();
+    }
+};
+
+CreatureAI* GetAI_boss_ukorz(Creature* pCreature)
+{
+    return new boss_ukorzAI(pCreature);
+}
+
+
 void AddSC_zulfarrak()
 {
     Script* newscript;
@@ -233,5 +686,45 @@ void AddSC_zulfarrak()
     newscript->GetAI = &GetAI_npc_weegli_blastfuse;
     newscript->pGossipHello =  &GossipHello_npc_weegli_blastfuse;
     newscript->pGossipSelect = &GossipSelect_npc_weegli_blastfuse;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_shallow_grave";
+    newscript->pGOHello = &GOHello_go_shallow_grave;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "boss_antusul";
+    newscript->GetAI = &GetAI_boss_antusul;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_servant";
+    newscript->GetAI = &GetAI_npc_servant;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_gong_of_ghazrilla";
+    newscript->pGOHello = &GOHello_go_gong_of_ghazrilla;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "boss_ghazrilla";
+    newscript->GetAI = &GetAI_boss_ghazrilla;
+    newscript->RegisterSelf();
+
+	newscript = new Script;
+    newscript->Name = "boss_velratha";
+    newscript->GetAI = &GetAI_boss_velratha;
+    newscript->RegisterSelf();
+
+	newscript = new Script;
+    newscript->Name = "boss_ruzzlu";
+    newscript->GetAI = &GetAI_boss_ruzzlu;
+    newscript->RegisterSelf();
+
+	newscript = new Script;
+    newscript->Name = "boss_ukorz";
+    newscript->GetAI = &GetAI_boss_ukorz;
     newscript->RegisterSelf();
 }

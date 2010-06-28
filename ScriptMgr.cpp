@@ -203,6 +203,33 @@ void DoScriptText(int32 iTextEntry, WorldObject* pSource, Unit* pTarget)
     }
 }
 
+char const* GetScriptText(int32 iTextEntry, Player* pPlayer)
+{
+    if (iTextEntry >= 0)
+    {
+        error_log("SD2: GetScriptText attempts to process text entry %i, but text entry must be negative.", iTextEntry);
+        return NULL;
+    }
+
+    const StringTextData* pData = pSystemMgr.GetTextData(iTextEntry);
+
+    if (!pData)
+    {
+        error_log("SD2: GetScriptText could not find text entry %i.", iTextEntry);
+        return NULL;
+    }
+
+    debug_log("SD2: GetScriptText: text entry=%i, Sound=%u, Type=%u, Language=%u, Emote=%u",
+        iTextEntry, pData->uiSoundId, pData->uiType, pData->uiLanguage, pData->uiEmote);
+
+    int currentLocaleIdx;
+
+    if (pPlayer && pPlayer->IsInWorld()) currentLocaleIdx = pPlayer->GetSession()->GetSessionDbLocaleIndex();
+        else currentLocaleIdx = LOCALE_enUS;
+
+    return sObjectMgr.GetMangosString(iTextEntry,currentLocaleIdx);
+}
+
 //*********************************
 //*** Functions used internally ***
 
@@ -274,7 +301,9 @@ bool GossipSelect(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 
     if (!tmpscript || !tmpscript->pGossipSelect)
         return false;
 
-    pPlayer->PlayerTalkClass->ClearMenus();
+//    pPlayer->PlayerTalkClass->ClearMenus();
+//    this expression is wrong, where 'return false' from script's GossipSelect
+//    not return menu ID (cleared in this string) and not allow to work with database-based menus
 
     return tmpscript->pGossipSelect(pPlayer, pCreature, uiSender, uiAction);
 }

@@ -17,7 +17,7 @@
 /* ScriptData
 SDName: Eversong_Woods
 SD%Complete: 100
-SDComment: Quest support: 8483, 8488, 9686
+SDComment: Quest support: 8346, 8483, 8488, 9686
 SDCategory: Eversong Woods
 EndScriptData */
 
@@ -26,6 +26,7 @@ npc_kelerun_bloodmourn
 go_harbinger_second_trial
 npc_prospector_anvilward
 npc_apprentice_mirveda
+npc_mana_wyrm
 EndContentData */
 
 #include "precompiled.h"
@@ -427,6 +428,40 @@ CreatureAI* GetAI_npc_apprentice_mirvedaAI(Creature* pCreature)
     return new npc_apprentice_mirvedaAI (pCreature);
 }
 
+/*######
+## npc_mana_wyrm
+######*/
+
+#define ARCANE_TORRENT_MANA			28730
+#define ARCANE_TORRENT_ENERGY		25046
+#define ARCANE_TORRENT_RUNIC		50613
+
+struct MANGOS_DLL_DECL npc_mana_wyrmAI : public ScriptedAI
+{
+    npc_mana_wyrmAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+		Reset();
+    }
+
+    void Reset() {}
+
+    void SpellHit(Unit* pCaster, const SpellEntry* pSpell)
+    {
+        if ( pCaster->GetTypeId() == TYPEID_PLAYER && m_creature->isAlive() && ( (pSpell->Id == ARCANE_TORRENT_MANA) || (pSpell->Id == ARCANE_TORRENT_ENERGY) || (pSpell->Id == ARCANE_TORRENT_RUNIC) ) )
+        {
+            if(((Player*)pCaster)->GetQuestStatus(8346) == QUEST_STATUS_INCOMPLETE)
+            {
+                ((Player*)pCaster)->KilledMonsterCredit(15468, 0);
+            }
+        }
+    }
+};
+
+CreatureAI* GetAI_npc_mana_wyrm(Creature* pCreature)
+{
+    return new npc_mana_wyrmAI(pCreature);
+}
+
 void AddSC_eversong_woods()
 {
     Script* newscript;
@@ -453,5 +488,10 @@ void AddSC_eversong_woods()
     newscript->Name = "npc_apprentice_mirveda";
     newscript->GetAI = GetAI_npc_apprentice_mirvedaAI;
     newscript->pQuestAccept = &QuestAccept_unexpected_results;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_mana_wyrm";
+    newscript->GetAI = &GetAI_npc_mana_wyrm;
     newscript->RegisterSelf();
 }

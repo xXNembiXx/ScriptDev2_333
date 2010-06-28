@@ -40,13 +40,13 @@ struct t_Locations
 
 static t_Locations PortalLoc[]=
 {
-{"Hammer of the World","Молот света",-17.1928, 2211.44, 30.1158,0,true,true,TYPE_TELEPORT}, //
-{"Chapel of Damned","Молельня проклятых",-503.62, 2211.47, 62.8235,70856,false,true,TYPE_MARROWGAR},  //
-{"Skulls plato","Черепной вал",-615.145, 2211.47, 199.972,70857,false,true,TYPE_DEATHWHISPER}, //
-{"The Rise of Deadly","Подъем смертоносного",-549.131, 2211.29, 539.291,70858,false,true,TYPE_FLIGHT_WAR}, //
-{"Icecrown Citadel","Цитадель Ледяной Короны",4198.42, 2769.22, 351.065,70859,false,true,TYPE_SAURFANG}, //
-{"Sanctuary of Blood","Святилище крови",4490.205566, 2769.275635, 403.983765,0,false,true,TYPE_BLOOD_COUNCIL}, //
-{"Lair of the Queen of Ice","Логово Королевы льда",4356.580078, 2565.75, 220.401993,70861,false,true,TYPE_VALITHRIA}, //
+{"Hammer of the World","Молот света",-17.1928f, 2211.44f, 30.1158f,0,true,true,TYPE_TELEPORT}, //
+{"Chapel of Damned","Молельня проклятых",-503.62f, 2211.47f, 62.8235f,70856,false,true,TYPE_MARROWGAR},  //
+{"Skulls plato","Черепной вал",-615.145f, 2211.47f, 199.972f,70857,false,true,TYPE_DEATHWHISPER}, //
+{"The Rise of Deadly","Подъем смертоносного",-549.131f, 2211.29f, 539.291f,70858,false,true,TYPE_FLIGHT_WAR}, //
+{"Icecrown Citadel","Цитадель Ледяной Короны",4198.42f, 2769.22f, 351.065f,70859,false,true,TYPE_SAURFANG}, //
+{"Sanctuary of Blood","Святилище крови",4490.205566f, 2769.275635f, 403.983765f,0,false,true,TYPE_BLOOD_COUNCIL}, //
+{"Lair of the Queen of Ice","Логово Королевы льда",4356.580078f, 2565.75f, 220.401993f,70861,false,true,TYPE_VALITHRIA}, //
 {"Frozen Throne","Ледяной трон",528.767273f, -2124.845947f, 1041.86f, 70860,false,true,TYPE_SINDRAGOSA}, //
 };
 

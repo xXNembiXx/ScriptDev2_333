@@ -78,31 +78,31 @@ bool GossipSelect_ulduar_teleporter(Player *player, Creature *creature, uint32 s
     switch(action)
     {
     case BASE_CAMP:
-        player->TeleportTo(603, -706.122, -92.6024, 429.876, 0);
+        player->TeleportTo(603, -706.122f, -92.6024f, 429.876f, 0);
         player->CLOSE_GOSSIP_MENU(); break;
     case GROUNDS:
-        player->TeleportTo(603, 131.248, -35.3802, 409.804, 0);
+        player->TeleportTo(603, 131.248f, -35.3802f, 409.804f, 0);
         player->CLOSE_GOSSIP_MENU(); break;
     case FORGE:
-        player->TeleportTo(603, 553.233, -12.3247, 409.679, 0);
+        player->TeleportTo(603, 553.233f, -12.3247f, 409.679f, 0);
         player->CLOSE_GOSSIP_MENU(); break;
     case SCRAPYARD:
-        player->TeleportTo(603, 926.292, -11.4635, 418.595, 0);
+        player->TeleportTo(603, 926.292f, -11.4635f, 418.595f, 0);
         player->CLOSE_GOSSIP_MENU(); break;
     case ANTECHAMBER:
-        player->TeleportTo(603, 1498.09, -24.246, 420.967, 0);
+        player->TeleportTo(603, 1498.09f, -24.246f, 420.967f, 0);
         player->CLOSE_GOSSIP_MENU(); break;
     case WALKWAY:
-        player->TeleportTo(603, 1859.45, -24.1, 448.9, 0); 
+        player->TeleportTo(603, 1859.45f, -24.1f, 448.9f, 0); 
         player->CLOSE_GOSSIP_MENU(); break;
     case CONSERVATORY:
-        player->TeleportTo(603, 2086.27, -24.3134, 421.239, 0);
+        player->TeleportTo(603, 2086.27f, -24.3134f, 421.239f, 0);
         player->CLOSE_GOSSIP_MENU(); break;
     case SPARK:
-        player->TeleportTo(603, 2536.87, 2569.15, 412.304, 0);
+        player->TeleportTo(603, 2536.87f, 2569.15f, 412.304f, 0);
         player->CLOSE_GOSSIP_MENU(); break;
     case PRISON:
-        player->TeleportTo(603, 1854.297, -11.0173, 334.4, 0);
+        player->TeleportTo(603, 1854.297f, -11.0173f, 334.4f, 0);
         player->CLOSE_GOSSIP_MENU(); break;
     }
 

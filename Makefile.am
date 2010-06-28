@@ -244,6 +244,7 @@ scripts/kalimdor/bloodmyst_isle.cpp \
 scripts/kalimdor/boss_azuregos.cpp \
 scripts/kalimdor/darkshore.cpp \
 scripts/kalimdor/desolace.cpp \
+scripts/kalimdor/durotar.cpp \
 scripts/kalimdor/dustwallow_marsh.cpp \
 scripts/kalimdor/felwood.cpp \
 scripts/kalimdor/feralas.cpp \

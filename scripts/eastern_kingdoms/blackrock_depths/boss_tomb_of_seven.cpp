@@ -35,9 +35,9 @@ enum
     SKILLPOINT_MIN              = 230
 };
 
-#define GOSSIP_ITEM_TEACH_1 "Teach me the art of smelting dark iron"
-#define GOSSIP_ITEM_TEACH_2 "Continue..."
-#define GOSSIP_ITEM_TRIBUTE "I want to pay tribute"
+#define GOSSIP_ITEM_TEACH_1 "Dunk'rel, gebt Eure Geheimnisse preis!"
+#define GOSSIP_ITEM_TEACH_2 "Continue..." //GMDB TODO not exist on german Realms
+#define GOSSIP_ITEM_TRIBUTE "Ich habe Euren Preis bezahlt, Dunk'rel. Jetzt lehrt mich Eure Geheimnisse!"
 
 bool GossipHello_boss_gloomrel(Player* pPlayer, Creature* pCreature)
 {
@@ -72,7 +72,7 @@ bool GossipSelect_boss_gloomrel(Player* pPlayer, Creature* pCreature, uint32 uiS
             pCreature->CastSpell(pPlayer, SPELL_LEARN_SMELT, false);
             break;
         case GOSSIP_ACTION_INFO_DEF+2:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "[PH] Continue...", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 22);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "[PH] Continue...", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 22); //GMDB TODO not exist on german Realms
             pPlayer->SEND_GOSSIP_MENU(2604, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+22:
@@ -100,7 +100,7 @@ enum
     MAX_DWARF                           = 7
 };
 
-#define GOSSIP_ITEM_CHALLENGE   "Your bondage is at an end, Doom'rel. I challenge you!"
+#define GOSSIP_ITEM_CHALLENGE   "Eure Knechtschaft hat ein Ende, Un'rel. Ich fordere Euch heraus!"
 
 struct MANGOS_DLL_DECL boss_doomrelAI : public ScriptedAI
 {

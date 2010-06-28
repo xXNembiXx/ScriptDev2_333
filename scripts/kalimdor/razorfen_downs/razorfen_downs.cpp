@@ -41,8 +41,8 @@ enum
     GOSSIP_TEXT_POTION_ANSWER                   = 2115,
 };
 
-#define GOSSIP_ITEM_TEA     "Teach me the cooking recipe"
-#define GOSSIP_ITEM_POTION  "Teach me the alchemy recipe"
+#define GOSSIP_ITEM_TEA     "Ihr könnt kochen? Ich auch! Könnt Ihr mir vielleicht ein besonderes Rezept verraten?"
+#define GOSSIP_ITEM_POTION  "Teach me the alchemy recipe" //GMDB TODO
 
 bool GossipHello_npc_henry_stern (Player* pPlayer, Creature* pCreature)
 {

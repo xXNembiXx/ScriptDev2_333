@@ -34,8 +34,8 @@ enum
     SAY_CORRECT             = -1999924
 };
 
-#define GOSSIP_ITEM_1       "A quiz: what's your name?"
-#define GOSSIP_ITEM_2       "I'm not interested"
+#define GOSSIP_ITEM_1       "Ein Quiz: Wie ist Euer Name?"
+#define GOSSIP_ITEM_2       "Ich bin nicht interessiert"
 
 //This function is called when the player opens the gossip menubool
 bool GossipHello_example_gossip_codebox(Player* pPlayer, Creature* pCreature)

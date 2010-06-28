@@ -32,13 +32,13 @@ EndContentData */
 ## npc_arete
 ######*/
 
-#define GOSSIP_ARETE_ITEM1 "Lord-Commander, I would hear your tale."
-#define GOSSIP_ARETE_ITEM2 "<You nod slightly but do not complete the motion as the Lord-Commander narrows his eyes before he continues.>"
-#define GOSSIP_ARETE_ITEM3 "I thought that they now called themselves the Scarlet Onslaught?"
-#define GOSSIP_ARETE_ITEM4 "Where did the grand admiral go?"
-#define GOSSIP_ARETE_ITEM5 "That's fine. When do I start?"
-#define GOSSIP_ARETE_ITEM6 "Let's finish this!"
-#define GOSSIP_ARETE_ITEM7 "That's quite a tale, Lord-Commander."
+#define GOSSIP_ARETE_ITEM1 "Lordkommandant, ich möchte Eure Geschichte hören."
+#define GOSSIP_ARETE_ITEM2 "<Ihr nickt leicht, aber beendet die Bewegung nicht, da sich die Augen des Lordkommandants verengen, bevor er fortfährt.>"
+#define GOSSIP_ARETE_ITEM3 "Ich dachte, sie würden sich selbst den Scharlachroten Ansturm nennen?"
+#define GOSSIP_ARETE_ITEM4 "Wo ist der Großadmiral hingegangen?"
+#define GOSSIP_ARETE_ITEM5 "Das geht in Ordnung. Wann soll ich anfangen?"
+#define GOSSIP_ARETE_ITEM6 "Lasst es uns beenden!"
+#define GOSSIP_ARETE_ITEM7 "Das ist eine ganz schöne Geschichte, Lordkommandant."
 
 enum
 {

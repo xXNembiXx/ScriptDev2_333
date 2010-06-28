@@ -35,7 +35,7 @@ EndContentData */
 ## npc_blood_knight_dawnstar
 ######*/
 
-#define GOSSIP_ITEM_INSIGNIA    "Take Blood Knight Insignia"
+#define GOSSIP_ITEM_INSIGNIA    "Take Blood Knight Insignia" //GMDB TODO
 
 bool GossipHello_npc_blood_knight_dawnstar(Player* pPlayer, Creature* pCreature)
 {
@@ -63,7 +63,7 @@ bool GossipSelect_npc_blood_knight_dawnstar(Player* pPlayer, Creature* pCreature
 ## npc_budd_nedreck
 ######*/
 
-#define GOSSIP_ITEM_DISGUISE        "You gave the crew disguises?"
+#define GOSSIP_ITEM_DISGUISE        "You gave the crew disguises?" //GMDB TODO
 
 bool GossipHello_npc_budd_nedreck(Player* pPlayer, Creature* pCreature)
 {

@@ -46,9 +46,9 @@ enum
     SAY_RAND_2                  = -1999921
 };
 
-#define GOSSIP_ITEM_1   "Click to Test Escort(Attack, Run)"
-#define GOSSIP_ITEM_2   "Click to Test Escort(NoAttack, Walk)"
-#define GOSSIP_ITEM_3   "Click to Test Escort(NoAttack, Run)"
+#define GOSSIP_ITEM_1   "Click to Test Escort(Attack, Run)" //GMDB TODO
+#define GOSSIP_ITEM_2   "Click to Test Escort(NoAttack, Walk)" //GMDB TODO
+#define GOSSIP_ITEM_3   "Click to Test Escort(NoAttack, Run)" //GMDB TODO
 
 struct MANGOS_DLL_DECL example_escortAI : public npc_escortAI
 {

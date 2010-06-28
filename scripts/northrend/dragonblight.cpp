@@ -41,8 +41,8 @@ enum
     TAXI_PATH_ID_MIDDLE_TOP             = 881
 };
 
-#define GOSSIP_ITEM_TAXI_MIDDLE_DOWN    "I would like to take a flight to the ground, Lord Of Afrasastrasz."
-#define GOSSIP_ITEM_TAXI_MIDDLE_TOP     "My Lord, I must go to the upper floor of the temple."
+#define GOSSIP_ITEM_TAXI_MIDDLE_DOWN    "Ich würde gerne bis auf Bodenhöhe mitfliegen, Lord Afrasastrasz."
+#define GOSSIP_ITEM_TAXI_MIDDLE_TOP     "Mein Fürst, ich muss ins obere Stockwerk des Tempels."
 
 bool GossipHello_npc_afrasastrasz(Player* pPlayer, Creature* pCreature)
 {
@@ -82,7 +82,7 @@ enum
     MOVIE_ID_GATES          = 14
 };
 
-#define GOSSIP_ITEM_WHAT_HAPPENED   "Alexstrasza, can you show me what happened here?"
+#define GOSSIP_ITEM_WHAT_HAPPENED   "Alexstrasza, könnt Ihr mir zeigen, was hier passiert ist?"
 
 bool GossipHello_npc_alexstrasza_wr_gate(Player* pPlayer, Creature* pCreature)
 {
@@ -119,8 +119,8 @@ enum
     TAXI_PATH_ID_BOTTOM_MIDDLE          = 883
 };
 
-#define GOSSIP_ITEM_TAXI_BOTTOM_TOP     "My Lord, I must go to the upper floor of the temple."
-#define GOSSIP_ITEM_TAXI_BOTTOM_MIDDLE  "Can you spare a drake to travel to Lord Of Afrasastrasz, in the middle of the temple?"
+#define GOSSIP_ITEM_TAXI_BOTTOM_TOP     "Bitte erlaubt mir, auf einem der Drachen zu den Gemächern der Königin im obersten Stockwerk des Tempels zu reiten."
+#define GOSSIP_ITEM_TAXI_BOTTOM_MIDDLE  "Habt Ihr vielleicht einen Drachen übrig, der mich zu Lord Afrasastrasz in der Mitte des Tempels bringen kann?"
 
 bool GossipHello_npc_tariolstrasz(Player* pPlayer, Creature* pCreature)
 {
@@ -159,8 +159,8 @@ enum
     TAXI_PATH_ID_TOP_BOTTOM             = 879
 };
 
-#define GOSSIP_ITEM_TAXI_TOP_MIDDLE     "I would like to see Lord Of Afrasastrasz, in the middle of the temple."
-#define GOSSIP_ITEM_TAXI_TOP_BOTTOM     "Yes, Please. I would like to return to the ground floor of the temple."
+#define GOSSIP_ITEM_TAXI_TOP_MIDDLE     "Ich möchte zu Lord Afrasastrasz in der Mitte des Tempels."
+#define GOSSIP_ITEM_TAXI_TOP_BOTTOM     "Ja, bitte, ich möchte zum Erdgeschoss des Tempels zurückkehren."
 
 bool GossipHello_npc_torastrasza(Player* pPlayer, Creature* pCreature)
 {

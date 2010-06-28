@@ -55,7 +55,7 @@ enum
     NPC_ADA                 = 3849
 };
 
-#define GOSSIP_ITEM_DOOR        "Please unlock the courtyard door."
+#define GOSSIP_ITEM_DOOR        "Öffnet bitte die Tür zum Hof."
 
 struct MANGOS_DLL_DECL npc_shadowfang_prisonerAI : public npc_escortAI
 {

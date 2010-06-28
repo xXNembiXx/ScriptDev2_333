@@ -517,7 +517,7 @@ int32 m_auiRandomSay[] =
     SAY_DUEL_A, SAY_DUEL_B, SAY_DUEL_C, SAY_DUEL_D, SAY_DUEL_E, SAY_DUEL_F, SAY_DUEL_G, SAY_DUEL_H, SAY_DUEL_I
 };
 
-#define GOSSIP_ACCEPT_DUEL      "I challenge you, death knight!"
+#define GOSSIP_ACCEPT_DUEL      "Ich fordere Euch heraus, Todesritter!"
 
 struct MANGOS_DLL_DECL npc_death_knight_initiateAI : public ScriptedAI
 {

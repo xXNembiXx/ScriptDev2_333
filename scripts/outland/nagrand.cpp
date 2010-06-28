@@ -185,7 +185,7 @@ CreatureAI* GetAI_mob_lump(Creature *_creature)
 bool GossipHello_mob_lump(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(9918) == QUEST_STATUS_INCOMPLETE)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I need answers, ogre!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich will Antworten, Oger!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
 
     pPlayer->SEND_GOSSIP_MENU(9352, pCreature->GetGUID());
 
@@ -197,15 +197,15 @@ bool GossipSelect_mob_lump(Player* pPlayer, Creature* pCreature, uint32 uiSender
     switch(uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Why are Boulderfist out this far? You know that this is Kurenai territory.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Warum sind die Felsfäuste so weit hier draußen? Ihr wisst, dass dies hier Territorium der Kurenai ist.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
             pPlayer->SEND_GOSSIP_MENU(9353, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+1:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "And you think you can just eat anything you want? You're obviously trying to eat the Broken of Telaar.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Und Ihr denkt, Ihr könntet alles essen was Ihr wollt? Ihr versucht offensichtlich, die Zerschlagenen von Telaar zu essen.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
             pPlayer->SEND_GOSSIP_MENU(9354, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+2:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "This means war, Lump! War I say!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Das bedeutet Krieg, Brocken! Krieg, sage ich!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
             pPlayer->SEND_GOSSIP_MENU(9355, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+3:
@@ -263,15 +263,15 @@ bool GossipHello_npc_altruis_the_sufferer(Player* pPlayer, Creature* pCreature)
 
     //gossip before obtaining Survey the Land
     if (pPlayer->GetQuestStatus(QUEST_SURVEY) == QUEST_STATUS_NONE)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I see twisted steel and smell sundered earth.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+10);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich sehe verbogenen Stahl und rieche zerrissene Erde..", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+10);
 
     //gossip when Survey the Land is incomplete (technically, after the flight)
     if (pPlayer->GetQuestStatus(QUEST_SURVEY) == QUEST_STATUS_INCOMPLETE)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Well...?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+20);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Nun...?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+20);
 
     //wowwiki.com/Varedis
     if (pPlayer->GetQuestStatus(QUEST_PUPIL) == QUEST_STATUS_INCOMPLETE)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "[PH] Story about Illidan's Pupil", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+30);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "[PH] Story about Illidan's Pupil", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+30); //GMDB TODO
 
     pPlayer->SEND_GOSSIP_MENU(9419, pCreature->GetGUID());
     return true;
@@ -286,15 +286,15 @@ bool GossipSelect_npc_altruis_the_sufferer(Player* pPlayer, Creature* pCreature,
             pPlayer->SEND_GOSSIP_MENU(9420, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+11:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "And now?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 12);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Und nun?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 12);
             pPlayer->SEND_GOSSIP_MENU(9421, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+12:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "How do you see them now?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 13);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Wie seht Ihr sie jetzt?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 13);
             pPlayer->SEND_GOSSIP_MENU(9422, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+13:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Forge camps?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 14);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Konstruktionslager?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 14);
             pPlayer->SEND_GOSSIP_MENU(9423, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+14:
@@ -302,7 +302,7 @@ bool GossipSelect_npc_altruis_the_sufferer(Player* pPlayer, Creature* pCreature,
             break;
 
         case GOSSIP_ACTION_INFO_DEF+20:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ok.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 21);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ok.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 21); //GMDB TODO
             pPlayer->SEND_GOSSIP_MENU(9427, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+21:
@@ -311,7 +311,7 @@ bool GossipSelect_npc_altruis_the_sufferer(Player* pPlayer, Creature* pCreature,
             break;
 
         case GOSSIP_ACTION_INFO_DEF+30:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "[PH] Story done", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 31);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "[PH] Geschichte erzählt", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 31); // Should be verified
             pPlayer->SEND_GOSSIP_MENU(384, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+31:
@@ -344,12 +344,12 @@ bool GossipHello_npc_greatmother_geyah(Player* pPlayer, Creature* pCreature)
 
     if (pPlayer->GetQuestStatus(10044) == QUEST_STATUS_INCOMPLETE)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Hello, Greatmother. Garrosh told me that you wanted to speak with me.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Hello, Greatmother. Garrosh told me that you wanted to speak with me.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1); //GMDB TODO
         pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
     }
     else if (pPlayer->GetQuestStatus(10172) == QUEST_STATUS_INCOMPLETE)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Garrosh is beyond redemption, Greatmother. I fear that in helping the Mag'har, I have convinced Garrosh that he is unfit to lead.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 10);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Garrosh is beyond redemption, Greatmother. I fear that in helping the Mag'har, I have convinced Garrosh that he is unfit to lead.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 10); //GMDB TODO
         pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
     }
     else
@@ -364,27 +364,27 @@ bool GossipSelect_npc_greatmother_geyah(Player* pPlayer, Creature* pCreature, ui
     switch(uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "You raised all of the orcs here, Greatmother?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "You raised all of the orcs here, Greatmother?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2); //GMDB TODO
             pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF + 2:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Do you believe that?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Do you believe that?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3); //GMDB TODO
             pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF + 3:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "What can be done? I have tried many different things. I have done my best to help the people of Nagrand. Each time I have approached Garrosh, he has dismissed me.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "What can be done? I have tried many different things. I have done my best to help the people of Nagrand. Each time I have approached Garrosh, he has dismissed me.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4); //GMDB TODO
             pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF + 4:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Left? How can you choose to leave?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Left? How can you choose to leave?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5); //GMDB TODO
             pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF + 5:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "What is this duty?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "What is this duty?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6); //GMDB TODO
             pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF + 6:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Is there anything I can do for you, Greatmother?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Is there anything I can do for you, Greatmother?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7); //GMDB TODO
             pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF + 7:
@@ -393,23 +393,23 @@ bool GossipSelect_npc_greatmother_geyah(Player* pPlayer, Creature* pCreature, ui
             break;
 
         case GOSSIP_ACTION_INFO_DEF + 10:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I have done all that I could, Greatmother. I thank you for your kind words.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 11);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I have done all that I could, Greatmother. I thank you for your kind words.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 11); //GMDB TODO
             pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF + 11:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Greatmother, you are the mother of Durotan?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 12);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Greatmother, you are the mother of Durotan?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 12); //GMDB TODO
             pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF + 12:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Greatmother, I never had the honor. Durotan died long before my time, but his heroics are known to all on my world. The orcs of Azeroth reside in a place known as Durotar, named after your son. And ... (You take a moment to breathe and think through what you are about to tell the Greatmother.)", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 13);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Greatmother, I never had the honor. Durotan died long before my time, but his heroics are known to all on my world. The orcs of Azeroth reside in a place known as Durotar, named after your son. And ... (You take a moment to breathe and think through what you are about to tell the Greatmother.)", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 13); //GMDB TODO
             pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF + 13:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "It is my Warchief, Greatmother. The leader of my people. From my world. He ... He is the son of Durotan. He is your grandchild.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 14);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "It is my Warchief, Greatmother. The leader of my people. From my world. He ... He is the son of Durotan. He is your grandchild.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 14); //GMDB TODO
             pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF + 14:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I will return to Azeroth at once, Greatmother.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 15);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I will return to Azeroth at once, Greatmother.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 15); //GMDB TODO
             pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF + 15:
@@ -430,7 +430,7 @@ bool GossipHello_npc_lantresor_of_the_blade(Player* pPlayer, Creature* pCreature
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
     if (pPlayer->GetQuestStatus(10107) == QUEST_STATUS_INCOMPLETE || pPlayer->GetQuestStatus(10108) == QUEST_STATUS_INCOMPLETE)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I have killed many of your ogres, Lantresor. I have no fear.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich habe viele Eurer Ogers getötet, Lantresor. Ich habe keine Furcht.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
 
     pPlayer->SEND_GOSSIP_MENU(9361, pCreature->GetGUID());
 
@@ -442,31 +442,31 @@ bool GossipSelect_npc_lantresor_of_the_blade(Player* pPlayer, Creature* pCreatur
     switch(uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Should I know? You look like an orc to me.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Sollte ich das? Für mich seht Ihr wie ein Orc aus.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
             pPlayer->SEND_GOSSIP_MENU(9362, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+1:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "And the other half?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Und die andere Hälfte?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
             pPlayer->SEND_GOSSIP_MENU(9363, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+2:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I have heard of your kind, but I never thought to see the day when I would meet a half-breed.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich habe von Eurer Art gehört, aber ich hätte nie geglaubt, den Tag zu erleben, an dem ich ein Halbblut treffe.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
             pPlayer->SEND_GOSSIP_MENU(9364, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+3:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "My apologies. I did not mean to offend. I am here on behalf of my people.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich bitte um Verzeihung, ich wollte Euch nicht beleidigen. Ich bin hier im Auftrag meines Volkes.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
             pPlayer->SEND_GOSSIP_MENU(9365, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+4:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "My people ask that you pull back your Boulderfist ogres and cease all attacks on our territories. In return, we will also pull back our forces.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Mein Volk verlangt, dass Ihr Eure Oger der Felsfäuste zurückzieht und alle Angriffe auf unsere Gebiete unterlasst. Im Gegenzug werden wir unsere Streitkräfte ebenfalls zurückziehen.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
             pPlayer->SEND_GOSSIP_MENU(9366, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+5:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "We will fight you until the end, then, Lantresor. We will not stand idly by as you pillage our towns and kill our people.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Dann werden wir Euch bis zum Ende bekämpfen, Lantresor. Wir werden nicht tatenlos zusehen, wie ihr unsere Städte plündert und unsere Leute tötet.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
             pPlayer->SEND_GOSSIP_MENU(9367, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+6:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "What do I need to do?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Was muss ich machen?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
             pPlayer->SEND_GOSSIP_MENU(9368, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+7:

@@ -33,7 +33,7 @@ EndContentData */
 ####*/
 
 #define SPELL_TELEPORT      41566                           // s41566 - Teleport to Ashtongue NPC's
-#define GOSSIP_OLUM1        "Teleport me to the other Ashtongue Deathsworn"
+#define GOSSIP_OLUM1        "Bringt mich zu den anderen Todeshörigen, Olum."
 
 bool GossipHello_npc_spirit_of_olum(Player* pPlayer, Creature* pCreature)
 {

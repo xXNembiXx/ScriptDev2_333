@@ -47,7 +47,7 @@ enum CreatureEntry
 
 /************* Quotes and Sounds ***********************/
 // Gossip for when a player clicks Akama
-#define GOSSIP_ITEM          "We are ready to face Illidan"
+#define GOSSIP_ITEM          "Wir sind bereit, Illidan zu konfrontieren."
 
 #define SAY_CONVO_1         -1564097
 #define SAY_CONVO_2         -1564098

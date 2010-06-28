@@ -44,8 +44,8 @@ enum
     TAXI_PATH_ID_HORDE          = 316
 };
 
-#define GOSSIP_ITEM_THUNDER     "I'd like to fly to Thunder Bluff."
-#define GOSSIP_ITEM_AQ_END      "Do you know where I can find Half Pendant of Aquatic Endurance?"
+#define GOSSIP_ITEM_THUNDER     "Ich würde gerne nach Donnerfels fliegen."
+#define GOSSIP_ITEM_AQ_END      "Kannst du mir sagen, wo sich Halber Anhänger der Wasserbelastbarkeit befindet?"
 
 bool GossipHello_npc_bunthen_plainswind(Player* pPlayer, Creature* pCreature)
 {
@@ -231,10 +231,10 @@ bool EffectDummyCreature_npc_clintar_dw_spirit(Unit *pCaster, uint32 spellId, Sp
 ## npc_great_bear_spirit
 ######*/
 
-#define GOSSIP_BEAR1 "What do you represent, spirit?"
-#define GOSSIP_BEAR2 "I seek to understand the importance of strength of the body."
-#define GOSSIP_BEAR3 "I seek to understand the importance of strength of the heart."
-#define GOSSIP_BEAR4 "I have heard your words, Great Bear Spirit, and I understand. I now seek your blessings to fully learn the way of the Claw."
+#define GOSSIP_BEAR1 "Was repräsentierst du, Geist?"
+#define GOSSIP_BEAR2 "Ich suche nach der Wichtigkeit der Stärke des Körpers."
+#define GOSSIP_BEAR3 "Ich suche nach der Wichtigkeit der Stärke des Herzes."
+#define GOSSIP_BEAR4 "Ich habe eure Worte gehöhrt, großer Bärengeist, und ich verstehe sie. Ich werde jetzt nach deiner Weisheit suchen, um die Weise des Greifers zu erlernen."
 
 bool GossipHello_npc_great_bear_spirit(Player* pPlayer, Creature* pCreature)
 {
@@ -281,8 +281,8 @@ bool GossipSelect_npc_great_bear_spirit(Player* pPlayer, Creature* pCreature, ui
 ## npc_silva_filnaveth
 ######*/
 
-#define GOSSIP_ITEM_RUTHERAN    "I'd like to fly to Rut'theran Village."
-#define GOSSIP_ITEM_AQ_AGI      "Do you know where I can find Half Pendant of Aquatic Agility?"
+#define GOSSIP_ITEM_RUTHERAN    "I'd like to fly to Rut'theran Village." //GMDB TODO
+#define GOSSIP_ITEM_AQ_AGI      "Kannst du mir sagen, wo sich Halber Anhänger der Wasserbelastbarkeit befindet?"
 
 bool GossipHello_npc_silva_filnaveth(Player* pPlayer, Creature* pCreature)
 {

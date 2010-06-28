@@ -381,9 +381,9 @@ bool GossipSelect_npc_drake_dealer_hurlunk(Player* pPlayer, Creature* pCreature,
 bool GossipHello_npcs_flanis_swiftwing_and_kagrosh(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(10583) == QUEST_STATUS_INCOMPLETE && !pPlayer->HasItemCount(30658,1,true))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take Flanis's Pack", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Bringt Flanis' Beutel zurück.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
     if (pPlayer->GetQuestStatus(10601) == QUEST_STATUS_INCOMPLETE && !pPlayer->HasItemCount(30659,1,true))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take Kagrosh's Pack", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Bringt Kagroshs' Beutel zurück.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
 
     pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
 
@@ -418,7 +418,7 @@ bool GossipSelect_npcs_flanis_swiftwing_and_kagrosh(Player* pPlayer, Creature* p
 bool GossipHello_npc_murkblood_overseer(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(QUEST_11082) == QUEST_STATUS_INCOMPLETE)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I am here for you, overseer.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich bin wegen Euch hier, Aufpasser.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
 
     pPlayer->SEND_GOSSIP_MENU(10940, pCreature->GetGUID());
     return true;
@@ -429,27 +429,27 @@ bool GossipSelect_npc_murkblood_overseer(Player* pPlayer, Creature* pCreature, u
     switch(uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF+1:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "How dare you question an overseer of the Dragonmaw!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ihr wagt es, einen Aufseher des Drachenmals in Frage zu stellen!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
                                                             //correct id not known
             pPlayer->SEND_GOSSIP_MENU(10940, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+2:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Who speaks of me? What are you talking about, broken?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+3);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Wer spricht von mir? Was redet Ihr da, Zerschlagener?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+3);
                                                             //correct id not known
             pPlayer->SEND_GOSSIP_MENU(10940, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+3:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Continue please.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+4);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Fahrt bitte fort.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+4);
                                                             //correct id not known
             pPlayer->SEND_GOSSIP_MENU(10940, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+4:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Who are these bidders?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+5);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Wer sind diese Biester?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+5);
                                                             //correct id not known
             pPlayer->SEND_GOSSIP_MENU(10940, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+5:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Well... yes.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+6);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Nun... ja.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+6);
                                                             //correct id not known
             pPlayer->SEND_GOSSIP_MENU(10940, pCreature->GetGUID());
             break;
@@ -473,7 +473,7 @@ bool GossipHello_npc_neltharaku(Player* pPlayer, Creature* pCreature)
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
     if (pPlayer->GetQuestStatus(10814) == QUEST_STATUS_INCOMPLETE)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I am listening, dragon", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich höre, Drache.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
 
     pPlayer->SEND_GOSSIP_MENU(10613, pCreature->GetGUID());
 
@@ -485,15 +485,15 @@ bool GossipSelect_npc_neltharaku(Player* pPlayer, Creature* pCreature, uint32 ui
     switch(uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF+1:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "But you are dragons! How could orcs do this to you?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Aber Ihr seid Drachen? Wie können Orcs Euch so etwas antun?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
             pPlayer->SEND_GOSSIP_MENU(10614, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+2:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Your mate?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+3);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Eure Gefährtin?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+3);
             pPlayer->SEND_GOSSIP_MENU(10615, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+3:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I have battled many beasts, dragon. I will help you.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+4);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich habe gegen viele Bestien gekämpft, Drache. Ich werde Euch helfen.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+4);
             pPlayer->SEND_GOSSIP_MENU(10616, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+4:
@@ -508,13 +508,13 @@ bool GossipSelect_npc_neltharaku(Player* pPlayer, Creature* pCreature, uint32 ui
 ## npc_oronok
 ######*/
 
-#define GOSSIP_ORONOK1 "I am ready to hear your story, Oronok."
-#define GOSSIP_ORONOK2 "How do I find the cipher?"
-#define GOSSIP_ORONOK3 "How do you know all of this?"
-#define GOSSIP_ORONOK4 "Yet what? What is it, Oronok?"
-#define GOSSIP_ORONOK5 "Continue, please."
-#define GOSSIP_ORONOK6 "So what of the cipher now? And your boys?"
-#define GOSSIP_ORONOK7 "I will find your boys and the cipher, Oronok."
+#define GOSSIP_ORONOK1 "Ich bin bereit für Eure Geschichte, Oronok."
+#define GOSSIP_ORONOK2 "Wie kann ich die Litanei finden?"
+#define GOSSIP_ORONOK3 "Woher wisst Ihr das alles?"
+#define GOSSIP_ORONOK4 "Und dann? Was ist los, Oronok?"
+#define GOSSIP_ORONOK5 "Bitte, fahrt fort."
+#define GOSSIP_ORONOK6 "Was ist aus der Litanei geworden? Und aus Euren Söhnen?"
+#define GOSSIP_ORONOK7 "Ich werde Eure Jungs und die Litanei finden, Oronok."
 
 bool GossipHello_npc_oronok_tornheart(Player* pPlayer, Creature* pCreature)
 {
@@ -598,7 +598,7 @@ enum
 {
     SAY_WIL_START               = -1000381,
     SAY_WIL_AGGRO1              = -1000382,
-    SAY_WIL_AGGRO2              = -1000383,
+    SAY_WIL_AGGRO2              = -1000383, //GMDB Missing
     SAY_WIL_PROGRESS1           = -1000384,
     SAY_WIL_PROGRESS2           = -1000385,
     SAY_WIL_FIND_EXIT           = -1000386,
@@ -784,7 +784,7 @@ enum
     SAY_TORLOTH_DIALOGUE1             = -1000532,
     SAY_TORLOTH_DIALOGUE2             = -1000533, 
     SAY_TORLOTH_DIALOGUE3             = -1000534,
-    SAY_ILLIDAN_DIALOGUE              = -1000535,
+    SAY_ILLIDAN_DIALOGUE              = -1000535, //GMDB Missing
     SAY_ILLIDAN_SUMMON1               = -1000536,
     SAY_ILLIDAN_SUMMON2               = -1000537,
     SAY_ILLIDAN_SUMMON3               = -1000538,

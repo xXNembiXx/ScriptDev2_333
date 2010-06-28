@@ -353,7 +353,7 @@ CreatureAI* GetAI_npc_time_rift(Creature* pCreature)
 
 #define SAY_SAAT_WELCOME        -1269019
 
-#define GOSSIP_ITEM_OBTAIN      "[PH] Obtain Chrono-Beacon"
+#define GOSSIP_ITEM_OBTAIN      "Ich benötige ein Chronosignal, Sa'at"
 #define SPELL_CHRONO_BEACON     34975
 #define ITEM_CHRONO_BEACON      24289
 

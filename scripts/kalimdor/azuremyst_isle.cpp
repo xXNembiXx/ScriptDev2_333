@@ -174,7 +174,7 @@ CreatureAI* GetAI_npc_draenei_survivor(Creature* pCreature)
 }
 
 /*######
-## npc_engineer_spark_overgrind
+## npc_engineer_spark_awa
 ######*/
 
 enum
@@ -190,7 +190,7 @@ enum
     SPELL_DYNAMITE          = 7978
 };
 
-#define GOSSIP_FIGHT        "Traitor! You will be brought to justice!"
+#define GOSSIP_FIGHT        "Es ist vorbei, Funks. Der Admiral weiß, dass Ihr es wart, der die Allianz verraten hat. Entweder arbeitet Ihr jetzt mit mir zusammen und erzählt mir alles, was Ihr wisst, oder ich muss handgreiflich werden."
 
 struct MANGOS_DLL_DECL npc_engineer_spark_overgrindAI : public ScriptedAI
 {
@@ -399,7 +399,7 @@ enum
     TAXI_PATH_ID            = 506
 };
 
-#define GOSSIP_ITEM_READY   "I am ready."
+#define GOSSIP_ITEM_READY   "I am ready." //GMDB TODO
 
 bool GossipHello_npc_susurrus(Player* pPlayer, Creature* pCreature)
 {

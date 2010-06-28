@@ -31,11 +31,11 @@ EndContentData */
 ## npc_royal_historian_archesonus
 ######*/
 
-#define GOSSIP_ITEM_ROYAL   "I am ready to listen"
-#define GOSSIP_ITEM_ROYAL_1 "That is tragic. How did this happen?"
-#define GOSSIP_ITEM_ROYAL_2 "Interesting, continue please."
-#define GOSSIP_ITEM_ROYAL_3 "Unbelievable! How dare they??"
-#define GOSSIP_ITEM_ROYAL_4 "Of course I will help!"
+#define GOSSIP_ITEM_ROYAL   "Ich bin bereit, Historikerin Archesonus."
+#define GOSSIP_ITEM_ROYAL_1 "Das ist tragisch. Wie konnte das geschehen?"
+#define GOSSIP_ITEM_ROYAL_2 "Interessant... fahrt bitte fort."
+#define GOSSIP_ITEM_ROYAL_3 "Unglaublich! Wie können sie es wagen!"
+#define GOSSIP_ITEM_ROYAL_4 "Natürlich werde ich Euch helfen!"
 
 bool GossipHello_npc_royal_historian_archesonus(Player* pPlayer, Creature* pCreature)
 {

@@ -40,7 +40,7 @@ enum
     SPELL_SHIELD_BASH = 11972,
     SPELL_REVENGE     = 12170
 };
-#define GOSSIP_BLY                  "That's it! I'm tired of helping you out. It's time we settled things on the battlefield!"
+#define GOSSIP_BLY                  "Jetzt reichts's! Ich habe es satt, Euch zu helfen! Es wird Zeit, dass wir die Dinge auf dem Schlachtfeld regeln."
 
 //find Bly's gossip menus
 
@@ -148,7 +148,7 @@ enum
     SPELL_WEEGLIS_BARREL   = 10772
 };
 
-#define GOSSIP_WEEGLI               "[PH] Please blow up the door."
+#define GOSSIP_WEEGLI               "Werdet Ihr jetzt die Tür aufsprengen?"
 
 struct MANGOS_DLL_DECL npc_weegli_blastfuseAI : public ScriptedAI
 {

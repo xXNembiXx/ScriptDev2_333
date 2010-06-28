@@ -341,7 +341,7 @@ bool QuestAccept_npc_oox17tn(Player* pPlayer, Creature* pCreature, const Quest* 
 ## npc_steward_of_time
 ######*/
 
-#define GOSSIP_ITEM_FLIGHT  "Please take me to the master's lair."
+#define GOSSIP_ITEM_FLIGHT  "Bringt mich bitte zum Hort des Meisters."
 
 bool GossipHello_npc_steward_of_time(Player* pPlayer, Creature* pCreature)
 {
@@ -379,12 +379,12 @@ bool GossipSelect_npc_steward_of_time(Player* pPlayer, Creature* pCreature, uint
 ## npc_stone_watcher_of_norgannon
 ######*/
 
-#define GOSSIP_ITEM_NORGANNON_1     "What function do you serve?"
-#define GOSSIP_ITEM_NORGANNON_2     "What are the Plates of Uldum?"
-#define GOSSIP_ITEM_NORGANNON_3     "Where are the Plates of Uldum?"
-#define GOSSIP_ITEM_NORGANNON_4     "Excuse me? We've been \"reschedueled for visitations\"? What does that mean?!"
-#define GOSSIP_ITEM_NORGANNON_5     "So, what's inside Uldum?"
-#define GOSSIP_ITEM_NORGANNON_6     "I will return when i have the Plates of Uldum."
+#define GOSSIP_ITEM_NORGANNON_1     "Welche Funktion habt Ihr?"
+#define GOSSIP_ITEM_NORGANNON_2     "Was sind die Platten von Uldum?"
+#define GOSSIP_ITEM_NORGANNON_3     "Wo sind die Platten von Uldum?"
+#define GOSSIP_ITEM_NORGANNON_4     "Wie bitte? Es ist ein \"erneuter Besuch\"? geplant? Was soll denn das heißen?"
+#define GOSSIP_ITEM_NORGANNON_5     "Was befindet sich denn in Uldum?"
+#define GOSSIP_ITEM_NORGANNON_6     "Ich komme mit den Platten von Uldum wieder."
 
 bool GossipHello_npc_stone_watcher_of_norgannon(Player* pPlayer, Creature* pCreature)
 {

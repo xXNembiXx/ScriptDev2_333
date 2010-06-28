@@ -30,14 +30,14 @@ EndContentData */
 #include "precompiled.h"
 #include "hyjalAI.h"
 
-#define GOSSIP_ITEM_BEGIN_ALLY      "My companions and I are with you, Lady Proudmoore."
-#define GOSSIP_ITEM_ANETHERON       "We are ready for whatever Archimonde might send our way, Lady Proudmoore."
-#define GOSSIP_ITEM_BEGIN_HORDE     "I am with you, Thrall."
-#define GOSSIP_ITEM_AZGALOR         "We have nothing to fear."
+#define GOSSIP_ITEM_BEGIN_ALLY      "Meine Gefährten und ich werden Euch zur Seite stehen, Lady Prachtmeer"
+#define GOSSIP_ITEM_ANETHERON       "Was auch immer Archimonde gegen uns ind Feld schicken mag, wir sind bereit, Lady Prachtmeer."
+#define GOSSIP_ITEM_BEGIN_HORDE     "Ich werde Euch zur Seite stehen, Thrall."
+#define GOSSIP_ITEM_AZGALOR         "Wir haben nichts zu befürchten."
 
-#define GOSSIP_ITEM_RETREAT         "We can't keep this up. Let's retreat!"
+#define GOSSIP_ITEM_RETREAT         "We can't keep this up. Let's retreat!" //GMDB TODO
 
-#define GOSSIP_ITEM_TYRANDE         "Aid us in defending Nordrassil"
+#define GOSSIP_ITEM_TYRANDE         "Ich wäre dankbar für jegliche Hilfe, die Ihr bieten könnt, Priesterin."
 
 CreatureAI* GetAI_npc_jaina_proudmoore(Creature* pCreature)
 {
@@ -77,7 +77,7 @@ bool GossipHello_npc_jaina_proudmoore(Player* pPlayer, Creature* pCreature)
                         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_RETREAT, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 
                     if (pPlayer->isGameMaster())
-                        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "[GM] Toggle Debug Timers", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
+                        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "[GM] Toggle Debug Timers", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF); //GMDB TODO
                 }
             }
         }
@@ -149,7 +149,7 @@ bool GossipHello_npc_thrall(Player* pPlayer, Creature* pCreature)
                         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_RETREAT, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 
                     if (pPlayer->isGameMaster())
-                        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "[GM] Toggle Debug Timers", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
+                        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "[GM] Toggle Debug Timers", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF); //GMDB TODO
                 }
             }
         }

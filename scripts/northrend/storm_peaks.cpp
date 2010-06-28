@@ -44,9 +44,9 @@ enum Scout
 
 };
 
-#define GOSSIP_ITEM_SCOUT_1     "Are you okay? I've come to take you back to Frosthold if you can stand."
-#define GOSSIP_ITEM_SCOUT_2     "I'm sorry that I didn't get here sooner. What happened?"
-#define GOSSIP_ITEM_SCOUT_3     "I'll go get some help. Hang in there."
+#define GOSSIP_ITEM_SCOUT_1     "Seid Ihr in Ordnung? Ich bin hier, um Euch zur Eisfestung zurückzubringen, falls Ihr stehen könnt."
+#define GOSSIP_ITEM_SCOUT_2     "Es tut mir leid, dass ich es nicht früher geschafft habe, Was ist passiert?"
+#define GOSSIP_ITEM_SCOUT_3     "Ich werde Hilfe holen gehen. Haltet aus!"
 
 bool GossipHello_npc_frostborn_scout(Player* pPlayer, Creature* pCreature)
 {
@@ -85,10 +85,10 @@ bool GossipSelect_npc_frostborn_scout(Player* pPlayer, Creature* pCreature, uint
 ## npc_loklira_the_crone
 ######*/
 
-#define GOSSIP_ITEM_TELL_ME         "Tell me about this proposal."
-#define GOSSIP_ITEM_WHAT_HAPPENED   "What happened then?"
-#define GOSSIP_ITEM_YOU_WANT_ME     "You want me to take part in the Hyldsmeet to end the war?"
-#define GOSSIP_ITEM_VERY_WELL       "Very well. I'll take part in this competition."
+#define GOSSIP_ITEM_TELL_ME         "Tell me about this proposal." //GMDB TODO
+#define GOSSIP_ITEM_WHAT_HAPPENED   "What happened then?" //GMDB TODO
+#define GOSSIP_ITEM_YOU_WANT_ME     "You want me to take part in the Hyldsmeet to end the war?" //GMDB TODO
+#define GOSSIP_ITEM_VERY_WELL       "Very well. I'll take part in this competition." //GMDB TODO
 
 enum
 {
@@ -146,9 +146,9 @@ bool GossipSelect_npc_loklira_the_crone(Player* pPlayer, Creature* pCreature, ui
 ## npc_thorim
 ######*/
 
-#define GOSSIP_ITEM_THORIM1         "Can you tell me what became of Sif?"
-#define GOSSIP_ITEM_THORIM2         "He did more than that, Thorim. He controls Ulduar now."
-#define GOSSIP_ITEM_THORIM3         "It needn't end this way."
+#define GOSSIP_ITEM_THORIM1         "Könnt Ihr mir sagen, was mit Sif geschehen ist?"
+#define GOSSIP_ITEM_THORIM2         "Er hat mehr als das getan, Thorim. Er hat jetzt die kontrolle in Ulduar."
+#define GOSSIP_ITEM_THORIM3         "Es muss so nicht enden."
 
 enum
 {
@@ -203,8 +203,8 @@ bool GossipSelect_npc_thorim(Player* pPlayer, Creature* pCreature, uint32 uiSend
 ## npc_roxi_ramrocket
 ######*/
 
-#define GOSSIP_TEXT_RAMROCKET1  "How do you fly in this cold climate?"
-#define GOSSIP_TEXT_RAMROCKET2  "I hear you sell motorcycle parts."
+#define GOSSIP_TEXT_RAMROCKET1  "Wie fliegt Ihr in diesen kalten Gefilden?"
+#define GOSSIP_TEXT_RAMROCKET2  "Ich habe gehört, dass Ihr Motorradteile verkauft."
 
 enum
 {

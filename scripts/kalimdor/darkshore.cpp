@@ -317,7 +317,7 @@ enum
     FACTION_HOSTILE         = 14
 };
 
-#define GOSSIP_ITEM_INSERT_KEY  "[PH] Insert key"
+#define GOSSIP_ITEM_INSERT_KEY  "Dreht den Schlüssel, um die Maschine zu starten."
 
 struct MANGOS_DLL_DECL npc_threshwackonatorAI : public FollowerAI
 {

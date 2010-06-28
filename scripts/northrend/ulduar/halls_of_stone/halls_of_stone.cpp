@@ -118,8 +118,8 @@ enum
     QUEST_HALLS_OF_STONE               = 13207,
 };
 
-#define GOSSIP_ITEM_START               "Brann, it would be our honor!"
-#define GOSSIP_ITEM_PROGRESS            "Let's move Brann, enough of the history lessons!"
+#define GOSSIP_ITEM_START               "Brann, es wäre uns eine Ehre!"
+#define GOSSIP_ITEM_PROGRESS            "Lasst uns auf aufbrechen, genug Geschichtsunterricht!"
 
 struct Locations
 {

@@ -34,7 +34,7 @@ EndContentData */
 ## npc_archmage_malin
 ######*/
 
-#define GOSSIP_ITEM_MALIN "Can you send me to Theramore? I have an urgent message for Lady Jaina from Highlord Bolvar."
+#define GOSSIP_ITEM_MALIN "Könnt ihr mich nach Theramore teleportieren? Ich habe eine wichtige Botschaft Lady Jaina Prachtmeer von Hochlord Bolvar Fordragon."
 
 bool GossipHello_npc_archmage_malin(Player* pPlayer, Creature* pCreature)
 {
@@ -196,10 +196,10 @@ CreatureAI* GetAI_npc_dashel_stonefist(Creature* pCreature)
 ## npc_lady_katrana_prestor
 ######*/
 
-#define GOSSIP_ITEM_KAT_1 "Pardon the intrusion, Lady Prestor, but Highlord Bolvar suggested that I seek your advice."
-#define GOSSIP_ITEM_KAT_2 "My apologies, Lady Prestor."
-#define GOSSIP_ITEM_KAT_3 "Begging your pardon, Lady Prestor. That was not my intent."
-#define GOSSIP_ITEM_KAT_4 "Thank you for your time, Lady Prestor."
+#define GOSSIP_ITEM_KAT_1 "Pardon the intrusion, Lady Prestor, but Highlord Bolvar suggested that I seek your advice." //GMDB TODO
+#define GOSSIP_ITEM_KAT_2 "My apologies, Lady Prestor." //GMDB TODO
+#define GOSSIP_ITEM_KAT_3 "Begging your pardon, Lady Prestor. That was not my intent." //GMDB TODO
+#define GOSSIP_ITEM_KAT_4 "Thank you for your time, Lady Prestor." //GMDB TODO
 
 bool GossipHello_npc_lady_katrana_prestor(Player* pPlayer, Creature* pCreature)
 {

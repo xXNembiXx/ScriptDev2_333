@@ -64,7 +64,7 @@ enum
 };
 
 //List of gossip item texts. Items will appear in the gossip window.
-#define GOSSIP_ITEM     "I'm looking for a fight"
+#define GOSSIP_ITEM     "Ich suche nach einem Kampf"
 
 struct MANGOS_DLL_DECL example_creatureAI : public ScriptedAI
 {

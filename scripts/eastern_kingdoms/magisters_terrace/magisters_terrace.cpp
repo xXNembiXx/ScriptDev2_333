@@ -41,11 +41,11 @@ enum
 
 const float afKaelLandPoint[] = {225.045f, -276.236f, -5.434f};
 
-#define GOSSIP_ITEM_KAEL_1      "Who are you?"
-#define GOSSIP_ITEM_KAEL_2      "What can we do to assist you?"
-#define GOSSIP_ITEM_KAEL_3      "What brings you to the Sunwell?"
-#define GOSSIP_ITEM_KAEL_4      "You're not alone here?"
-#define GOSSIP_ITEM_KAEL_5      "What would Kil'jaeden want with a mortal woman?"
+#define GOSSIP_ITEM_KAEL_1      "Wer seid Ihr?"
+#define GOSSIP_ITEM_KAEL_2      "Wie können wir Euch behilflich sein?"
+#define GOSSIP_ITEM_KAEL_3      "Was führt Euch zum Sonnenbrunnen?"
+#define GOSSIP_ITEM_KAEL_4      "Ihr seid nicht alleine hierher gekommen?"
+#define GOSSIP_ITEM_KAEL_5      "Was würde Kil'jaeden mit einer sterblichen Frau anfangen wollen?"
 
 // This is friendly keal that appear after used Orb.
 // If we assume DB handle summon, summon appear somewhere outside the platform where Orb is

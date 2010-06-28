@@ -397,17 +397,17 @@ CreatureAI* GetAI_mob_phalanx(Creature* pCreature)
 #define QUEST_4001      4001
 #define QUEST_4342      4342
 
-#define GOSSIP_ITEM_KHARAN_1    "I need to know where the princess are, Kharan!"
-#define GOSSIP_ITEM_KHARAN_2    "All is not lost, Kharan!"
+#define GOSSIP_ITEM_KHARAN_1    "I need to know where the princess are, Kharan!" //GMDB TODO
+#define GOSSIP_ITEM_KHARAN_2    "Es ist nicht alles verloren, Kharan!"
 
-#define GOSSIP_ITEM_KHARAN_3    "Gor'shak is my friend, you can trust me."
-#define GOSSIP_ITEM_KHARAN_4    "Not enough, you need to tell me more."
-#define GOSSIP_ITEM_KHARAN_5    "So what happened?"
-#define GOSSIP_ITEM_KHARAN_6    "Continue..."
-#define GOSSIP_ITEM_KHARAN_7    "So you suspect that someone on the inside was involved? That they were tipped off?"
-#define GOSSIP_ITEM_KHARAN_8    "Continue with your story please."
-#define GOSSIP_ITEM_KHARAN_9    "Indeed."
-#define GOSSIP_ITEM_KHARAN_10   "The door is open, Kharan. You are a free man."
+#define GOSSIP_ITEM_KHARAN_3    "Gor'shak is my friend, you can trust me." //GMDB TODO
+#define GOSSIP_ITEM_KHARAN_4    "Not enough, you need to tell me more." //GMDB TODO
+#define GOSSIP_ITEM_KHARAN_5    "Weiter..."
+#define GOSSIP_ITEM_KHARAN_6    "Und was ist passiert?"
+#define GOSSIP_ITEM_KHARAN_7    "Ihr vermutet also, dass jemand auf Eurer Seite darin verwickelt war? Dass sie einen Tipp bekamen?"
+#define GOSSIP_ITEM_KHARAN_8    "Fahrt bitte mit Eurer Geschichte fort."
+#define GOSSIP_ITEM_KHARAN_9    "So ist es."
+#define GOSSIP_ITEM_KHARAN_10   "Die Tür ist offen, Kharan. Ihr seid ein freier Mann."
 
 bool GossipHello_npc_kharan_mighthammer(Player* pPlayer, Creature* pCreature)
 {
@@ -485,8 +485,8 @@ bool GossipSelect_npc_kharan_mighthammer(Player* pPlayer, Creature* pCreature, u
 #define QUEST_A_BINDING_CONTRACT                         7604
 #define SPELL_CREATE_THORIUM_BROTHERHOOD_CONTRACT_DND    23059
 
-#define GOSSIP_ITEM_SHOW_ACCESS     "Show me what I have access to, Lothos."
-#define GOSSIP_ITEM_GET_CONTRACT    "Get Thorium Brotherhood Contract"
+#define GOSSIP_ITEM_SHOW_ACCESS     "Show me what I have access to, Lothos." //GMDB TODO
+#define GOSSIP_ITEM_GET_CONTRACT    "Get Thorium Brotherhood Contract" //GMDB TODO
 
 bool GossipHello_npc_lokhtos_darkbargainer(Player* pPlayer, Creature* pCreature)
 {

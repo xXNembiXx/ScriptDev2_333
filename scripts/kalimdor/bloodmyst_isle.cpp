@@ -79,7 +79,7 @@ bool GossipHello_npc_captured_sunhawk_agent(Player* pPlayer, Creature* pCreature
 {
     if (pPlayer->HasAura(31609, EFFECT_INDEX_1) && pPlayer->GetQuestStatus(9756) == QUEST_STATUS_INCOMPLETE)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "[PH] ", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich bin ein Gefangener, was denn sonst? Der Draeneiabschaum hat mich gefangengenommen, als ich das Sonnentor verließ. Anschließend töteten sie unsere Portalaufseher und zerstörten das Tor. Der Sonnenkönig wird von dieser Wendung der Ergebnisse nicht begeistert sein.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
         pPlayer->SEND_GOSSIP_MENU(9136, pCreature->GetGUID());
     }
     else
@@ -93,23 +93,23 @@ bool GossipSelect_npc_captured_sunhawk_agent(Player* pPlayer, Creature* pCreatur
     switch(uiAction)
     {
         case GOSSIP_ACTION_INFO_DEF+1:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "[PH] ", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ah ja, Sironas. Ich hätte beinahe vergessen, dass sie dort war. In der Scherbenwelt diente ich unter Sironas. Allerdings hatte ich keine Ahnung von der Existenz ihrer Monstrosität; Ich war noch nicht vollständig auf dieser Welt materialisiert, da nahmen mich diese verdammten Draenei schon gefangen.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
             pPlayer->SEND_GOSSIP_MENU(9137, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+2:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "[PH] ", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+3);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Unglaublich. Wie ist Sironas etwas Derartiges gelungen?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+3);
             pPlayer->SEND_GOSSIP_MENU(9138, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+3:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "[PH] ", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+4);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Sironas ist eine Eredar... Ich meine, ja, offensichtlich.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+4);
             pPlayer->SEND_GOSSIP_MENU(9139, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+4:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "[PH] ", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+5);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Die Vektorspule ist gigantisch. Ich hoffe, wir verfügen über mehr als eine Monstrosität, um die zahlreichen Schwachpunkte zu bewachen.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+5);
             pPlayer->SEND_GOSSIP_MENU(9140, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+5:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "[PH] ", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+6);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Das habe ich getan und Ihr habt mir geglaubt. Vielen Dank für die Informationen, Blutelf. Ihr habt uns weit mehr geholfen, als Ihr es für möglich haltet.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+6);
             pPlayer->SEND_GOSSIP_MENU(9141, pCreature->GetGUID());
             break;
         case GOSSIP_ACTION_INFO_DEF+6:

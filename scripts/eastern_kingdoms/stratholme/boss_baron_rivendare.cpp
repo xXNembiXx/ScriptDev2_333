@@ -24,12 +24,12 @@ EndScriptData */
 #include "precompiled.h"
 #include "stratholme.h"
 
-#define SAY_0    "Intruders! More pawns of the Argent Dawn, no doubt. I already count one of their number among my prisoners. Withdraw from my domain before she is executed!"
-#define SAY_1    "You're still here? Your foolishness is amusing! The Argent Dawn wench needn't suffer in vain. Leave at once and she shall be spared!"
-#define SAY_2    "I shall take great pleasure in taking this poor wretch's life! It's not too late, she needn't suffer in vain. Turn back and her death shall be merciful!"
-#define SAY_3    "May this prisoner's death serve as a warning. None shall defy the Scourge and live!"
-#define SAY_4    "So you see fit to toy with the Lich King's creations? Ramstein, be sure to give the intruders a proper greeting."
-#define SAY_5    "Time to take matters into my own hands. Come. Enter my domain and challenge the might of the Scourge!"
+#define SAY_0    "Eindringlinge! Zweifellos mehr Handlanger der Argentumdämmerung. Es befindet sich bereits eine von ihnen in meiner Gefangenschaft. Zieht Euch aus meiner Domäne zurück, bevor ich sie hinrichten lasse!"
+#define SAY_1    "You're still here? Your foolishness is amusing! The Argent Dawn wench needn't suffer in vain. Leave at once and she shall be spared!" //GMDB TODO
+#define SAY_2    "I shall take great pleasure in taking this poor wretch's life! It's not too late, she needn't suffer in vain. Turn back and her death shall be merciful!" //GMDB TODO
+#define SAY_3    "May this prisoner's death serve as a warning. None shall defy the Scourge and live!" //GMDB TODO
+#define SAY_4    "So you see fit to toy with the Lich King's creations? Ramstein, be sure to give the intruders a proper greeting." //GMDB TODO
+#define SAY_5    "Time to take matters into my own hands. Come. Enter my domain and challenge the might of the Scourge!" //GMDB TODO
 
 #define ADD_1X 4017.403809f
 #define ADD_1Y -3339.703369f

@@ -32,13 +32,13 @@ EndContentData */
 ## npc_highlord_demitrian
 ###*/
 
-#define GOSSIP_ITEM_DEMITRIAN1 "What do you know of it?"
-#define GOSSIP_ITEM_DEMITRIAN2 "I am listening , Demitrian."
-#define GOSSIP_ITEM_DEMITRIAN3 "Continue, please."
-#define GOSSIP_ITEM_DEMITRIAN4 "A battle?"
-#define GOSSIP_ITEM_DEMITRIAN5 "<Nod>"
-#define GOSSIP_ITEM_DEMITRIAN6 "Caught unaware? How?"
-#define GOSSIP_ITEM_DEMITRIAN7 "So what did Ragnaros do next?"
+#define GOSSIP_ITEM_DEMITRIAN1 "Was wisst Ihr darüber?"
+#define GOSSIP_ITEM_DEMITRIAN2 "Ich höre zu , Demitrian."
+#define GOSSIP_ITEM_DEMITRIAN3 "Fahrt bitte fort."
+#define GOSSIP_ITEM_DEMITRIAN4 "Eine Schlacht?"
+#define GOSSIP_ITEM_DEMITRIAN5 "<Nickt>"
+#define GOSSIP_ITEM_DEMITRIAN6 "Unwissend erwischt? Wie?"
+#define GOSSIP_ITEM_DEMITRIAN7 "Und was hat Ragnaros als nächstes getan?"
 
 enum
 {
@@ -113,20 +113,20 @@ bool GossipSelect_npc_highlord_demitrian(Player* pPlayer, Creature* pCreature, u
 ###*/
 
 //gossip item text best guess
-#define GOSSIP_ITEM_SEEK1 "I seek information about Natalia"
+#define GOSSIP_ITEM_SEEK1 "Ich suche Informationen über Natalia"
 
-#define GOSSIP_ITEM_RUTGAR2 "That sounds dangerous!"
-#define GOSSIP_ITEM_RUTGAR3 "What did you do?"
-#define GOSSIP_ITEM_RUTGAR4 "Who?"
-#define GOSSIP_ITEM_RUTGAR5 "Women do that. What did she demand?"
-#define GOSSIP_ITEM_RUTGAR6 "What do you mean?"
-#define GOSSIP_ITEM_RUTGAR7 "What happened next?"
+#define GOSSIP_ITEM_RUTGAR2 "Das hört sich gefährlich an!"
+#define GOSSIP_ITEM_RUTGAR3 "Was habt ihr getan?"
+#define GOSSIP_ITEM_RUTGAR4 "Wer?"
+#define GOSSIP_ITEM_RUTGAR5 "Frauen tun das. Was hat sie verlangt?"
+#define GOSSIP_ITEM_RUTGAR6 "Was meint ihr?"
+#define GOSSIP_ITEM_RUTGAR7 "Was passierte dann?"
 
-#define GOSSIP_ITEM_FRANKAL11 "Yes, please continue"
-#define GOSSIP_ITEM_FRANKAL12 "What language?"
-#define GOSSIP_ITEM_FRANKAL13 "The Priestess attacked you?!"
-#define GOSSIP_ITEM_FRANKAL14 "I should ask the monkey about this"
-#define GOSSIP_ITEM_FRANKAL15 "Then what..."
+#define GOSSIP_ITEM_FRANKAL11 "Ja, bitte fahrt fort"
+#define GOSSIP_ITEM_FRANKAL12 "Welche Sprache?"
+#define GOSSIP_ITEM_FRANKAL13 "Die Priesterinnen griffen euch an?!"
+#define GOSSIP_ITEM_FRANKAL14 "Ich sollte den Affen darüber befragen"
+#define GOSSIP_ITEM_FRANKAL15 "Als was..."
 
 enum
 {

@@ -79,7 +79,7 @@ CreatureAI* GetAI_npc_dalaran_guardian_mage(Creature* pCreature)
 ## npc_zidormi
 ######*/
 
-#define GOSSIP_ITEM_ZIDORMI1    "Take me to the Caverns of Time."
+#define GOSSIP_ITEM_ZIDORMI1    "Bringt mich zu den Höhlen der Zeit."
 
 enum
 {

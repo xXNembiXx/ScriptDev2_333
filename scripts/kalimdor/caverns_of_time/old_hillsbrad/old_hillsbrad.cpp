@@ -47,7 +47,7 @@ enum
 ## npc_brazen
 ######*/
 
-#define GOSSIP_ITEM_READY       "I am ready to go to Durnholde Keep."
+#define GOSSIP_ITEM_READY       "Ich bin bereit, nach Burg Durnholde zu gehen."
 
 bool GossipHello_npc_brazen(Player* pPlayer, Creature* pCreature)
 {
@@ -83,10 +83,10 @@ bool GossipHello_npc_erozion(Player* pPlayer, Creature* pCreature)
     ScriptedInstance* pInstance = ((ScriptedInstance*)pCreature->GetInstanceData());
 
     if (pInstance && pInstance->GetData(TYPE_BARREL_DIVERSION) != DONE && !pPlayer->HasItemCount(ITEM_ENTRY_BOMBS,1))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I need a pack of Incendiary Bombs.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich brauche ein Bündel Brandbomben.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
 
     if (!pPlayer->GetQuestRewardStatus(QUEST_ENTRY_RETURN) && pPlayer->GetQuestStatus(QUEST_ENTRY_RETURN) == QUEST_STATUS_COMPLETE)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "[PH] Teleport please, i'm tired.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Bringt mich in meine Zeit zurück.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
 
     pPlayer->SEND_GOSSIP_MENU(9778, pCreature->GetGUID());
 
@@ -194,13 +194,13 @@ bool GossipSelect_npc_erozion(Player* pPlayer, Creature* pCreature, uint32 uiSen
 //gossip items
 #define GOSSIP_ID_START             9568
 #define GOSSIP_ID_SKARLOC1          9614                    //I'm glad Taretha is alive. We now must find a way to free her...
-#define GOSSIP_ITEM_SKARLOC1        "Taretha cannot see you, Thrall."
+#define GOSSIP_ITEM_SKARLOC1        "Taretha cannot see you, Thrall." //GMDB TODO
 #define GOSSIP_ID_SKARLOC2          9579                    //What do you mean by this? Is Taretha in danger?
-#define GOSSIP_ITEM_SKARLOC2        "The situation is rather complicated, Thrall. It would be best for you to head into the mountains now, before more of Blackmoore's men show up. We'll make sure Taretha is safe."
+#define GOSSIP_ITEM_SKARLOC2        "Die Situation ist recht kompliziert, Thrall. Es wäre das Beste für Euch, wenn Ihr nun in die Berge aufbrecht, bevor noch mehr von Schwarzmoors Männer hier auftauchen. Wir stellen sicher, dass Taretha in Sicherheit ist."
 #define GOSSIP_ID_SKARLOC3          9580
 
 #define GOSSIP_ID_TARREN            9597                    //tarren mill is beyond these trees
-#define GOSSIP_ITEM_TARREN          "We're ready, Thrall."
+#define GOSSIP_ITEM_TARREN          "Wir sind bereit, Thrall."
 
 #define GOSSIP_ID_COMPLETE          9578                    //Thank you friends, I owe my freedom to you. Where is Taretha? I hoped to see her
 
@@ -511,7 +511,7 @@ bool GossipHello_npc_thrall_old_hillsbrad(Player* pPlayer, Creature* pCreature)
     {
         if (pInstance->GetData(TYPE_BARREL_DIVERSION) == DONE && !pInstance->GetData(TYPE_THRALL_EVENT))
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "[PH] Start walking.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "[PH] Start walking.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1); //GMDB TODO
             pPlayer->SEND_GOSSIP_MENU(GOSSIP_ID_START, pCreature->GetGUID());
         }
 
@@ -577,9 +577,9 @@ bool GossipSelect_npc_thrall_old_hillsbrad(Player* pPlayer, Creature* pCreature,
 ######*/
 
 #define GOSSIP_ID_EPOCH1        9610                        //Thank you for helping Thrall escape, friends. Now I only hope
-#define GOSSIP_ITEM_EPOCH1      "Strange wizard?"
+#define GOSSIP_ITEM_EPOCH1      "Seltsamer Zauber?"
 #define GOSSIP_ID_EPOCH2        9613                        //Yes, friends. This man was no wizard of
-#define GOSSIP_ITEM_EPOCH2      "We'll get you out. Taretha. Don't worry. I doubt the wizard would wander too far away."
+#define GOSSIP_ITEM_EPOCH2      "Keine Sorge! Wir werden Euch hier herausholen, Taretha. Ich bezweifle, dass der Zauberer sich zu weit von hier entfernen würde."
 
 struct MANGOS_DLL_DECL npc_tarethaAI : public npc_escortAI
 {

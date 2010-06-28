@@ -717,7 +717,7 @@ CreatureAI* GetAI_mob_cyclone(Creature* pCreature)
 #define SPELL_TERRIFYING_HOWL           30752
 #define SPELL_WIDE_SWIPE                30761
 
-#define GOSSIP_GRANDMA                  "What phat lewtz you have grandmother?"
+#define GOSSIP_GRANDMA                  "Großmutter, was hast du für große Ohren?"
 
 /**** The Wolf's Entry ****/
 #define CREATURE_BIG_BAD_WOLF           17521

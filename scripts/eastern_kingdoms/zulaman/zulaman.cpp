@@ -114,7 +114,7 @@ enum
     SPELL_BANGING_THE_GONG  = 45225
 };
 
-#define GOSSIP_ITEM_BEGIN   "Thanks for the concern, but we intend to explore Zul'Aman."
+#define GOSSIP_ITEM_BEGIN   "Danke für den Ratschlag, aber wir haben vor, Zul'Aman dennoch zu erforschen."
 
 struct MANGOS_DLL_DECL npc_harrison_jones_zaAI : public npc_escortAI
 {

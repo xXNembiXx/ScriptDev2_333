@@ -37,15 +37,15 @@ there is no difference here (except that default text is chosen with `gameobject
 /*###
 # to be removed from here (->ncp_text). This is data for database projects.
 ###*/
-#define TALK_MUST_UNLEARN_WEAPON    "You must forget your weapon type specialty before I can help you. Go to Everlook in Winterspring and seek help there."
+#define TALK_MUST_UNLEARN_WEAPON    "You must forget your weapon type specialty before I can help you. Go to Everlook in Winterspring and seek help there." //GMDB TODO
 
-#define TALK_HAMMER_LEARN           "Ah, a seasoned veteran you once were. I know you are capable, you merely need to ask and I shall teach you the way of the hammersmith."
-#define TALK_AXE_LEARN              "Ah, a seasoned veteran you once were. I know you are capable, you merely need to ask and I shall teach you the way of the axesmith."
-#define TALK_SWORD_LEARN            "Ah, a seasoned veteran you once were. I know you are capable, you merely need to ask and I shall teach you the way of the swordsmith."
+#define TALK_HAMMER_LEARN           "Ah, a seasoned veteran you once were. I know you are capable, you merely need to ask and I shall teach you the way of the hammersmith." //GMDB TODO
+#define TALK_AXE_LEARN              "Ah, a seasoned veteran you once were. I know you are capable, you merely need to ask and I shall teach you the way of the axesmith." //GMDB TODO
+#define TALK_SWORD_LEARN            "Ah, a seasoned veteran you once were. I know you are capable, you merely need to ask and I shall teach you the way of the swordsmith." //GMDB TODO
 
-#define TALK_HAMMER_UNLEARN         "Forgetting your Hammersmithing skill is not something to do lightly. If you choose to abandon it you will forget all recipes that require Hammersmithing to create!"
-#define TALK_AXE_UNLEARN            "Forgetting your Axesmithing skill is not something to do lightly. If you choose to abandon it you will forget all recipes that require Axesmithing to create!"
-#define TALK_SWORD_UNLEARN          "Forgetting your Swordsmithing skill is not something to do lightly. If you choose to abandon it you will forget all recipes that require Swordsmithing to create!"
+#define TALK_HAMMER_UNLEARN         "Forgetting your Hammersmithing skill is not something to do lightly. If you choose to abandon it you will forget all recipes that require Hammersmithing to create!" //GMDB TODO
+#define TALK_AXE_UNLEARN            "Forgetting your Axesmithing skill is not something to do lightly. If you choose to abandon it you will forget all recipes that require Axesmithing to create!" //GMDB TODO
+#define TALK_SWORD_UNLEARN          "Forgetting your Swordsmithing skill is not something to do lightly. If you choose to abandon it you will forget all recipes that require Swordsmithing to create!" //GMDB TODO
 
 /*###
 # generic defines
@@ -59,52 +59,52 @@ there is no difference here (except that default text is chosen with `gameobject
 # gossip item and box texts
 ###*/
 
-#define GOSSIP_LEARN_POTION         "Please teach me how to become a Master of Potions, Lauranna"
-#define GOSSIP_UNLEARN_POTION       "I wish to unlearn Potion Mastery"
-#define GOSSIP_LEARN_TRANSMUTE      "Please teach me how to become a Master of Transmutations, Zarevhi"
-#define GOSSIP_UNLEARN_TRANSMUTE    "I wish to unlearn Transmutation Mastery"
-#define GOSSIP_LEARN_ELIXIR         "Please teach me how to become a Master of Elixirs, Lorokeem"
-#define GOSSIP_UNLEARN_ELIXIR       "I wish to unlearn Elixir Mastery"
+#define GOSSIP_LEARN_POTION         "Please teach me how to become a Master of Potions, Lauranna" //GMDB TODO
+#define GOSSIP_UNLEARN_POTION       "I wish to unlearn Potion Mastery" //GMDB TODO
+#define GOSSIP_LEARN_TRANSMUTE      "Please teach me how to become a Master of Transmutations, Zarevhi" //GMDB TODO
+#define GOSSIP_UNLEARN_TRANSMUTE    "I wish to unlearn Transmutation Mastery" //GMDB TODO
+#define GOSSIP_LEARN_ELIXIR         "Please teach me how to become a Master of Elixirs, Lorokeem" //GMDB TODO
+#define GOSSIP_UNLEARN_ELIXIR       "I wish to unlearn Elixir Mastery" //GMDB TODO
 
-#define BOX_UNLEARN_ALCHEMY_SPEC    "Do you really want to unlearn your alchemy specialty and lose all associated recipes? \n Cost: "
+#define BOX_UNLEARN_ALCHEMY_SPEC    "Do you really want to unlearn your alchemy specialty and lose all associated recipes? \n Cost: " //GMDB TODO
 
-#define GOSSIP_WEAPON_LEARN         "Please teach me how to become a Weaponsmith"
-#define GOSSIP_WEAPON_UNLEARN       "I wish to unlearn the art of Weaponsmithing"
-#define GOSSIP_ARMOR_LEARN          "Please teach me how to become a Armorsmith"
-#define GOSSIP_ARMOR_UNLEARN        "I wish to unlearn the art of Armorsmithing"
+#define GOSSIP_WEAPON_LEARN         "Please teach me how to become a Weaponsmith" //GMDB TODO
+#define GOSSIP_WEAPON_UNLEARN       "I wish to unlearn the art of Weaponsmithing" //GMDB TODO
+#define GOSSIP_ARMOR_LEARN          "Please teach me how to become a Armorsmith" //GMDB TODO
+#define GOSSIP_ARMOR_UNLEARN        "I wish to unlearn the art of Armorsmithing" //GMDB TODO
 
-#define GOSSIP_UNLEARN_SMITH_SPEC   "I wish to unlearn my blacksmith specialty"
-#define BOX_UNLEARN_ARMORORWEAPON   "Do you really want to unlearn your blacksmith specialty and lose all associated recipes? \n Cost: "
+#define GOSSIP_UNLEARN_SMITH_SPEC   "I wish to unlearn my blacksmith specialty" //GMDB TODO
+#define BOX_UNLEARN_ARMORORWEAPON   "Do you really want to unlearn your blacksmith specialty and lose all associated recipes? \n Cost: " //GMDB TODO
 
-#define GOSSIP_LEARN_HAMMER         "Please teach me how to become a Hammersmith, Lilith"
-#define GOSSIP_UNLEARN_HAMMER       "I wish to unlearn Hammersmithing"
-#define GOSSIP_LEARN_AXE            "Please teach me how to become a Axesmith, Kilram"
-#define GOSSIP_UNLEARN_AXE          "I wish to unlearn Axesmithing"
-#define GOSSIP_LEARN_SWORD          "Please teach me how to become a Swordsmith, Seril"
-#define GOSSIP_UNLEARN_SWORD        "I wish to unlearn Swordsmithing"
+#define GOSSIP_LEARN_HAMMER         "Please teach me how to become a Hammersmith, Lilith" //GMDB TODO
+#define GOSSIP_UNLEARN_HAMMER       "I wish to unlearn Hammersmithing" //GMDB TODO
+#define GOSSIP_LEARN_AXE            "Please teach me how to become a Axesmith, Kilram" //GMDB TODO
+#define GOSSIP_UNLEARN_AXE          "I wish to unlearn Axesmithing" //GMDB TODO
+#define GOSSIP_LEARN_SWORD          "Please teach me how to become a Swordsmith, Seril" //GMDB TODO
+#define GOSSIP_UNLEARN_SWORD        "I wish to unlearn Swordsmithing" //GMDB TODO
 
-#define BOX_UNLEARN_WEAPON_SPEC     "Do you really want to unlearn your weaponsmith specialty and lose all associated recipes? \n Cost: "
+#define BOX_UNLEARN_WEAPON_SPEC     "Do you really want to unlearn your weaponsmith specialty and lose all associated recipes? \n Cost: " //GMDB TODO
 
-#define GOSSIP_LEARN_DRAGON         "I am absolutely certain that i want to learn dragonscale leatherworking"
-#define GOSSIP_UNLEARN_DRAGON       "I wish to unlearn Dragonscale Leatherworking"
-#define GOSSIP_LEARN_ELEMENTAL      "I am absolutely certain that i want to learn elemental leatherworking"
-#define GOSSIP_UNLEARN_ELEMENTAL    "I wish to unlearn Elemental Leatherworking"
-#define GOSSIP_LEARN_TRIBAL         "I am absolutely certain that i want to learn tribal leatherworking"
-#define GOSSIP_UNLEARN_TRIBAL       "I wish to unlearn Tribal Leatherworking"
+#define GOSSIP_LEARN_DRAGON         "I am absolutely certain that i want to learn dragonscale leatherworking" //GMDB TODO
+#define GOSSIP_UNLEARN_DRAGON       "I wish to unlearn Dragonscale Leatherworking" //GMDB TODO
+#define GOSSIP_LEARN_ELEMENTAL      "I am absolutely certain that i want to learn elemental leatherworking" //GMDB TODO
+#define GOSSIP_UNLEARN_ELEMENTAL    "I wish to unlearn Elemental Leatherworking" //GMDB TODO
+#define GOSSIP_LEARN_TRIBAL         "I am absolutely certain that i want to learn tribal leatherworking" //GMDB TODO
+#define GOSSIP_UNLEARN_TRIBAL       "I wish to unlearn Tribal Leatherworking" //GMDB TODO
 
-#define BOX_UNLEARN_LEATHER_SPEC    "Do you really want to unlearn your leatherworking specialty and lose all associated recipes? \n Cost: "
+#define BOX_UNLEARN_LEATHER_SPEC    "Do you really want to unlearn your leatherworking specialty and lose all associated recipes? \n Cost: " //GMDB TODO
 
-#define GOSSIP_LEARN_SPELLFIRE      "Please teach me how to become a Spellcloth tailor"
-#define GOSSIP_UNLEARN_SPELLFIRE    "I wish to unlearn Spellfire Tailoring"
-#define GOSSIP_LEARN_MOONCLOTH      "Please teach me how to become a Mooncloth tailor"
-#define GOSSIP_UNLEARN_MOONCLOTH    "I wish to unlearn Mooncloth Tailoring"
-#define GOSSIP_LEARN_SHADOWEAVE     "Please teach me how to become a Shadoweave tailor"
-#define GOSSIP_UNLEARN_SHADOWEAVE   "I wish to unlearn Shadoweave Tailoring"
+#define GOSSIP_LEARN_SPELLFIRE      "Please teach me how to become a Spellcloth tailor" //GMDB TODO
+#define GOSSIP_UNLEARN_SPELLFIRE    "I wish to unlearn Spellfire Tailoring" //GMDB TODO
+#define GOSSIP_LEARN_MOONCLOTH      "Please teach me how to become a Mooncloth tailor" //GMDB TODO
+#define GOSSIP_UNLEARN_MOONCLOTH    "I wish to unlearn Mooncloth Tailoring" //GMDB TODO
+#define GOSSIP_LEARN_SHADOWEAVE     "Please teach me how to become a Shadoweave tailor" //GMDB TODO
+#define GOSSIP_UNLEARN_SHADOWEAVE   "I wish to unlearn Shadoweave Tailoring" //GMDB TODO
 
-#define BOX_UNLEARN_TAILOR_SPEC     "Do you really want to unlearn your tailoring specialty and lose all associated recipes? \n Cost: "
+#define BOX_UNLEARN_TAILOR_SPEC     "Do you really want to unlearn your tailoring specialty and lose all associated recipes? \n Cost: " //GMDB TODO
 
-#define GOSSIP_LEARN_GOBLIN         "I am absolutely certain that i want to learn Goblin engineering"
-#define GOSSIP_LEARN_GNOMISH        "I am absolutely certain that i want to learn Gnomish engineering"
+#define GOSSIP_LEARN_GOBLIN         "I am absolutely certain that i want to learn Goblin engineering" //GMDB TODO
+#define GOSSIP_LEARN_GNOMISH        "I am absolutely certain that i want to learn Gnomish engineering" //GMDB TODO
 
 /*###
 # spells defines
@@ -836,10 +836,10 @@ enum
     ITEM_GOBLIN_CARD            = 10791
 };
 
-#define GOSSIP_ITEM_ZAP         "[PH] Unknown"
-#define GOSSIP_ITEM_JHORDY      "I must build a beacon for this marvelous device!"
-#define GOSSIP_ITEM_KABLAM      "[PH] Unknown"
-#define GOSSIP_ITEM_SMILES      "[PH] Unknown"
+#define GOSSIP_ITEM_ZAP         "[PH] Unbekannt" // Should be verified
+#define GOSSIP_ITEM_JHORDY      "Ich muss ein Blinklicht für diesen großartigen Apparat bauen!"
+#define GOSSIP_ITEM_KABLAM      "[PH] Unbekannt" // Should be verified
+#define GOSSIP_ITEM_SMILES      "[PH] Unbekannt" // Should be verified
 
 bool GossipHello_npc_engineering_tele_trinket(Player* pPlayer, Creature* pCreature)
 {

@@ -266,7 +266,7 @@ enum
     SPELL_PLUCKY_CHICKEN    = 9220
 };
 
-#define GOSSIP_ITEM_QUEST   "Please tell me the Phrase.."
+#define GOSSIP_ITEM_QUEST   "Please tell me the Phrase.." //GMDB TODO
 
 struct MANGOS_DLL_DECL npc_plucky_johnsonAI : public ScriptedAI
 {

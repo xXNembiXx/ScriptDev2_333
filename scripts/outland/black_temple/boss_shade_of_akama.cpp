@@ -33,7 +33,7 @@ EndScriptData */
 #include "precompiled.h"
 #include "black_temple.h"
 
-#define GOSSIP_ITEM                 "We are ready to fight alongside you, Akama"
+#define GOSSIP_ITEM                 "Ich bin bei Euch, Akama"
 
 // Spells
 enum

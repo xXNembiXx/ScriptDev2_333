@@ -34,20 +34,20 @@ EndContentData */
 # npc_barnesAI
 ######*/
 
-#define GOSSIP_READY        "I'm not an actor."
+#define GOSSIP_READY        "Ich bin kein Schauspieler."
 
-#define SAY_READY           "Splendid, I'm going to get the audience ready. Break a leg!"
-#define SAY_OZ_INTRO1       "Finally, everything is in place. Are you ready for your big stage debut?"
-#define OZ_GOSSIP1          "I'm not an actor."
-#define SAY_OZ_INTRO2       "Don't worry, you'll be fine. You look like a natural!"
-#define OZ_GOSSIP2          "Ok, I'll give it a try, then."
+#define SAY_READY           "Splendid, I'm going to get the audience ready. Break a leg!" //GMDB TODO
+#define SAY_OZ_INTRO1       "Finally, everything is in place. Are you ready for your big stage debut?" //GMDB TODO
+#define OZ_GOSSIP1          "I'm not an actor." //GMDB TODO
+#define SAY_OZ_INTRO2       "Don't worry, you'll be fine. You look like a natural!" //GMDB TODO
+#define OZ_GOSSIP2          "Ok, ich werde es versuchen."
 
-#define SAY_RAJ_INTRO1      "The romantic plays are really tough, but you'll do better this time. You have TALENT. Ready?"
-#define RAJ_GOSSIP1         "I've never been more ready."
+#define SAY_RAJ_INTRO1      "The romantic plays are really tough, but you'll do better this time. You have TALENT. Ready?" //GMDB TODO
+#define RAJ_GOSSIP1         "I've never been more ready." //GMDB TODO
 
-#define OZ_GM_GOSSIP1       "[GM] Change event to EVENT_OZ"
-#define OZ_GM_GOSSIP2       "[GM] Change event to EVENT_HOOD"
-#define OZ_GM_GOSSIP3       "[GM] Change event to EVENT_RAJ"
+#define OZ_GM_GOSSIP1       "[GM] Change event to EVENT_OZ" //GMDB TODO
+#define OZ_GM_GOSSIP2       "[GM] Change event to EVENT_HOOD" //GMDB TODO
+#define OZ_GM_GOSSIP3       "[GM] Change event to EVENT_RAJ" //GMDB TODO
 
 struct Dialogue
 {
@@ -390,7 +390,7 @@ enum
     SPELL_TELEPORT              = 39567
 };
 
-#define GOSSIP_ITEM_TELEPORT    "Teleport me to the Guardian's Library"
+#define GOSSIP_ITEM_TELEPORT    "Bitte bringt mich zu der Bibliothek des Wächters."
 
 bool GossipHello_npc_berthold(Player* pPlayer, Creature* pCreature)
 {

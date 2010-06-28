@@ -32,7 +32,7 @@ EndContentData */
 ## npc_deathly_usher
 ######*/
 
-#define GOSSIP_ITEM_USHER "I wish to to visit the Rise of the Defiler."
+#define GOSSIP_ITEM_USHER "I wish to to visit the Rise of the Defiler." //GMDB TODO
 
 #define SPELL_TELEPORT_SINGLE           12885
 #define SPELL_TELEPORT_SINGLE_IN_GROUP  13142
@@ -63,13 +63,13 @@ bool GossipSelect_npc_deathly_usher(Player* pPlayer, Creature* pCreature, uint32
 ## npc_fallen_hero_of_horde
 ######*/
 
-#define GOSSIP_ITEM_FALLEN "Continue..."
+#define GOSSIP_ITEM_FALLEN "Sprecht bitte weiter, oh Held..."
 
-#define GOSSIP_ITEM_FALLEN1 "What could be worse than death?"
-#define GOSSIP_ITEM_FALLEN2 "Subordinates?"
-#define GOSSIP_ITEM_FALLEN3 "What are the stones of binding?"
-#define GOSSIP_ITEM_FALLEN4 "You can count on me, Hero"
-#define GOSSIP_ITEM_FALLEN5 "I shall"
+#define GOSSIP_ITEM_FALLEN1 "Was könnte schlimmer sein als der Tod?"
+#define GOSSIP_ITEM_FALLEN2 "Untergebenen?"
+#define GOSSIP_ITEM_FALLEN3 "Was sind die Steine der Bindung?"
+#define GOSSIP_ITEM_FALLEN4 "Verlasst Euch auf mich, oh Held."
+#define GOSSIP_ITEM_FALLEN5 "Das werde ich."
 
 bool GossipHello_npc_fallen_hero_of_horde(Player* pPlayer, Creature* pCreature)
 {
@@ -77,13 +77,13 @@ bool GossipHello_npc_fallen_hero_of_horde(Player* pPlayer, Creature* pCreature)
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
     if (pPlayer->GetQuestStatus(2784) == QUEST_STATUS_INCOMPLETE)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Why are you here?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Warum seid ihr hier?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
 
     if (pPlayer->GetQuestStatus(2801) == QUEST_STATUS_INCOMPLETE && pPlayer->GetTeam() == HORDE)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Continue story...", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Fahrt mit der Geschichte fort...", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
 
     if (pPlayer->GetQuestStatus(2801) == QUEST_STATUS_INCOMPLETE && pPlayer->GetTeam() == ALLIANCE)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Why are you here?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Warum seid ihr hier?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
 
     pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
 

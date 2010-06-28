@@ -229,7 +229,7 @@ enum
     SPELL_JAINAS_AUTOGRAPH = 23122
 };
 
-#define GOSSIP_ITEM_JAINA "I know this is rather silly but i have a young ward who is a bit shy and would like your autograph."
+#define GOSSIP_ITEM_JAINA "Lady Jaina, dies mag nach einer sonderbaren Bitte klingen... aber ich habe da einen jungen Schützling, der recht schüchtern ist. Ihr seid eine Heldin für ihn, deshalb bat er mich, Euch um ein Autogramm zu bitten."
 
 bool GossipHello_npc_lady_jaina_proudmoore(Player* pPlayer, Creature* pCreature)
 {
@@ -788,7 +788,7 @@ enum
     SPELL_ALCAZ_SURVEY          = 42295
 };
 
-#define GOSSIP_RIDE             "<Ride the gryphons to Survey Alcaz Island>"
+#define GOSSIP_RIDE             "Lady Jaina sagte, ich solle mit Euch über die Verwendung eines Greifen für die Beobachtung der Insel Alcaz sprechen."
 
 bool GossipHello_npc_cassa_crimsonwing(Player* pPlayer, Creature* pCreature)
 {

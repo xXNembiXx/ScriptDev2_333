@@ -199,7 +199,7 @@ CreatureAI* GetAI_npc_ancestral_wolf(Creature* pCreature)
 ## npc_demoniac_scryer
 ######*/
 
-#define GOSSIP_ITEM_ATTUNE          "Yes, Scryer. You may possess me."
+#define GOSSIP_ITEM_ATTUNE          "Ja, Seher, Ihr dürft von mir Besitz ergreifen."
 
 enum
 {
@@ -384,8 +384,8 @@ enum
     SPELL_TAXI_TO_BEACH_HEAD    = 35065
 };
 
-#define GOSSIP_ITEM1_WIN        "Fly me to The Abyssal Shelf"
-#define GOSSIP_ITEM2_WIN        "Fly me to Honor Point"
+#define GOSSIP_ITEM1_WIN        "Schickt mich zur abyssische Untiefe!"
+#define GOSSIP_ITEM2_WIN        "Schickt mich zum Ehrenposten"
 
 bool GossipHello_npc_gryphoneer_windbellow(Player* pPlayer, Creature* pCreature)
 {
@@ -427,7 +427,7 @@ bool GossipSelect_npc_gryphoneer_windbellow(Player* pPlayer, Creature* pCreature
 ## npc_naladu
 ######*/
 
-#define GOSSIP_NALADU_ITEM1 "Why don't you escape?"
+#define GOSSIP_NALADU_ITEM1 "Wieso flüchtet Ihr nicht?"
 
 enum
 {
@@ -456,9 +456,9 @@ bool GossipSelect_npc_naladu(Player* pPlayer, Creature* pCreature, uint32 uiSend
 ## npc_tracy_proudwell
 ######*/
 
-#define GOSSIP_TEXT_REDEEM_MARKS        "I have marks to redeem!"
-#define GOSSIP_TRACY_PROUDWELL_ITEM1    "I heard that your dog Fei Fei took Klatu's prayer beads..."
-#define GOSSIP_TRACY_PROUDWELL_ITEM2    "<back>"
+#define GOSSIP_TEXT_REDEEM_MARKS        "Ich habe ein Abzeichen einzulösen!"
+#define GOSSIP_TRACY_PROUDWELL_ITEM1    "Ich habe gehört, dass Euer Hund Fei-Fei Klatus Gebetsperlen gestohlen hat..."
+#define GOSSIP_TRACY_PROUDWELL_ITEM2    "<Zurück>"
 
 enum
 {
@@ -504,9 +504,9 @@ bool GossipSelect_npc_tracy_proudwell(Player* pPlayer, Creature* pCreature, uint
 ## npc_trollbane
 ######*/
 
-#define GOSSIP_TROLLBANE_ITEM1      "Tell me of the Sons of Lothar."
-#define GOSSIP_TROLLBANE_ITEM2      "<more>"
-#define GOSSIP_TROLLBANE_ITEM3      "Tell me of your homeland."
+#define GOSSIP_TROLLBANE_ITEM1      "Erzähl mir mehr über die Söhne Lothars."
+#define GOSSIP_TROLLBANE_ITEM2      "<mehr>"
+#define GOSSIP_TROLLBANE_ITEM3      "Erzähl mir von Eurer Heimat."
 
 enum
 {
@@ -557,8 +557,8 @@ enum
     QUEST_SHATTER_POINT         = 10340
 };
 
-#define GOSSIP_ITEM1_DAB        "Fly me to Murketh and Shaadraz Gateways"
-#define GOSSIP_ITEM2_DAB        "Fly me to Shatter Point"
+#define GOSSIP_ITEM1_DAB        "Ich habe einen Bomberauftrag von Vorpostenkommandant Wa'ppun. Ich brauche einen Greifenzerstörer!"
+#define GOSSIP_ITEM2_DAB        "Schickt mich zum Trümmerposten."
 
 bool GossipHello_npc_wing_commander_dabiree(Player* pPlayer, Creature* pCreature)
 {
@@ -610,9 +610,9 @@ enum
     SPELL_TAXI_SPINEBREAKER     = 34578
 };
 
-#define GOSSIP_ITEM1_BRA        "I'm on a bombing mission for Forward Commander To'arch. I need a wyvern destroyer!"
-#define GOSSIP_ITEM2_BRA        "Fly me to The Abyssal Shelf"
-#define GOSSIP_ITEM3_BRA        "Lend me a Wind Rider, I'm going to Spinebreaker Post."
+#define GOSSIP_ITEM1_BRA        "Ich habe einen Bombenauftrag von Vorpostenkommandant To'arch. Ich brauche einen Flügeldrachenzerstörer!"
+#define GOSSIP_ITEM2_BRA        "Schickt mich zur abyssischen Untertiefe!"
+#define GOSSIP_ITEM3_BRA        "Gebt mir einen Windreiter. Ich werde zum Rückenbrecherposten fliegen!"
 
 bool GossipHello_npc_wing_commander_brack(Player* pPlayer, Creature* pCreature)
 {

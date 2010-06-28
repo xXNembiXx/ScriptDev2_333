@@ -39,8 +39,8 @@ EndContentData */
 
 #define SAY_REWARD_BLESS          -1000207
 
-#define GOSSIP_ITEM_BLESS_ASH     "Grant me your mark, wise ancient."
-#define GOSSIP_ITEM_BLESS_KEL     "Grant me your mark, mighty ancient."
+#define GOSSIP_ITEM_BLESS_ASH     "Gewährt mir Euer Mal, weises Urtum."
+#define GOSSIP_ITEM_BLESS_KEL     "Mächtiges Urtum, bitte gewährt mir Euer Mal."
 
 //#define TEXT_BLESSINGS        "<You need higher standing with Cenarion Expedition to recive a blessing.>"
 
@@ -122,7 +122,7 @@ enum
     FACTION_HOSTILE_CO      = 45
 };
 
-#define GOSSIP_COOSH        "You owe Sim'salabim money. Hand them over or die!"
+#define GOSSIP_COOSH        "Ich wurde von Sal'salabim geschickt, um eine Schuld einzutreiben. Bezahlt, oder ich muss Euch weh tun."
 
 struct MANGOS_DLL_DECL npc_cooshcooshAI : public ScriptedAI
 {
@@ -187,9 +187,9 @@ bool GossipSelect_npc_cooshcoosh(Player* pPlayer, Creature* pCreature, uint32 ui
 ## npc_elder_kuruti
 ######*/
 
-#define GOSSIP_ITEM_KUR1 "Offer treat"
-#define GOSSIP_ITEM_KUR2 "Im a messenger for Draenei"
-#define GOSSIP_ITEM_KUR3 "Get message"
+#define GOSSIP_ITEM_KUR1 "Seid gegrüßt, Ältester. Es ist Zeit für Euer Volk, die Feindseligkeiten mit den Draenei und ihren Verbündeten zu beenden."
+#define GOSSIP_ITEM_KUR2 "Ich wollte Euch nicht täuschen, Ältester. Die Draenei von Telredor wollten in einer Weise an Euch herantreten, mit der Ihr vertraut seid."
+#define GOSSIP_ITEM_KUR3 "Ich werde es ihnen sagen. Gehabt Euch wohl, Ältester."
 
 bool GossipHello_npc_elder_kuruti(Player* pPlayer, Creature* pCreature)
 {
@@ -327,8 +327,8 @@ bool GossipSelect_npc_mortog_steamhead(Player* pPlayer, Creature* pCreature, uin
 ## npc_timothy_daniels
 ######*/
 
-#define GOSSIP_TIMOTHY_DANIELS_ITEM1    "Specialist, eh? Just what kind of specialist are you, anyway?"
-#define GOSSIP_TEXT_BROWSE_POISONS      "Let me browse your reagents and poison supplies."
+#define GOSSIP_TIMOTHY_DANIELS_ITEM1    "Spezialist, was? Was für ein Spezialist seid Ihr denn genau?"
+#define GOSSIP_TEXT_BROWSE_POISONS      "Zeigt mir Eure Reagenzien und Giftzutanten."
 
 enum
 {

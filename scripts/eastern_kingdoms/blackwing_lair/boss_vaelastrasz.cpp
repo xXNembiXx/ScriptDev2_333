@@ -29,7 +29,7 @@ EndScriptData */
 #define SAY_HALFLIFE        -1469029
 #define SAY_KILLTARGET      -1469030
 
-#define GOSSIP_ITEM         "Start Event <Needs Gossip Text>"
+#define GOSSIP_ITEM         "Start Event <Needs Gossip Text>" //GMDB TODO
 
 #define SPELL_ESSENCEOFTHERED       23513
 #define SPELL_FLAMEBREATH           23461

@@ -361,8 +361,8 @@ enum
     QUEST_CRACK_SKULLS      = 10009
 };
 
-#define GOSSIP_FLOON1       "You owe Sim'salabim money. Hand them over or die!"
-#define GOSSIP_FLOON2       "Hand over the money or die...again!"
+#define GOSSIP_FLOON1       "Ich wurde von Sal'salabim geschickt, um eine Schuld einzutreiben. Bezahlt, oder ich muss Euch weh tun."
+#define GOSSIP_FLOON2       "Er will sein 'Gold'. Bezahlt oder Sterbt... wieder..."
 
 struct MANGOS_DLL_DECL npc_floonAI : public ScriptedAI
 {
@@ -449,7 +449,7 @@ bool GossipSelect_npc_floon(Player* pPlayer, Creature* pCreature, uint32 uiSende
 ## npc_skyguard_handler_deesak
 ######*/
 
-#define GOSSIP_SKYGUARD "Fly me to Ogri'la please"
+#define GOSSIP_SKYGUARD "Aber ja doch! Bringt mich zum Außenposten der Himmelswache."
 
 bool GossipHello_npc_skyguard_handler_deesak(Player* pPlayer, Creature* pCreature)
 {

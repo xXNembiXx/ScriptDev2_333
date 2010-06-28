@@ -47,7 +47,7 @@ enum
     NPC_CORRUPT_SABER           = 10042
 };
 
-#define GOSSIP_ITEM_RELEASE     "I want to release the corrupted saber to Winna."
+#define GOSSIP_ITEM_RELEASE     "Ich möchte den verderbten Säbler auf Winna loslassen."
 
 struct MANGOS_DLL_DECL npc_kittenAI : public FollowerAI
 {
@@ -174,7 +174,7 @@ enum
     SPELL_CENARION_BEACON     = 15120
 };
 
-#define GOSSIP_ITEM_BEACON  "Please make me a Cenarion Beacon"
+#define GOSSIP_ITEM_BEACON  "Ich brauche ein cenarisches Leuchtfeuer."
 
 bool GossipHello_npcs_riverbreeze_and_silversky(Player* pPlayer, Creature* pCreature)
 {

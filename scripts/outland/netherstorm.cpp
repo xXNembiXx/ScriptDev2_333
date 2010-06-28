@@ -632,7 +632,7 @@ enum
     TAXI_PATH_ID                = 627                       //(possibly 627+628(152->153->154->155))
 };
 
-#define GOSSIP_ITEM_FLY_ULTRIS  "Fly me to Ultris"
+#define GOSSIP_ITEM_FLY_ULTRIS  "Ich bin bereit loszufliegen! Bringt mich hinauf, Drache!"
 
 bool GossipHello_npc_protectorate_nether_drake(Player* pPlayer, Creature* pCreature)
 {
@@ -664,7 +664,7 @@ enum
     SPELL_STEALTH_FLIGHT     = 34905
 };
 
-#define GOSSIP_ITEM_FLY_CORUU  "Fly me to Manaforge Coruu please"
+#define GOSSIP_ITEM_FLY_CORUU  "Ich bin so bereit, wie ich es nur sein kann!"
 
 bool GossipHello_npc_veronia(Player* pPlayer, Creature* pCreature)
 {

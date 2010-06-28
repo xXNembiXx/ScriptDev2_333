@@ -1942,6 +1942,14 @@
 							>
 						</File>
 						<File
+							RelativePath="..\scripts\northrend\nexus\nexus\commander_kolurg.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\northrend\nexus\nexus\commander_stoutbeard.cpp"
+							>
+						</File>
+						<File
 							RelativePath="..\scripts\northrend\nexus\nexus\instance_nexus.cpp"
 							>
 						</File>

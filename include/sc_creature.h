@@ -183,4 +183,13 @@ struct MANGOS_DLL_DECL Scripted_NoMovementAI : public ScriptedAI
     void AttackStart(Unit*);
 };
 
+// Trinity
+#define SCRIPT_CAST_TYPE dynamic_cast
+//#define SCRIPT_CAST_TYPE static_cast
+#define CAST_PLR(a)     (SCRIPT_CAST_TYPE<Player*>(a))
+#define CAST_CRE(a)     (SCRIPT_CAST_TYPE<Creature*>(a))
+#define CAST_SUM(a)     (SCRIPT_CAST_TYPE<TempSummon*>(a))
+#define CAST_PET(a)     (SCRIPT_CAST_TYPE<Pet*>(a))
+#define CAST_AI(a,b)    (SCRIPT_CAST_TYPE<a*>(b))
+
 #endif

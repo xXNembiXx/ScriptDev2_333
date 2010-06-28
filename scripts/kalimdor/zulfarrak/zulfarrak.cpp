@@ -337,14 +337,14 @@ struct MANGOS_DLL_DECL boss_antusulAI : public ScriptedAI
 
         if (FireNova_Timer < diff)
         {
-			if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+			if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                 DoCast(pTarget, SPELL_FIRE_NOVA);
             FireNova_Timer = 18000;
         }else FireNova_Timer -= diff;
 
         if (TotemEarthgrab_Timer < diff)
         {
-			if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+			if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                 DoCast(pTarget, SPELL_TOTEM_EARTHGRAB);
             TotemEarthgrab_Timer = 60000;
         }else TotemEarthgrab_Timer -= diff;
@@ -467,7 +467,7 @@ struct MANGOS_DLL_DECL boss_ghazrillaAI : public ScriptedAI
 
 		if (FreezeSolid_Timer < diff)
         {
-			if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+			if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
 				 DoCast(m_creature->getVictim(), SPELL_FREEZE_SOLID);
             FreezeSolid_Timer = 13000;
         }else FreezeSolid_Timer -= diff;
@@ -526,7 +526,7 @@ struct MANGOS_DLL_DECL boss_velrathaAI : public ScriptedAI
 
 		if (ShadowBoltVolley_Timer < diff)
         {
-			if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+			if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
 				 DoCast(m_creature->getVictim(), SPELL_SHADOW_BOLT_VOLLEY);
             ShadowBoltVolley_Timer = 12000;
         }else ShadowBoltVolley_Timer -= diff;
@@ -643,7 +643,7 @@ struct MANGOS_DLL_DECL boss_ukorzAI : public ScriptedAI
 
 		if (WideSlash_Timer < diff)
         {
-			if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+			if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
 				DoCast(m_creature->getVictim(), SPELL_WIDE_SLASH);
             WideSlash_Timer = 18000;
         }else WideSlash_Timer -= diff;

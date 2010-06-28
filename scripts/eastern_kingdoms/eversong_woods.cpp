@@ -17,7 +17,7 @@
 /* ScriptData
 SDName: Eversong_Woods
 SD%Complete: 100
-SDComment: Quest support: 8346, 8483, 8488, 9686
+SDComment: Quest support: 8346, 8483, 8488, 8490, 9686
 SDCategory: Eversong Woods
 EndScriptData */
 
@@ -27,6 +27,7 @@ go_harbinger_second_trial
 npc_prospector_anvilward
 npc_apprentice_mirveda
 npc_mana_wyrm
+npc_infused_crystal
 EndContentData */
 
 #include "precompiled.h"
@@ -462,6 +463,123 @@ CreatureAI* GetAI_npc_mana_wyrm(Creature* pCreature)
     return new npc_mana_wyrmAI(pCreature);
 }
 
+/*######
+## npc_infused_crystal
+######*/
+
+#define ADD_X1 8259.375977f
+#define ADD_Y1 -7202.288574f
+#define ADD_Z1 139.287430f
+#define ADD_X2 8255.425781f
+#define ADD_Y2 -7222.026367f
+#define ADD_Z2 139.607162f
+#define ADD_X3 8267.902344f
+#define ADD_Y3 -7193.510742f
+#define ADD_Z3 139.430374f
+
+struct MANGOS_DLL_DECL npc_infused_crystalAI : public ScriptedAI
+{
+    npc_infused_crystalAI(Creature* pCreature) : ScriptedAI(pCreature) { Reset(); }
+    
+    uint32 QuestTimer;
+    uint32 SpawnTimer;
+    uint64 PlayerGUID;
+
+    bool Completed;
+            
+    void Reset()
+    {
+        QuestTimer = 60000;
+        SpawnTimer  = 1000;
+        PlayerGUID = 0;
+        Completed = false;
+    }
+
+	void MoveInLineOfSight(Unit* pUnit)
+	{
+		if ( pUnit && pUnit->GetTypeId() != TYPEID_PLAYER )
+			return;
+
+		if ( ((Player*)pUnit)->GetQuestStatus(8490) != QUEST_STATUS_INCOMPLETE )
+			return;
+
+		PlayerGUID = ((Player*)pUnit)->GetGUID();
+	}
+
+	void Aggro(Unit* pUnit) { }
+
+    void JustDied(Unit* pUnit) 
+    {
+        if (PlayerGUID)
+		{
+			Unit* pPlayer = Unit::GetUnit((*m_creature), PlayerGUID);
+			if (pPlayer && ((Player*)pPlayer)->GetQuestStatus(8490) == QUEST_STATUS_INCOMPLETE)
+				((Player*)pPlayer)->FailQuest(8490);
+		}
+    }
+
+    void UpdateAI(const uint32 diff)
+    {    
+        if (Completed) 
+            return;
+
+        if (SpawnTimer < diff)
+        {
+            Creature* Spawned = NULL;
+            Creature* Spawned2 = NULL;
+            Creature* Spawned3 = NULL;
+
+            Spawned = m_creature->SummonCreature(17086, ADD_X1, ADD_Y1, ADD_Z1, 5.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
+            if (Spawned)
+            {
+                Spawned->AI()->AttackStart(m_creature);
+                Spawned->setFaction(168);
+                Spawned->MonsterTextEmote("becomes enraged!", NULL);
+            }
+
+            Spawned2 = m_creature->SummonCreature(17086, ADD_X2, ADD_Y2, ADD_Z2, 5.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
+            if (Spawned2)
+            {
+                Spawned2->AI()->AttackStart(m_creature);
+                Spawned2->setFaction(168);
+                Spawned2->MonsterTextEmote("becomes enraged!", NULL);
+            }
+
+            Spawned3 = m_creature->SummonCreature(17086, ADD_X3, ADD_Y3, ADD_Z3, 5.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
+            if (Spawned)
+            {
+                Spawned3->AI()->AttackStart(m_creature);
+                Spawned3->setFaction(168);
+                Spawned3->MonsterTextEmote("becomes enraged!", NULL);
+            }
+
+			SpawnTimer = 40000;
+
+        }else SpawnTimer -= diff;
+
+        if (QuestTimer < diff)
+        {
+			if(PlayerGUID)
+			{
+				Unit* pPlayer = Unit::GetUnit((*m_creature), PlayerGUID);
+				if (pPlayer)
+                {
+					((Player*)pPlayer)->KilledMonsterCredit(16364,0);
+                    m_creature->MonsterTextEmote("releases the last of its energies into nearby runestone, succesfully reactivating it.", NULL);
+					m_creature->RemoveFromWorld();
+				}
+			}
+            Completed = true;
+
+        }else QuestTimer -= diff;
+    }
+};
+
+CreatureAI* GetAI_npc_infused_crystal(Creature* pCreature)
+{
+    return new npc_infused_crystalAI (pCreature);
+}
+
 void AddSC_eversong_woods()
 {
     Script* newscript;
@@ -493,5 +611,10 @@ void AddSC_eversong_woods()
     newscript = new Script;
     newscript->Name = "npc_mana_wyrm";
     newscript->GetAI = &GetAI_npc_mana_wyrm;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name= "npc_infused_crystal";
+    newscript->GetAI = &GetAI_npc_infused_crystal;
     newscript->RegisterSelf();
 }

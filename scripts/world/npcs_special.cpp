@@ -2081,13 +2081,13 @@ void AddSC_npcs_special()
     newscript->pGossipHello =  &GossipHello_npc_rogue_trainer;
     newscript->pGossipSelect = &GossipSelect_npc_rogue_trainer;
     newscript->RegisterSelf();
-
+/*
     newscript = new Script;
     newscript->Name = "npc_sayge";
     newscript->pGossipHello = &GossipHello_npc_sayge;
     newscript->pGossipSelect = &GossipSelect_npc_sayge;
     newscript->RegisterSelf();
-
+*/
     newscript = new Script;
     newscript->Name = "npc_tabard_vendor";
     newscript->pGossipHello =  &GossipHello_npc_tabard_vendor;

@@ -54,9 +54,9 @@ struct MANGOS_DLL_DECL instance_ruby_sanctum : public ScriptedInstance
 
     void OnObjectCreate(GameObject* pGo)
     {
-        switch(pGo->GetEntry())
+        /*switch(pGo->GetEntry())
         {
-        }
+        }*/
     }
 
     void SetData(uint32 uiType, uint32 uiData)

@@ -4262,7 +4262,7 @@ void SendTrainersMenu_guard_dalaran(Player* pPlayer, Creature* pCreature, uint32
 	switch(action)
 	{
 		case GOSSIP_ACTION_INFO_DEF + 1:
-			pPlayer->SEND_POI(5807.69f, 586.88, 7, 6, 0, "Der Magierlehrer von Dalaran");
+			pPlayer->SEND_POI(5807.69f, 586.88f, 7, 6, 0, "Der Magierlehrer von Dalaran");
 			pPlayer->SEND_GOSSIP_MENU(13999, pCreature->GetGUID());
 			break;
 		case GOSSIP_ACTION_INFO_DEF + 2:
@@ -4319,7 +4319,7 @@ void SendVendorsMenu_guard_dalaran(Player* pPlayer, Creature* pCreature, uint32 
 			pPlayer->SEND_GOSSIP_MENU(14107, pCreature->GetGUID());
 			break;
 		case GOSSIP_ACTION_INFO_DEF + 5:
-			pPlayer->SEND_POI(5753.19, 694.93, 7, 6, 0, "Obstverkäufer in Dalaran");
+			pPlayer->SEND_POI(5753.19f, 694.93f, 7, 6, 0, "Obstverkäufer in Dalaran");
 			pPlayer->SEND_GOSSIP_MENU(14106, pCreature->GetGUID());
 			break;
 		case GOSSIP_ACTION_INFO_DEF + 6:

@@ -131,6 +131,8 @@ struct MANGOS_DLL_DECL boss_rotfaceAI : public ScriptedAI
     void UpdateAI(const uint32 diff)
     {
 
+    if(!pInstance) return;
+
     if (!pet) {
               if (Creature* pGuard = (Creature*)Unit::GetUnit((*m_creature),pInstance->GetData64(NPC_PRECIOUS)))
                                 if (!pGuard->isAlive())  {
@@ -160,19 +162,20 @@ struct MANGOS_DLL_DECL boss_rotfaceAI : public ScriptedAI
               };
 
         if (bsw->timedQuery(SPELL_SLIME_SPRAY, diff))
-            if (Unit* pTemp = bsw->doSummon(NPC_OOZE_SPRAY_STALKER))
+            if (bsw->doSummon(NPC_OOZE_SPRAY_STALKER))
                 bsw->doCast(SPELL_SLIME_SPRAY);
 
-        for(uint8 i = 0; i < MAX_INFECTION_TARGETS; ++i)
-           if (InfectionTarget[i] && InfectionTarget[i]->isAlive() && InfectionTarget[i]->IsInMap(m_creature))
-              if (!bsw->hasAura(SPELL_MUTATED_INFECTION_AURA,InfectionTarget[i]))
-                {
-                    float fPosX, fPosY, fPosZ;
-                    InfectionTarget[i]->GetPosition(fPosX, fPosY, fPosZ);
-                    if (Unit* pTemp = bsw->doSummon(NPC_SMALL_OOZE,fPosX, fPosY, fPosZ))
-                        pTemp->AddThreat(InfectionTarget[i], 1000.0f);
-                    InfectionTarget[i] = NULL;
-                };
+        if (bsw->timedQuery(SPELL_MUTATED_INFECTION_AURA, diff))
+            for(uint8 i = 0; i < MAX_INFECTION_TARGETS; ++i)
+               if (InfectionTarget[i] && InfectionTarget[i]->isAlive() && InfectionTarget[i]->IsInMap(m_creature))
+                  if (!bsw->hasAura(SPELL_MUTATED_INFECTION_AURA,InfectionTarget[i]))
+                  {
+                       float fPosX, fPosY, fPosZ;
+                       InfectionTarget[i]->GetPosition(fPosX, fPosY, fPosZ);
+                       if (Unit* pTemp = bsw->doSummon(NPC_SMALL_OOZE,fPosX, fPosY, fPosZ))
+                           pTemp->AddThreat(InfectionTarget[i], 1000.0f);
+                       InfectionTarget[i] = NULL;
+                   };
 
         if (bsw->timedQuery(SPELL_MUTATED_INFECTION, diff))
             if (Unit* pTarget = bsw->SelectRandomPlayer(SPELL_MUTATED_INFECTION_AURA, false, 60.0f))

@@ -11,11 +11,15 @@
 #include "ProgressBar.h"
 #include "../system/ScriptLoader.h"
 #include "../system/system.h"
+#include "World.h"
 
 int num_sc_scripts;
 Script *m_scripts[MAX_SCRIPTS];
 
 Config SD2Config;
+
+bool MaNGOS::Singleton<ObjectMgr>::si_destroyed;
+class ObjectMgr * MaNGOS::Singleton<ObjectMgr>::si_instance;
 
 QueryResult* strSD2Pquery(char* str)
 {

@@ -27,6 +27,9 @@ EndScriptData */
 #include "def_halls.h"
 #include "World.h"
 
+bool MaNGOS::Singleton<World>::si_destroyed;
+class World * MaNGOS::Singleton<World>::si_instance;
+
 struct MANGOS_DLL_DECL instance_halls_of_reflection : public ScriptedInstance
 {
     instance_halls_of_reflection(Map* pMap) : ScriptedInstance(pMap) 

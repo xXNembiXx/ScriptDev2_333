@@ -50,6 +50,7 @@ include/sc_instance.h \
 include/sc_boss_spell_worker.cpp \
 include/sc_boss_spell_worker.h \
 scripts/battlegrounds/battleground.cpp \
+scripts/custom/custom_events.cpp \
 scripts/custom/npc_arena_honor.cpp \
 scripts/custom/teleguy.cpp \
 scripts/battlegrounds/alterac_valley/boss_balinda.cpp \

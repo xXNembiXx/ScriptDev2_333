@@ -404,6 +404,10 @@
 				Name="custom"
 				>
 				<File
+					RelativePath="..\scripts\custom\custom_events.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\scripts\custom\npc_arena_honor.cpp"
 					>
 				</File>

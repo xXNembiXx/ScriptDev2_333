@@ -18,8 +18,23 @@ Script *m_scripts[MAX_SCRIPTS];
 
 Config SD2Config;
 
-bool MaNGOS::Singleton<ObjectMgr>::si_destroyed;
+/**********************************************************************
+additions for windows compiler
+**********************************************************************/
+template<> bool MaNGOS::Singleton<World>::si_destroyed;
+class World * MaNGOS::Singleton<World>::si_instance;
+template<> bool MaNGOS::Singleton<ObjectMgr>::si_destroyed;
 class ObjectMgr * MaNGOS::Singleton<ObjectMgr>::si_instance;
+World::World()
+{
+}
+World::~World()
+{
+}
+ObjectMgr::~ObjectMgr()
+{
+}
+/***********************************************************************/
 
 QueryResult* strSD2Pquery(char* str)
 {

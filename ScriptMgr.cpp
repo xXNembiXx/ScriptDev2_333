@@ -22,9 +22,8 @@ Config SD2Config;
 additions for windows compiler
 **********************************************************************/
 template<> bool MaNGOS::Singleton<World>::si_destroyed;
-class World * MaNGOS::Singleton<World>::si_instance;
 template<> bool MaNGOS::Singleton<ObjectMgr>::si_destroyed;
-class ObjectMgr * MaNGOS::Singleton<ObjectMgr>::si_instance;
+template<> World *MaNGOS::Singleton<World>::si_instance;
 World::World()
 {
 }
@@ -246,7 +245,7 @@ char const* GetScriptText(int32 iTextEntry, Player* pPlayer)
     if (pPlayer && pPlayer->IsInWorld()) currentLocaleIdx = pPlayer->GetSession()->GetSessionDbLocaleIndex();
         else currentLocaleIdx = LOCALE_enUS;
 
-    return sObjectMgr.GetMangosString(iTextEntry,currentLocaleIdx);
+    return GetMangosString(iTextEntry, currentLocaleIdx);
 }
 
 //*********************************

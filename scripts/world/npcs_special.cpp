@@ -49,6 +49,7 @@ npc_winter_reveler		100%	Winterveil event
 npc_metzen				100%	Winterveil event
 npc_death_knight_gargoyle		AI for summoned gargoyle of deathknights
 npc_training_dummy		100%	AI for training dummies
+npc_experience_eliminator		NPC to stop gaining experience 
 EndContentData */
 
 /*########
@@ -2453,6 +2454,44 @@ CreatureAI* GetAI_npc_training_dummy(Creature* pCreature)
     return new npc_training_dummyAI(pCreature);
 }
 
+/*######
+## npc_experience_eliminator
+######*/
+
+#define GOSSIP_ITEM_STOP_XP_GAIN "I don't want to gain experience anymore."
+#define GOSSIP_CONFIRM_STOP_XP_GAIN "Are you sure you want to stop gaining experience?"
+#define GOSSIP_ITEM_START_XP_GAIN "I want to be able to gain experience again."
+#define GOSSIP_CONFIRM_START_XP_GAIN "Are you sure you want to be able to gain experience once again?"
+
+bool GossipHello_npc_experience_eliminator(Player* pPlayer, Creature* pCreature)
+{
+pPlayer->ADD_GOSSIP_ITEM_EXTENDED(GOSSIP_ICON_CHAT, pPlayer->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_XP_USER_DISABLED) ? GOSSIP_ITEM_START_XP_GAIN : GOSSIP_ITEM_STOP_XP_GAIN,
+GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1,
+pPlayer->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_XP_USER_DISABLED) ? GOSSIP_CONFIRM_START_XP_GAIN : GOSSIP_CONFIRM_STOP_XP_GAIN, 100000, false);
+
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_experience_eliminator(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if(uiAction == GOSSIP_ACTION_INFO_DEF+1)
+    {
+        // cheater(?) passed through client limitations
+        if(pPlayer->GetMoney() < 100000)
+            return true;
+
+        pPlayer->ModifyMoney(-100000);
+
+        if(pPlayer->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_XP_USER_DISABLED))
+            pPlayer->RemoveFlag(PLAYER_FLAGS, PLAYER_FLAGS_XP_USER_DISABLED);
+        else
+            pPlayer->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_XP_USER_DISABLED);
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_npcs_special()
 {
     Script* newscript;
@@ -2577,5 +2616,11 @@ void AddSC_npcs_special()
     newscript = new Script;
     newscript->Name = "npc_training_dummy";
     newscript->GetAI = &GetAI_npc_training_dummy;
+    newscript->RegisterSelf();
+
+	newscript = new Script;
+    newscript->Name = "npc_experience_eliminator";
+    newscript->pGossipHello = &GossipHello_npc_experience_eliminator;
+    newscript->pGossipSelect = &GossipSelect_npc_experience_eliminator;
     newscript->RegisterSelf();
 }

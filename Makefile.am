@@ -270,6 +270,9 @@ scripts/kalimdor/caverns_of_time/dark_portal/dark_portal.cpp \
 scripts/kalimdor/caverns_of_time/dark_portal/dark_portal.h \
 scripts/kalimdor/caverns_of_time/dark_portal/instance_dark_portal.cpp \
 scripts/kalimdor/caverns_of_time/hyjal/boss_archimonde.cpp \
+scripts/kalimdor/caverns_of_time/hyjal/boss_anetheron.cpp \
+scripts/kalimdor/caverns_of_time/hyjal/boss_azgalor.cpp \
+scripts/kalimdor/caverns_of_time/hyjal/boss_kazrogal.cpp \
 scripts/kalimdor/caverns_of_time/hyjal/hyjal.cpp \
 scripts/kalimdor/caverns_of_time/hyjal/hyjal.h \
 scripts/kalimdor/caverns_of_time/hyjal/hyjalAI.cpp \

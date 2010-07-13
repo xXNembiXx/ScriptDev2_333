@@ -47,6 +47,7 @@ npc_locksmith            75%    list of keys needs to be confirmed
 mob_mirror_image         60%    AI for mage spell Mirror Image
 npc_winter_reveler		100%	Winterveil event
 npc_metzen				100%	Winterveil event
+npc_death_knight_gargoyle		AI for summoned gargoyle of deathknights
 EndContentData */
 
 /*########
@@ -2325,6 +2326,88 @@ bool GossipSelect_npc_metzen(Player* pPlayer, Creature* pCreature, uint32 uiSend
     return true;
 }
 
+/*########
+# mob_death_knight_gargoyle AI
+#########*/
+
+// UPDATE `creature_template` SET `ScriptName` = 'mob_death_knight_gargoyle' WHERE `entry` = '27829';
+
+enum GargoyleSpells
+{
+    SPELL_GARGOYLE_STRIKE = 43802      // Don't know if this is the correct spell, it does about 700-800 damage points
+};
+
+struct MANGOS_DLL_DECL npc_death_knight_gargoyle : public ScriptedAI
+{
+    npc_death_knight_gargoyle(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        bLocked = false;
+        Reset();
+    }
+    uint64 m_uiCreatorGUID;
+    uint32 m_uiGargoyleStrikeTimer;
+    float fDist;
+    float fAngle;
+    bool bLocked;
+
+    void Reset()
+    {
+        m_uiGargoyleStrikeTimer = urand(1000, 2000);
+    }
+
+    void UpdateAI(const uint32 uiDiff)
+    {
+        if (!bLocked)
+        {
+            m_uiCreatorGUID = m_creature->GetCreatorGUID();
+            if (Player* pOwner = (Player*)Unit::GetUnit(*m_creature, m_uiCreatorGUID))
+            {
+                fDist = m_creature->GetDistance(pOwner);
+                fAngle = m_creature->GetAngle(pOwner);
+            }
+            bLocked = true;
+        }
+
+        Player* pOwner = (Player*)Unit::GetUnit(*m_creature, m_uiCreatorGUID);
+        if (!pOwner || !pOwner->IsInWorld())
+        {
+            m_creature->ForcedDespawn();
+            return;
+        }
+
+        uint64 targetGUID = 0;
+
+        if (pOwner->getVictim())
+            targetGUID = pOwner->getVictim()->GetGUID();
+
+        Unit* pTarget = Unit::GetUnit(*m_creature, targetGUID);
+
+        if (!pTarget || !m_creature->CanInitiateAttack() || !pTarget->isTargetableForAttack() ||
+        !m_creature->IsHostileTo(pTarget) || !pTarget->isInAccessablePlaceFor(m_creature))
+        {
+            if (m_creature->GetMotionMaster()->GetCurrentMovementGeneratorType() != FOLLOW_MOTION_TYPE)
+            {
+                m_creature->InterruptNonMeleeSpells(false);
+                m_creature->GetMotionMaster()->Clear();
+                m_creature->GetMotionMaster()->MoveFollow(pOwner, fDist, fAngle);
+            }
+            return;
+        }
+
+        if (m_uiGargoyleStrikeTimer <= uiDiff)
+        {
+            if (DoCastSpellIfCan(pTarget, SPELL_GARGOYLE_STRIKE, 0, pOwner->GetGUID()) == CAST_OK)
+                m_uiGargoyleStrikeTimer = urand(1000, 2000);
+        }
+        else m_uiGargoyleStrikeTimer -= uiDiff;
+    }
+};
+
+CreatureAI* GetAI_npc_death_knight_gargoyle(Creature* pCreature)
+{
+    return new npc_death_knight_gargoyle(pCreature);
+}
+
 void AddSC_npcs_special()
 {
     Script* newscript;
@@ -2439,5 +2522,10 @@ void AddSC_npcs_special()
     newscript->Name = "npc_metzen";
     newscript->pGossipHello = &GossipHello_npc_metzen;
 	newscript->pGossipSelect = &GossipSelect_npc_metzen;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_death_knight_gargoyle";
+    newscript->GetAI = &GetAI_npc_death_knight_gargoyle;
     newscript->RegisterSelf();
 }

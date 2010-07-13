@@ -48,6 +48,7 @@ mob_mirror_image         60%    AI for mage spell Mirror Image
 npc_winter_reveler		100%	Winterveil event
 npc_metzen				100%	Winterveil event
 npc_death_knight_gargoyle		AI for summoned gargoyle of deathknights
+npc_training_dummy		100%	AI for training dummies
 EndContentData */
 
 /*########
@@ -2408,6 +2409,50 @@ CreatureAI* GetAI_npc_death_knight_gargoyle(Creature* pCreature)
     return new npc_death_knight_gargoyle(pCreature);
 }
 
+/*######
+## npc_training_dummy
+######*/
+
+#define OUT_OF_COMBAT_TIME 5000
+
+struct MANGOS_DLL_DECL npc_training_dummyAI : public Scripted_NoMovementAI
+{
+    uint32 combat_timer;
+
+    npc_training_dummyAI(Creature* pCreature) : Scripted_NoMovementAI(pCreature)
+    {
+        Reset();
+    }
+
+    void Reset()
+    {
+        combat_timer = 0;
+		m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE);
+    }
+
+    void DamageTaken(Unit* pDoneBy, uint32 &uiDamage)
+    {
+        combat_timer = 0;
+    }
+
+    void UpdateAI(const uint32 diff)
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+        m_creature->ModifyHealth(m_creature->GetMaxHealth());
+
+        combat_timer += diff;
+        if (combat_timer > OUT_OF_COMBAT_TIME)
+            EnterEvadeMode();
+    }
+};
+
+CreatureAI* GetAI_npc_training_dummy(Creature* pCreature)
+{
+    return new npc_training_dummyAI(pCreature);
+}
+
 void AddSC_npcs_special()
 {
     Script* newscript;
@@ -2527,5 +2572,10 @@ void AddSC_npcs_special()
     newscript = new Script;
     newscript->Name = "npc_death_knight_gargoyle";
     newscript->GetAI = &GetAI_npc_death_knight_gargoyle;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_training_dummy";
+    newscript->GetAI = &GetAI_npc_training_dummy;
     newscript->RegisterSelf();
 }

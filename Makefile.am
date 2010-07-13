@@ -53,6 +53,15 @@ scripts/battlegrounds/battleground.cpp \
 scripts/custom/custom_events.cpp \
 scripts/custom/npc_arena_honor.cpp \
 scripts/custom/teleguy.cpp \
+scripts/guards/ancient_of_war.cpp \
+scripts/guards/archbishop_benedictus.cpp \
+scripts/guards/g_marcus_jonathan.cpp \
+scripts/guards/high_fire_mage.cpp \
+scripts/guards/high_sorcerer_andromath.cpp \
+scripts/guards/highlord_bolvar_fordragon.cpp \
+scripts/guards/officers.cpp \
+scripts/guards/overlord_saurfang.cpp \
+scripts/guards/thrall.cpp \
 scripts/battlegrounds/alterac_valley/boss_balinda.cpp \
 scripts/battlegrounds/alterac_valley/boss_drekthar.cpp \
 scripts/battlegrounds/alterac_valley/boss_galvangar.cpp \

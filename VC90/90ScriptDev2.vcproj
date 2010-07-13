@@ -2964,6 +2964,46 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="guards"
+				>
+				<File
+					RelativePath="..\scripts\guards\ancient_of_war.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\scripts\guards\archbishop_benedictus.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\scripts\guards\g_marcus_jonathan.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\scripts\guards\high_fire_mage.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\scripts\guards\high_sorcerer_andromath.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\scripts\guards\highlord_bolvar_fordragon.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\scripts\guards\officers.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\scripts\guards\overlord_saurfang.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\scripts\guards\thrall.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="include"

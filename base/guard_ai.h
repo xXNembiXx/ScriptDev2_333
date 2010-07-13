@@ -14,13 +14,27 @@ struct MANGOS_DLL_DECL guardAI : public ScriptedAI
         ~guardAI() {}
 
     uint32 GlobalCooldown;                                  //This variable acts like the global cooldown that players have (1.5 seconds)
-    uint32 BuffTimer;                                       //This variable keeps track of buffs
+    uint32 Bandage;
+    uint32 Potion;
+    uint32 Help;
+    uint32 OffHand;
+    uint32 ZoneAttackMsgTimer;
+    bool yell;
+    int _Aggro;
+    float temp1;
+    float temp2;
+    Unit* enemy;
+    Creature* Helper;
 
     void Reset();
 
     void Aggro(Unit *who);
 
     void JustDied(Unit *Killer);
+
+    void DamageDeal(Unit *done_to, uint32 &damage);
+
+    void DamageTaken(Unit *done_by, uint32 &damage);
 
     void UpdateAI(const uint32 diff);
 

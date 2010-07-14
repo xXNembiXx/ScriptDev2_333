@@ -17,7 +17,7 @@
 /* ScriptData
 SDName: Darkshore
 SD%Complete: 100
-SDComment: Quest support: 731, 2078, 5321
+SDComment: Quest support: 731, 2078, 5321, 2118
 SDCategory: Darkshore
 EndScriptData */
 
@@ -30,6 +30,7 @@ EndContentData */
 #include "precompiled.h"
 #include "escort_ai.h"
 #include "follower_ai.h"
+#include "simple_ai.h"
 
 /*####
 # npc_kerlonian
@@ -380,6 +381,82 @@ bool GossipSelect_npc_threshwackonator(Player* pPlayer, Creature* pCreature, uin
     return true;
 }
 
+/*#####
+# npc_captured_rabid_thistle_bear
+#####*/
+
+#define QUEST_PLAGUED_LANDS					2118
+#define NPC_THANARIUM_TREETENDER			3701
+#define NPC_CAPTURED_RABID_THISTLE_BEAR		11836
+#define OBJECT_BEARTRAP						111148
+
+struct MANGOS_DLL_DECL npc_captured_rabid_thistle_bearAI : public FollowerAI
+{
+    npc_captured_rabid_thistle_bearAI(Creature* pCreature) : FollowerAI(pCreature) { Reset(); }
+
+    void Reset() {}
+
+    void MoveInLineOfSight(Unit* pWho)
+    {
+        FollowerAI::MoveInLineOfSight(pWho);
+
+        if (!m_creature->getVictim() && !HasFollowState(STATE_FOLLOW_COMPLETE) && pWho->GetEntry() == NPC_THANARIUM_TREETENDER)
+        {
+            if (m_creature->IsWithinDistInMap(pWho, 5.0f))
+            {
+                DoAtEnd();
+            }
+        }
+    }
+    void DoAtEnd()
+    {
+		if (Player* pHolder = GetLeaderForFollower())
+		{
+			pHolder->KilledMonsterCredit(NPC_CAPTURED_RABID_THISTLE_BEAR,NULL);
+			SetFollowComplete();
+		}
+    }
+};
+
+CreatureAI* GetAI_npc_captured_rabid_thistle_bear(Creature* pCreature)
+{
+    return new npc_captured_rabid_thistle_bearAI(pCreature);
+}
+
+/*#####
+# npc_rabid_thistle_bear
+#####*/
+
+struct MANGOS_DLL_DECL npc_rabid_thistle_bearAI : SimpleAI
+{
+	npc_rabid_thistle_bearAI(Creature* pCreature) : SimpleAI(pCreature) { Reset(); }
+
+	void Reset() {}
+
+	void UpdateAI(const uint32 uiDiff)
+	{		
+		if (GameObject* pGoTemp = GetClosestGameObjectWithEntry(m_creature, OBJECT_BEARTRAP, 5.0f)){
+
+			if (m_creature->getVictim()->GetTypeId() == TYPEID_PLAYER){
+
+				Creature* captured_bear = DoSpawnCreature(NPC_CAPTURED_RABID_THISTLE_BEAR,5,5,0,0,TEMPSUMMON_CORPSE_DESPAWN,24000);
+
+				if (npc_captured_rabid_thistle_bearAI* pCaptured_BearAI = dynamic_cast<npc_captured_rabid_thistle_bearAI*>(captured_bear->AI()))
+				{	
+					pCaptured_BearAI->StartFollow((Player*)m_creature->getVictim(), FACTION_ESCORT_N_FRIEND_PASSIVE, 0);
+					m_creature->RemoveFromWorld();
+				}
+			}			
+		}
+	}
+
+};
+
+CreatureAI* GetAI_npc_rabid_thistle_bear(Creature* pCreature)
+{
+	return new npc_rabid_thistle_bearAI(pCreature);
+}
+
 void AddSC_darkshore()
 {
     Script* pNewScript;
@@ -401,5 +478,15 @@ void AddSC_darkshore()
     pNewScript->GetAI = &GetAI_npc_threshwackonator;
     pNewScript->pGossipHello = &GossipHello_npc_threshwackonator;
     pNewScript->pGossipSelect = &GossipSelect_npc_threshwackonator;
+    pNewScript->RegisterSelf();
+
+	pNewScript = new Script;
+	pNewScript->Name = "npc_rabid_thistle_bear";
+    pNewScript->GetAI = &GetAI_npc_rabid_thistle_bear;
+    pNewScript->RegisterSelf();
+
+	pNewScript = new Script;
+	pNewScript->Name = "npc_captured_rabid_thistle_bear";
+    pNewScript->GetAI = &GetAI_npc_captured_rabid_thistle_bear;
     pNewScript->RegisterSelf();
 }

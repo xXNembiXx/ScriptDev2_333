@@ -2,24 +2,20 @@
  * This program is free software licensed under GPL version 2
  * Please see the included DOCS/LICENSE.TXT for more information */
 
-#ifndef DEF_UTG_KEEP_H
-#define DEF_UTG_KEEP_H
+#ifndef DEF_UTGARDE_KEEP_H
+#define DEF_UTGARDE_KEEP_H
 
-enum
-{
-    MAX_ENCOUNTER               = 3,
+#define DATA_PRINCEKELESETH             1
+#define DATA_SKARVALD                   3
+#define DATA_DALRONN                    4
+#define DATA_INGVAR                     6
 
-    //also using these as identifier for Set/GetData(), unlike normal naming
-    NPC_KELESETH                = 23953,
-    NPC_SKARVALD                = 24200,
-    NPC_DALRONN                 = 24201,
+#define DATA_PRINCEKELESETH_EVENT       2
+#define DATA_SKARVALD_DALRONN_EVENT     5
+#define DATA_INGVAR_EVENT               7
 
-    GO_BELLOW_1                 = 186688,
-    GO_BELLOW_2                 = 186689,
-    GO_BELLOW_3                 = 186690,
-    GO_FORGEFIRE_1              = 186692,
-    GO_FORGEFIRE_2              = 186693,
-    GO_FORGEFIRE_3              = 186691
-};
+#define EVENT_FORGE_1                   8
+#define EVENT_FORGE_2                   9
+#define EVENT_FORGE_3                   10
 
 #endif

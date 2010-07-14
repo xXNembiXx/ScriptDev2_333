@@ -28,117 +28,126 @@ EndContentData */
 #include "precompiled.h"
 #include "utgarde_keep.h"
 
-/*######
-## mob_dragonflayer_forge_master
-######*/
-
-enum
+uint32 entry_search[3] =
 {
-    SPELL_BURNING_BRAND     = 43757,
-    SPELL_BURNING_BRAND_H   = 59601,
-    SPELL_CAUTERIZE         = 60211,
-
-    MAX_FORGE               = 3
+    186609,
+    186610,
+    186611
 };
 
 struct MANGOS_DLL_DECL mob_dragonflayer_forge_masterAI : public ScriptedAI
 {
-    mob_dragonflayer_forge_masterAI(Creature* pCreature) : ScriptedAI(pCreature)
+    mob_dragonflayer_forge_masterAI(Creature *pCreature) : ScriptedAI(pCreature)
     {
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
-        m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
-        m_uiForgeEncounterId = 0;
-        Reset();
+        fm_Type = 0;
     }
 
     ScriptedInstance* m_pInstance;
-    bool m_bIsRegularMode;
-
-    uint32 m_uiForgeEncounterId;
-    uint32 m_uiBurningBrandTimer;
+    uint8 fm_Type;
 
     void Reset()
     {
-        m_uiBurningBrandTimer = 2000;
+        if (fm_Type == 0) fm_Type = GetForgeMasterType();
+        CheckForge();
     }
 
-    void SetMyForge()
+    void CheckForge()
     {
-        std::list<GameObject *> lGOList;
-        uint32 uiGOBellow = 0;
-        uint32 uiGOFire = 0;
-
-        for(uint8 i = 0; i < MAX_FORGE; ++i)
+       if (m_pInstance)
         {
-            switch(i)
+            switch(fm_Type)
             {
-                case 0: uiGOBellow = GO_BELLOW_1; break;
-                case 1: uiGOBellow = GO_BELLOW_2; break;
-                case 2: uiGOBellow = GO_BELLOW_3; break;
+            case 1:
+                m_pInstance->SetData(EVENT_FORGE_1,m_creature->isAlive() ? NOT_STARTED : DONE);
+                break;
+            case 2:
+                m_pInstance->SetData(EVENT_FORGE_2,m_creature->isAlive() ? NOT_STARTED : DONE);
+                break;
+            case 3:
+                m_pInstance->SetData(EVENT_FORGE_3,m_creature->isAlive() ? NOT_STARTED : DONE);
+                break;
             }
-
-            if (GameObject* pGOTemp = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(uiGOBellow)))
-                lGOList.push_back(pGOTemp);
-        }
-
-        if (!lGOList.empty())
-        {
-            if (lGOList.size() != MAX_FORGE)
-                error_log("SD2: mob_dragonflayer_forge_master expected %u in lGOList, but does not match.", MAX_FORGE);
-
-            lGOList.sort(ObjectDistanceOrder(m_creature));
-
-            if (lGOList.front()->getLootState() == GO_READY)
-                lGOList.front()->UseDoorOrButton(DAY);
-            else if (lGOList.front()->getLootState() == GO_ACTIVATED)
-                lGOList.front()->ResetDoorOrButton();
-
-            switch(lGOList.front()->GetEntry())
-            {
-                case GO_BELLOW_1: uiGOFire = GO_FORGEFIRE_1; break;
-                case GO_BELLOW_2: uiGOFire = GO_FORGEFIRE_2; break;
-                case GO_BELLOW_3: uiGOFire = GO_FORGEFIRE_3; break;
-            }
-
-            if (GameObject* pGOTemp = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(uiGOFire)))
-            {
-                if (pGOTemp->getLootState() == GO_READY)
-                    pGOTemp->UseDoorOrButton(DAY);
-                else if (pGOTemp->getLootState() == GO_ACTIVATED)
-                    pGOTemp->ResetDoorOrButton();
-            }
-
-            m_uiForgeEncounterId = lGOList.front()->GetEntry();
         }
     }
 
-    void Aggro(Unit* pWho)
+    void JustDied(Unit *killer)
     {
-        SetMyForge();
-    }
-
-    void JustReachedHome()
-    {
-        SetMyForge();
-    }
-
-    void JustDied(Unit* pKiller)
-    {
+        if (fm_Type == 0) fm_Type = GetForgeMasterType();
         if (m_pInstance)
-            m_pInstance->SetData(m_uiForgeEncounterId, DONE);
+        {
+            switch(fm_Type)
+            {
+            case 1:
+                m_pInstance->SetData(EVENT_FORGE_1,DONE);
+                break;
+            case 2:
+                m_pInstance->SetData(EVENT_FORGE_2,DONE);
+                break;
+            case 3:
+                m_pInstance->SetData(EVENT_FORGE_3,DONE);
+                break;
+            }
+        }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void EnterCombat(Unit *who)
     {
+        if (fm_Type == 0) fm_Type = GetForgeMasterType();
+        if (m_pInstance)
+        {
+            switch(fm_Type)
+            {
+            case 1:
+                m_pInstance->SetData(EVENT_FORGE_1,IN_PROGRESS);
+                break;
+            case 2:
+                m_pInstance->SetData(EVENT_FORGE_2,IN_PROGRESS);
+                break;
+            case 3:
+                m_pInstance->SetData(EVENT_FORGE_3,IN_PROGRESS);
+                break;
+            }
+        }
+        m_creature->SetUInt32Value(UNIT_NPC_EMOTESTATE ,EMOTE_ONESHOT_NONE);
+    }
+
+    uint8 GetForgeMasterType()
+    {
+        float diff = 30.0f;
+        int near_f = 0;
+
+        for (uint8 i = 0; i < 3 ; ++i)
+        {
+            GameObject* temp;
+            temp = GetClosestGameObjectWithEntry(m_creature, entry_search[i], 30);
+            if (temp)
+            {
+                if (m_creature->IsWithinDist(temp,diff,false))
+                {
+                    near_f = i + 1;
+                    diff = m_creature->GetDistance2d(temp);
+
+                }
+            }
+        }
+
+        switch (near_f)
+        {
+        case 1:  return 1;
+        case 2:  return 2;
+        case 3:  return 3;
+        default: return 0;
+        }
+    }
+
+    void UpdateAI(const uint32 diff)
+    {
+        if (fm_Type == 0)
+            fm_Type = GetForgeMasterType();
+
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
-
-        if (m_uiBurningBrandTimer < uiDiff)
-        {
-            DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_BURNING_BRAND : SPELL_BURNING_BRAND_H);
-            m_uiBurningBrandTimer = 15000;
-        }
-        else m_uiBurningBrandTimer -= uiDiff;
 
         DoMeleeAttackIfReady();
     }

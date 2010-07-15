@@ -274,13 +274,13 @@ struct MANGOS_DLL_DECL crystal_channelAI : public ScriptedAI
     {
         if (Check_Timer < uiDiff)
         {
-            Creature* pNovos =  GetClosestCreatureWithEntry(m_creature, NPC_NOVOS, 85.0f);
-            if (Creature* pTarget = GetClosestCreatureWithEntry(m_creature, NPC_CRYSTAL_CHANNEL_TARGET , 85.0f))
-                if (((boss_novosAI*)pNovos->AI())->Phase1 == true)
-                    DoCast(pTarget, SPELL_EFFECT, true);
-                else
-                    pTarget->ForcedDespawn();
-            Check_Timer = 1000;
+            if (Creature* pNovos =  GetClosestCreatureWithEntry(m_creature, NPC_NOVOS, 85.0f))
+				if (Creature* pTarget = GetClosestCreatureWithEntry(m_creature, NPC_CRYSTAL_CHANNEL_TARGET , 85.0f))
+					if (((boss_novosAI*)pNovos->AI())->Phase1 == true)
+						DoCast(pTarget, SPELL_EFFECT, true);
+					else
+						pTarget->ForcedDespawn();
+				Check_Timer = 1000;
         }else Check_Timer -= uiDiff;
     }
 };

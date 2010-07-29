@@ -17,7 +17,7 @@
 /* ScriptData
 SDName: Azuremyst_Isle
 SD%Complete: 75
-SDComment: Quest support: 9283, 9531, 9537, 9539, 9540, 9582, 9554(special flight path, proper model for mount missing). Injured Draenei cosmetic only
+SDComment: Quest support: 9283, 9531, 9537, 9539, 9540, 9541, 9582, 9554(special flight path, proper model for mount missing). Injured Draenei cosmetic only
 SDCategory: Azuremyst Isle
 EndScriptData */
 
@@ -32,6 +32,8 @@ npc_ancestor_akida
 npc_totem_of_akida
 npc_ancestor_coo
 npc_totem_of_coo
+npc_ancestor_yor
+npc_totem_of_yor
 EndContentData */
 
 #include "precompiled.h"
@@ -788,6 +790,137 @@ bool QuestAccept_npc_totem_of_coo(Player* pPlayer, Creature* pCreature, const Qu
     return true;
 }
 
+/*######
+## npc_ancestor_yor
+######*/
+
+enum
+{
+	QUEST_TOTEM_OF_VARK			=	9542,
+	NPC_ANCESTOR_YOR			=	17393,
+
+	SPELL_TRANSFORM_YOR			=	30446,
+	SPELL_SHADOW_FOREST			=	30448,
+
+
+	YOR_SAY_START				=	-1050017,
+	YOR_SAY_SAY1				=	-1050018,
+	YOR_SAY_SAY2				=	-1050019,
+
+};
+
+struct MANGOS_DLL_DECL npc_ancestor_yorAI : public npc_escortAI
+{
+	npc_ancestor_yorAI(Creature* pCreature) : npc_escortAI(pCreature) {Reset();}
+
+	bool bReachedTarget;
+	uint32 SayTimer;
+	uint32 Step;
+
+	void Reset()
+	{
+		Step = 0;
+		bReachedTarget = false;
+		SayTimer = 0;
+	}
+
+	void WaypointReached(uint32 i)
+    {
+        Player* pPlayer = GetPlayerForEscort();
+		m_creature->SetSpeedRate(MOVE_WALK, 1.2f, true);
+
+		if (!pPlayer)
+            return;
+
+		if(!(pPlayer->GetQuestStatus(QUEST_TOTEM_OF_VARK) == QUEST_STATUS_INCOMPLETE))
+		{
+			m_creature->StopMoving();
+			m_creature->setDeathState(JUST_DIED);
+			m_creature->RemoveCorpse();
+			return;
+		}
+
+        switch(i)
+        {
+			case 1:
+				SayTimer = 500;
+				bReachedTarget = true;
+				break;
+            case 24:
+                pPlayer->GroupEventHappens(QUEST_TOTEM_OF_VARK, m_creature);
+				m_creature->CastSpell(m_creature,SPELL_DISAPPEAR_ANCESTOR,false);
+				m_creature->setDeathState(JUST_DIED);
+				m_creature->RemoveCorpse();
+                break;
+        }
+    }
+
+	void UpdateAI(const uint32 diff)
+	{
+		Player* pPlayer = GetPlayerForEscort();
+
+		if(bReachedTarget)
+		{
+			if (SayTimer <= diff)
+			{
+		        switch(Step)
+		        {
+					case 0:
+						m_creature->CastSpell(m_creature,SPELL_TRANSFORM_YOR,false);
+						SayTimer = 4000;
+						Step++;
+						break;
+					case 1:
+						DoScriptText(YOR_SAY_SAY1, m_creature, pPlayer);
+						SayTimer = 4000;
+						Step++;
+						break;
+					case 2:
+						m_creature->CastSpell(m_creature,SPELL_SHADOW_FOREST,false);
+						SayTimer = 3000;
+						Step++;
+						break;
+					case 3:
+						m_creature->CastSpell(pPlayer,SPELL_SHADOW_FOREST,false);
+						SayTimer = 3000;
+						Step++;
+						break;
+					case 4:
+						DoScriptText(YOR_SAY_SAY2, m_creature, pPlayer);
+						SayTimer = 3000;
+						Step++;
+						break;
+					case 5:
+						npc_escortAI::SetRun(true);
+						bReachedTarget = false;
+						break;
+				}
+			} else SayTimer -= diff;
+		}else
+			npc_escortAI::UpdateAI(diff);
+	}
+};
+
+CreatureAI* GetAI_npc_ancestor_yorAI(Creature* pCreature)
+{
+    return new npc_ancestor_yorAI(pCreature);
+}
+
+bool QuestAccept_npc_totem_of_yor(Player* pPlayer, Creature* pCreature, const Quest* pQuest)
+{
+    if (pQuest->GetQuestId() == QUEST_TOTEM_OF_VARK)
+    {
+		Creature* npcYor = pCreature->SummonCreature(NPC_ANCESTOR_YOR, -4634.25f, -13071.687f, -14.75535f, 0,  TEMPSUMMON_DEAD_DESPAWN, 0);
+        if (npc_ancestor_yorAI* pEscortAI = dynamic_cast<npc_ancestor_yorAI*>(npcYor->AI()))
+		{
+			npcYor->CastSpell(npcYor,SPELL_APPEAR_ANCESTOR,false);
+			DoScriptText(YOR_SAY_START, npcYor, pPlayer);
+            pEscortAI->Start(false, false, pPlayer->GetGUID(), pQuest);
+		}
+	}
+    return true;
+}
+
 void AddSC_azuremyst_isle()
 {
     Script *newscript;
@@ -844,5 +977,15 @@ void AddSC_azuremyst_isle()
 	newscript = new Script;
 	newscript->Name= "npc_totem_of_coo";
 	newscript->pQuestAccept = &QuestAccept_npc_totem_of_coo;
+	newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name= "npc_ancestor_yor";
+	newscript->GetAI = &GetAI_npc_ancestor_yorAI;
+	newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name= "npc_totem_of_yor";
+	newscript->pQuestAccept = &QuestAccept_npc_totem_of_yor;
 	newscript->RegisterSelf();
 }

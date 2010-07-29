@@ -17,12 +17,13 @@
 /* ScriptData
 SDName: Arathi Highlands
 SD%Complete: 100
-SDComment: Quest support: 665
+SDComment: Quest support: 665, 660
 SDCategory: Arathi Highlands
 EndScriptData */
 
 /* ContentData
 npc_professor_phizzlethorpe
+npc_kinelory
 EndContentData */
 
 #include "precompiled.h"
@@ -114,6 +115,101 @@ CreatureAI* GetAI_npc_professor_phizzlethorpe(Creature* pCreature)
     return new npc_professor_phizzlethorpeAI(pCreature);
 }
 
+/*######
+## npc_kinelory
+######*/
+
+enum
+{
+	SPELL_HEAL					= 3627,
+	SPELL_BEARFORM				= 4948,
+	QUEST_HINTS_OF_A_NEW_PLAGUE = 660
+};
+
+struct MANGOS_DLL_DECL npc_kineloryAI : public npc_escortAI
+{
+    npc_kineloryAI(Creature* pCreature) : npc_escortAI(pCreature) { Reset(); }
+
+	int32 m_healtimer;
+	int32 m_bearformtimer;
+
+	void Reset()
+    {
+		m_healtimer=3000;
+		m_bearformtimer=3000;
+	}
+
+    void WaypointReached(uint32 i)
+    {	
+        Player* pPlayer = GetPlayerForEscort();
+
+        if (!pPlayer)
+            return;
+		switch(i)
+		{
+			case 19: //last waypoint
+				pPlayer->GroupEventHappens(QUEST_HINTS_OF_A_NEW_PLAGUE, m_creature);
+				break;
+		}
+		
+	}
+	void UpdateEscortAI(const uint32 uiDiff)
+	{	
+		 
+		 m_healtimer -= uiDiff;
+		 m_bearformtimer -= uiDiff;
+		 if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+         return;  
+
+		if (Player* pPlayer = GetPlayerForEscort())
+		{ 
+		
+			if (((m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) < 75)&& m_healtimer < 0){
+				if( m_healtimer<0)
+				{
+					DoCast(m_creature, SPELL_HEAL);
+					m_healtimer =30000;
+					return;
+				}
+			}
+			if (((pPlayer->GetMaxHealth()*100 / pPlayer->GetHealth())<50)&& m_healtimer < 0)
+			{
+				DoCast(pPlayer, SPELL_HEAL);
+				m_healtimer =30000;
+				return;
+			}
+		
+			if (m_creature->getVictim() && m_bearformtimer<0)
+			{
+				DoCast(m_creature, SPELL_BEARFORM);
+				m_creature->CastSpell(m_creature,SPELL_BEARFORM,true);
+				m_bearformtimer=30000;
+				return;
+			}
+		}
+		DoMeleeAttackIfReady();
+		return;
+	}
+};
+
+CreatureAI* GetAI_npc_kinelory(Creature* pCreature)
+{
+    return new npc_kineloryAI(pCreature);
+}
+
+bool QuestAccept_npc_kinelory(Player* pPlayer, Creature* pCreature, const Quest* pQuest)
+{
+    if (pQuest->GetQuestId() == QUEST_HINTS_OF_A_NEW_PLAGUE)
+    {
+        pCreature->setFaction(FACTION_ESCORT_A_NEUTRAL_PASSIVE);
+			if (npc_kineloryAI* pEscortAI = dynamic_cast<npc_kineloryAI*>(pCreature->AI()))
+			{
+				pEscortAI->Start(false, false, pPlayer->GetGUID(), pQuest, true);
+			}
+    }
+	return true;
+}
+
 void AddSC_arathi_highlands()
 {
     Script * newscript;
@@ -122,5 +218,11 @@ void AddSC_arathi_highlands()
     newscript->Name = "npc_professor_phizzlethorpe";
     newscript->GetAI = &GetAI_npc_professor_phizzlethorpe;
     newscript->pQuestAccept = &QuestAccept_npc_professor_phizzlethorpe;
+    newscript->RegisterSelf();
+
+	newscript = new Script;
+    newscript->Name = "npc_kinelory";
+    newscript->GetAI = &GetAI_npc_kinelory;
+    newscript->pQuestAccept = &QuestAccept_npc_kinelory;
     newscript->RegisterSelf();
 }

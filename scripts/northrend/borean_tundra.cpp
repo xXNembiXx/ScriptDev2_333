@@ -17,7 +17,7 @@
 /* ScriptData
 SDName: Borean_Tundra
 SD%Complete: 100
-SDComment: Quest support: 11708, 11692, 11961. Taxi vendors. 11570
+SDComment: Quest support: 11708, 11692, 11881, 11961. Taxi vendors. 11570
 SDCategory: Borean Tundra
 EndScriptData */
 
@@ -28,6 +28,7 @@ npc_kara_thricestar
 npc_surristrasz
 npc_tiare
 npc_lurgglbr
+npc_fezzix_geartwist
 EndContentData */
 
 #include "precompiled.h"
@@ -396,6 +397,42 @@ CreatureAI* GetAI_npc_lurgglbr(Creature* pCreature)
     return new npc_lurgglbrAI(pCreature);
 }
 
+/*######
+## npc_fezzix_geartwist
+######*/
+
+struct MANGOS_DLL_DECL npc_fezzix_geartwistAI : public ScriptedAI
+{
+    npc_fezzix_geartwistAI(Creature* pCreature) : ScriptedAI(pCreature) {Reset();}
+
+    void Reset()
+    {
+    }
+
+	void MoveInLineOfSight(Unit* pWho)
+    {
+        if (!pWho || pWho->GetEntry() != 25969)
+            return;
+
+        if (!m_creature->IsWithinDist(pWho, 5.0f))
+            return;
+
+        Player *pPlayer = pWho->GetCharmerOrOwnerPlayerOrPlayerItself();
+
+		pPlayer->KilledMonsterCredit(pWho->GetEntry(),pWho->GetGUID());
+
+		pWho->RemoveFromWorld();
+
+        return;
+    }
+
+};
+
+CreatureAI* GetAI_npc_fezzix_geartwist(Creature* pCreature)
+{
+    return new npc_fezzix_geartwistAI(pCreature);
+}
+
 void AddSC_borean_tundra()
 {
     Script *newscript;
@@ -435,4 +472,9 @@ void AddSC_borean_tundra()
     newscript->GetAI = &GetAI_npc_lurgglbr;
     newscript->pQuestAccept = &QuestAccept_npc_lurgglbr;
     newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name = "npc_fezzix_geartwist";
+	newscript->GetAI = &GetAI_npc_fezzix_geartwist;
+	newscript->RegisterSelf();
 }

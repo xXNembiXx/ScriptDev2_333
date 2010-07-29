@@ -17,7 +17,7 @@
 /* ScriptData
 SDName: Azuremyst_Isle
 SD%Complete: 75
-SDComment: Quest support: 9283, 9531, 9537, 9539, 9582, 9554(special flight path, proper model for mount missing). Injured Draenei cosmetic only
+SDComment: Quest support: 9283, 9531, 9537, 9539, 9540, 9582, 9554(special flight path, proper model for mount missing). Injured Draenei cosmetic only
 SDCategory: Azuremyst Isle
 EndScriptData */
 
@@ -30,6 +30,8 @@ npc_susurrus
 npc_geezle
 npc_ancestor_akida
 npc_totem_of_akida
+npc_ancestor_coo
+npc_totem_of_coo
 EndContentData */
 
 #include "precompiled.h"
@@ -832,5 +834,15 @@ void AddSC_azuremyst_isle()
 	newscript = new Script;
 	newscript->Name= "npc_totem_of_akida";
 	newscript->pQuestAccept = &QuestAccept_npc_totem_of_akida;
+	newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name= "npc_ancestor_coo";
+	newscript->GetAI = &GetAI_npc_ancestor_cooAI;
+	newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name= "npc_totem_of_coo";
+	newscript->pQuestAccept = &QuestAccept_npc_totem_of_coo;
 	newscript->RegisterSelf();
 }

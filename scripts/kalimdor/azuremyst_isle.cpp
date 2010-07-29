@@ -17,7 +17,7 @@
 /* ScriptData
 SDName: Azuremyst_Isle
 SD%Complete: 75
-SDComment: Quest support: 9283, 9531, 9537, 9582, 9554(special flight path, proper model for mount missing). Injured Draenei cosmetic only
+SDComment: Quest support: 9283, 9531, 9537, 9539, 9582, 9554(special flight path, proper model for mount missing). Injured Draenei cosmetic only
 SDCategory: Azuremyst Isle
 EndScriptData */
 
@@ -28,6 +28,8 @@ npc_injured_draenei
 npc_magwin
 npc_susurrus
 npc_geezle
+npc_ancestor_akida
+npc_totem_of_akida
 EndContentData */
 
 #include "precompiled.h"
@@ -594,6 +596,196 @@ CreatureAI* GetAI_npc_geezleAI(Creature* pCreature)
     return new npc_geezleAI(pCreature);
 }
 
+/*######
+## npc_ancestor_akida
+######*/
+
+enum
+{
+	QUEST_TOTEM_OF_COO			=	9539,
+	NPC_ANCESTOR_AKIDA			=	17379,
+	AKIDA_SAY_START				=	-1050010,
+
+	SPELL_APPEAR_ANCESTOR		=	25035,
+	SPELL_DISAPPEAR_ANCESTOR	=	30428
+};
+
+struct MANGOS_DLL_DECL npc_ancestor_akidaAI : public npc_escortAI
+{
+	npc_ancestor_akidaAI(Creature* pCreature) : npc_escortAI(pCreature) {Reset();}
+
+	void Reset(){}
+
+	void WaypointReached(uint32 i)
+    {
+        Player* pPlayer = GetPlayerForEscort();
+		m_creature->SetSpeedRate(MOVE_WALK, 1.2f, true);
+
+		if (!pPlayer)
+            return;
+
+		if(!(pPlayer->GetQuestStatus(QUEST_TOTEM_OF_COO) == QUEST_STATUS_INCOMPLETE))
+		{
+			m_creature->StopMoving();
+			m_creature->setDeathState(JUST_DIED);
+			m_creature->RemoveCorpse();
+			return;
+		}
+
+        switch(i)
+        {
+            case 1:
+                DoScriptText(AKIDA_SAY_START, m_creature, pPlayer);
+                break;
+            case 10:
+                pPlayer->GroupEventHappens(QUEST_TOTEM_OF_COO, m_creature);
+				m_creature->CastSpell(m_creature,SPELL_DISAPPEAR_ANCESTOR,false);
+				m_creature->setDeathState(JUST_DIED);
+				m_creature->RemoveCorpse();
+                break;
+        }
+    }
+};
+
+CreatureAI* GetAI_npc_ancestor_akidaAI(Creature* pCreature)
+{
+    return new npc_ancestor_akidaAI(pCreature);
+}
+
+bool QuestAccept_npc_totem_of_akida(Player* pPlayer, Creature* pCreature, const Quest* pQuest)
+{
+    if (pQuest->GetQuestId() == QUEST_TOTEM_OF_COO)
+    {
+		Creature* npcAkida = pCreature->SummonCreature(NPC_ANCESTOR_AKIDA, -4173.75f, -12514.605f, 44.37066f, 0,  TEMPSUMMON_DEAD_DESPAWN, 0);
+        if (npc_ancestor_akidaAI* pEscortAI = dynamic_cast<npc_ancestor_akidaAI*>(npcAkida->AI()))
+		{
+			npcAkida->CastSpell(npcAkida,SPELL_APPEAR_ANCESTOR,false);
+            pEscortAI->Start(false, false, pPlayer->GetGUID(), pQuest);
+		}
+	}
+    return true;
+}
+
+/*######
+## npc_ancestor_coo
+######*/
+
+enum
+{
+	QUEST_TOTEM_OF_TIKTI	=	9540,
+	NPC_ANCESTOR_COO		=	17391,
+	SPELL_GHOST_WALK		=	30424,
+
+	COO_SAY_START			=	-1050011,
+	COO_SAY_SAY1			=	-1050012,
+	COO_SAY_SAY2			=	-1050013
+};
+
+struct MANGOS_DLL_DECL npc_ancestor_cooAI : public npc_escortAI
+{
+	npc_ancestor_cooAI(Creature* pCreature) : npc_escortAI(pCreature) {Reset();}
+
+	bool bReachedTarget;
+	uint32 SayTimer;
+	uint32 Step;
+
+	void Reset()
+	{
+		Step = 0;
+		bReachedTarget = false;
+	}
+
+	void WaypointReached(uint32 i)
+    {
+        Player* pPlayer = GetPlayerForEscort();
+		m_creature->SetSpeedRate(MOVE_WALK, 1.2f, true);
+
+		if (!pPlayer)
+            return;
+
+		if(!(pPlayer->GetQuestStatus(QUEST_TOTEM_OF_TIKTI) == QUEST_STATUS_INCOMPLETE))
+		{
+			m_creature->StopMoving();
+			m_creature->setDeathState(JUST_DIED);
+			m_creature->RemoveCorpse();
+			return;
+		}
+
+        switch(i)
+        {
+            case 1:
+                DoScriptText(COO_SAY_START, m_creature, pPlayer);
+                break;
+            case 2:
+				SayTimer = 1000;
+				bReachedTarget = true;
+				m_creature->StopMoving();
+                break;
+        }
+    }
+
+	void UpdateAI(const uint32 diff)
+	{
+		Player* pPlayer = GetPlayerForEscort();
+
+		if(bReachedTarget)
+		{
+			if (SayTimer <= diff)
+			{
+		        switch(Step)
+		        {
+					case 0:
+						DoScriptText(COO_SAY_SAY1, m_creature, pPlayer);
+						SayTimer = 4000;
+						Step++;
+						break;
+					case 1:
+						DoScriptText(COO_SAY_SAY2, m_creature, pPlayer);
+						SayTimer = 4000;
+						Step++;
+						break;
+					case 2:
+						if (pPlayer)
+							pPlayer->GroupEventHappens(QUEST_TOTEM_OF_TIKTI, m_creature);
+						m_creature->CastSpell(pPlayer,SPELL_GHOST_WALK,false);
+						SayTimer = 3000;
+						Step++;
+						break;
+					case 3:
+						m_creature->CastSpell(m_creature,SPELL_DISAPPEAR_ANCESTOR,false);
+						SayTimer = 3000;
+						Step++;
+						break;
+					case 4:
+						m_creature->setDeathState(JUST_DIED);
+						m_creature->RemoveCorpse();
+						break;
+				}
+			} else SayTimer -= diff;
+		}else
+			npc_escortAI::UpdateAI(diff);
+	}
+};
+
+CreatureAI* GetAI_npc_ancestor_cooAI(Creature* pCreature)
+{
+    return new npc_ancestor_cooAI(pCreature);
+}
+
+bool QuestAccept_npc_totem_of_coo(Player* pPlayer, Creature* pCreature, const Quest* pQuest)
+{
+    if (pQuest->GetQuestId() == QUEST_TOTEM_OF_TIKTI)
+    {
+		Creature* npcCoo = pCreature->SummonCreature(NPC_ANCESTOR_COO, -3926.974f, -12752.2852f, 97.6727f, 0,  TEMPSUMMON_DEAD_DESPAWN, 0);
+		if (npc_ancestor_cooAI* pEscortAI = dynamic_cast<npc_ancestor_cooAI*>(npcCoo->AI()))
+		{
+			npcCoo->CastSpell(npcCoo,SPELL_APPEAR_ANCESTOR,false);
+            pEscortAI->Start(false, false, pPlayer->GetGUID(), pQuest);
+		}
+	}
+    return true;
+}
+
 void AddSC_azuremyst_isle()
 {
     Script *newscript;
@@ -630,5 +822,15 @@ void AddSC_azuremyst_isle()
 	newscript = new Script;
 	newscript->Name= "npc_geezle";
 	newscript->GetAI = &GetAI_npc_geezleAI;
+	newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name= "npc_ancestor_akida";
+	newscript->GetAI = &GetAI_npc_ancestor_akidaAI;
+	newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name= "npc_totem_of_akida";
+	newscript->pQuestAccept = &QuestAccept_npc_totem_of_akida;
 	newscript->RegisterSelf();
 }

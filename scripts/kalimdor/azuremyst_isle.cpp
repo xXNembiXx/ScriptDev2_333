@@ -17,7 +17,7 @@
 /* ScriptData
 SDName: Azuremyst_Isle
 SD%Complete: 75
-SDComment: Quest support: 9283, 9531, 9537, 9539, 9540, 9541, 9582, 9554(special flight path, proper model for mount missing). Injured Draenei cosmetic only
+SDComment: Quest support: 9283, 9531, 9537, 9539, 9540, 9541, 9542, 9582, 9554(special flight path, proper model for mount missing). Injured Draenei cosmetic only
 SDCategory: Azuremyst Isle
 EndScriptData */
 
@@ -34,6 +34,8 @@ npc_ancestor_coo
 npc_totem_of_coo
 npc_ancestor_yor
 npc_totem_of_yor
+npc_ancestor_tikti
+npc_totem_of_tikti
 EndContentData */
 
 #include "precompiled.h"
@@ -921,6 +923,134 @@ bool QuestAccept_npc_totem_of_yor(Player* pPlayer, Creature* pCreature, const Qu
     return true;
 }
 
+/*######
+## npc_ancestor_tikti
+######*/
+
+enum
+{
+	QUEST_TOTEM_OF_YOR		=	9541,
+	NPC_ANCESTOR_TIKTI		=	17392,
+	SPELL_TRANSFORM_TIKTI	=	30431,
+	SPELL_EMBRACE_SERPENT	=	30430,
+
+	TIKTI_SAY_START			=	-1050014,
+	TIKTI_SAY_SAY1			=	-1050015,
+	TIKTI_SAY_SAY2			=	-1050016
+
+};
+
+struct MANGOS_DLL_DECL npc_ancestor_tiktiAI : public npc_escortAI
+{
+	npc_ancestor_tiktiAI(Creature* pCreature) : npc_escortAI(pCreature) {Reset();}
+
+	bool bReachedTarget;
+	uint32 SayTimer;
+	uint32 Step;
+
+	void Reset()
+	{
+		Step = 0;
+		bReachedTarget = false;
+		SayTimer = 0;
+	}
+
+	void WaypointReached(uint32 i)
+    {
+        Player* pPlayer = GetPlayerForEscort();
+		m_creature->SetSpeedRate(MOVE_WALK, 1.2f, true);
+
+		if (!pPlayer)
+            return;
+
+		if(!(pPlayer->GetQuestStatus(QUEST_TOTEM_OF_YOR) == QUEST_STATUS_INCOMPLETE))
+		{
+			m_creature->StopMoving();
+			m_creature->setDeathState(JUST_DIED);
+			m_creature->RemoveCorpse();
+			return;
+		}
+
+        switch(i)
+        {
+            case 1:
+                DoScriptText(TIKTI_SAY_START, m_creature, pPlayer);
+                break;
+            case 2:
+				SayTimer = 1000;
+				bReachedTarget = true;
+				//m_creature->StopMoving();
+				break;
+			case 3:
+				m_creature->setDeathState(JUST_DIED);
+				m_creature->RemoveCorpse();
+				break;
+        }
+    }
+
+	void UpdateAI(const uint32 diff)
+	{
+		Player* pPlayer = GetPlayerForEscort();
+
+		if(bReachedTarget)
+		{
+			if (SayTimer <= diff)
+			{
+		        switch(Step)
+		        {
+					case 0:
+						DoScriptText(TIKTI_SAY_SAY1, m_creature, pPlayer);
+						SayTimer = 4000;
+						Step++;
+						break;
+					case 1:
+						m_creature->CastSpell(pPlayer,SPELL_EMBRACE_SERPENT,false);
+						DoScriptText(TIKTI_SAY_SAY2, m_creature, pPlayer);
+						SayTimer = 4000;
+						Step++;
+						break;
+					case 2:
+						if (pPlayer)
+							pPlayer->GroupEventHappens(QUEST_TOTEM_OF_YOR, m_creature);
+						SayTimer = 3000;
+						Step++;
+						break;
+					case 3:
+						m_creature->CastSpell(m_creature,SPELL_TRANSFORM_TIKTI,false);
+						SayTimer = 3000;
+						Step++;
+						break;
+					case 4:
+						//m_creature->setDeathState(JUST_DIED);
+						//m_creature->RemoveCorpse();
+						bReachedTarget = false;
+						break;
+				}
+			} else SayTimer -= diff;
+		}else
+			npc_escortAI::UpdateAI(diff);
+	}
+};
+
+CreatureAI* GetAI_npc_ancestor_tiktiAI(Creature* pCreature)
+{
+    return new npc_ancestor_tiktiAI(pCreature);
+}
+
+bool QuestAccept_npc_totem_of_tikti(Player* pPlayer, Creature* pCreature, const Quest* pQuest)
+{
+    if (pQuest->GetQuestId() == QUEST_TOTEM_OF_YOR)
+    {
+		Creature* npcTikti = pCreature->SummonCreature(NPC_ANCESTOR_TIKTI, -3875.43f, -13125.012f, 6.82215f, 0,  TEMPSUMMON_DEAD_DESPAWN, 0);
+        if (npc_ancestor_tiktiAI* pEscortAI = dynamic_cast<npc_ancestor_tiktiAI*>(npcTikti->AI()))
+		{
+			npcTikti->CastSpell(npcTikti,SPELL_APPEAR_ANCESTOR,false);
+            pEscortAI->Start(false, false, pPlayer->GetGUID(), pQuest);
+		}
+	}
+    return true;
+}
+
 void AddSC_azuremyst_isle()
 {
     Script *newscript;
@@ -987,5 +1117,15 @@ void AddSC_azuremyst_isle()
 	newscript = new Script;
 	newscript->Name= "npc_totem_of_yor";
 	newscript->pQuestAccept = &QuestAccept_npc_totem_of_yor;
+	newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name= "npc_ancestor_tikti";
+	newscript->GetAI = &GetAI_npc_ancestor_tiktiAI;
+	newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name= "npc_totem_of_tikti";
+	newscript->pQuestAccept = &QuestAccept_npc_totem_of_tikti;
 	newscript->RegisterSelf();
 }

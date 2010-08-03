@@ -34,6 +34,7 @@ struct MANGOS_DLL_DECL instance_ulduar : public ScriptedInstance
     bool Regular;
     //Creatures GUID
 	uint64 mRazorscaleGUID;
+	uint64 mXT002GUID;
     uint64 mKologarnGUID;
     uint64 mKologarnLeftArmGUID;
     uint64 mKologarnRightArmGUID;
@@ -89,6 +90,7 @@ struct MANGOS_DLL_DECL instance_ulduar : public ScriptedInstance
             mEncounter[i] = NOT_STARTED;
 
 		mRazorscaleGUID = 0;
+		mXT002GUID = 0;
         mKologarnGUID = 0;
         mKologarnLeftArmGUID = 0;
         mKologarnRightArmGUID = 0;
@@ -126,6 +128,7 @@ struct MANGOS_DLL_DECL instance_ulduar : public ScriptedInstance
         switch(pCreature->GetEntry())
         {
 			case 33186: mRazorscaleGUID = pCreature->GetGUID();break;
+			case 33293: mXT002GUID = pCreature->GetGUID();break;
             case 32930: mKologarnGUID = pCreature->GetGUID();break;
             case 32933: mKologarnLeftArmGUID = pCreature->GetGUID();break;
             case 32934: mKologarnRightArmGUID = pCreature->GetGUID();break;
@@ -355,6 +358,7 @@ struct MANGOS_DLL_DECL instance_ulduar : public ScriptedInstance
         switch(uiData)
         {
 			case NPC_RAZORSCALE:			return mRazorscaleGUID;
+			case NPC_XT002:					return mXT002GUID;
             case NPC_STEELBREAKER:          return mSteelbreakerGUID;
             case NPC_MOLGEIM:               return mMolgeimGUID;
             case NPC_BRUNDIR:               return mBrundirGUID;

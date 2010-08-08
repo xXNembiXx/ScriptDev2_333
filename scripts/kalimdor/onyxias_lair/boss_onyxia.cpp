@@ -137,6 +137,8 @@ struct MANGOS_DLL_DECL boss_onyxiaAI : public ScriptedAI
 
     bool m_bIsSummoningWhelps;
 
+	uint32 m_uiEvadeCheckCooldown;
+
     void Reset()
     {
         if (!IsCombatMovement())
@@ -162,6 +164,8 @@ struct MANGOS_DLL_DECL boss_onyxiaAI : public ScriptedAI
         m_uiSummonCount = 0;
 
         m_bIsSummoningWhelps = false;
+
+		m_uiEvadeCheckCooldown = 2000;
     }
 
     void Aggro(Unit* pWho)
@@ -243,6 +247,15 @@ struct MANGOS_DLL_DECL boss_onyxiaAI : public ScriptedAI
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
+
+        if (m_uiEvadeCheckCooldown < uiDiff)
+        {
+            if (m_creature->GetDistance2d(-128.236f, -214.887f) > 80.0f)
+                EnterEvadeMode();
+            m_uiEvadeCheckCooldown = 2000;
+        }
+        else
+            m_uiEvadeCheckCooldown -= uiDiff;
 
         switch (m_uiPhase)
         {
@@ -377,8 +390,8 @@ struct MANGOS_DLL_DECL boss_onyxiaAI : public ScriptedAI
                     {
                         if (m_uiWhelpTimer < uiDiff)
                         {
-                            m_creature->SummonCreature(NPC_WHELP, afSpawnLocations[0][0], afSpawnLocations[0][1], afSpawnLocations[0][2], 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 30000);
-                            m_creature->SummonCreature(NPC_WHELP, afSpawnLocations[1][0], afSpawnLocations[1][1], afSpawnLocations[1][2], 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 30000);
+                            m_creature->SummonCreature(NPC_WHELP, afSpawnLocations[0][0], afSpawnLocations[0][1], afSpawnLocations[0][2], 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);
+                            m_creature->SummonCreature(NPC_WHELP, afSpawnLocations[1][0], afSpawnLocations[1][1], afSpawnLocations[1][2], 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);
                             m_uiWhelpTimer = 500;
                         }
                         else

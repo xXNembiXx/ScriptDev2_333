@@ -167,7 +167,7 @@ struct MANGOS_DLL_DECL event_boss_kruulAI : public ScriptedAI
 
         if (ManaDetonation_Timer < diff)
         {
-            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                 DoCast(pTarget,SPELL_MANA_DETONATION);
 
             ManaDetonation_Timer = 20000;
@@ -175,7 +175,7 @@ struct MANGOS_DLL_DECL event_boss_kruulAI : public ScriptedAI
 
         if (Curse_Timer < diff)
         {
-            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                 DoCast(pTarget,SPELL_CURSE);
 
             Curse_Timer = 38000;
@@ -183,7 +183,7 @@ struct MANGOS_DLL_DECL event_boss_kruulAI : public ScriptedAI
 
         if (Polymorph_Timer < diff)
         {
-            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                 DoCast(pTarget,SPELL_POLYMORPH);
 
             Polymorph_Timer = 12000;
@@ -191,7 +191,7 @@ struct MANGOS_DLL_DECL event_boss_kruulAI : public ScriptedAI
 
         if (FrostBlast_Timer < diff)
         {
-            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                 DoCast(pTarget, SPELL_FROST_BLAST);
 
             FrostBlast_Timer = (rand()%60)*1000;
@@ -218,7 +218,7 @@ struct MANGOS_DLL_DECL event_boss_kruulAI : public ScriptedAI
 
 		if (LightningWhirl_Timer < diff)
         {
-            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                 DoCast(pTarget,SPELL_LIGHTNING_WHIRL);
 
 			LightningWhirl_Timer = 25000;
@@ -226,7 +226,7 @@ struct MANGOS_DLL_DECL event_boss_kruulAI : public ScriptedAI
 		
 		if (ShadowCrash_Timer < diff)
         {
-            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                 DoCast(pTarget,SPELL_SHADOW_CRASH);
 
 			ShadowCrash_Timer = 21000;
@@ -368,7 +368,7 @@ struct MANGOS_DLL_DECL event_npc_image_kruulAI : public ScriptedAI
 
         if (RockShower_Timer < diff)
         {
-            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                 DoCast(pTarget,SPELL_ROCK_SHOWER);
 				
             RockShower_Timer = 11000;
@@ -376,7 +376,7 @@ struct MANGOS_DLL_DECL event_npc_image_kruulAI : public ScriptedAI
 
 		if (AbyssalStrike_Timer < diff)
         {
-            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                 DoCast(pTarget,SPELL_ABYSSAL_STRIKE);
 
             AbyssalStrike_Timer = 14000;
@@ -384,7 +384,7 @@ struct MANGOS_DLL_DECL event_npc_image_kruulAI : public ScriptedAI
 
         if (RockRumble_Timer < diff)
         {
-            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                 DoCast(pTarget,SPELL_ROCK_RUMBLE);
 
             RockRumble_Timer = 15000;
@@ -392,7 +392,7 @@ struct MANGOS_DLL_DECL event_npc_image_kruulAI : public ScriptedAI
 
         if (Pumpkin_Timer < diff)
         {
-            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                 DoCast(pTarget,SPELL_PUMPKIN);
 
             Pumpkin_Timer = 25000;
@@ -507,7 +507,7 @@ struct MANGOS_DLL_DECL event_npc_succubusAI : public ScriptedAI
 
         if (ShadowShock_Timer < diff)
         {
-            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                 DoCast(pTarget,SPELL_SHADOW_SHOCK);
 
             ShadowShock_Timer = 4000;
@@ -597,7 +597,7 @@ struct MANGOS_DLL_DECL event_npc_houndAI : public ScriptedAI
 
         if (CauterizingFlames_Timer < diff)
         {
-            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                 DoCast(pTarget,SPELL_CAUTERIZING_FLAMES);
 
             CauterizingFlames_Timer = 10000;
@@ -686,7 +686,7 @@ struct MANGOS_DLL_DECL event_npc_emperorAI : public ScriptedAI
 
         if (Wound_Timer < diff)
         {
-            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                 DoCast(pTarget, SPELL_WOUND);
 
             Wound_Timer = 5000;
@@ -694,7 +694,7 @@ struct MANGOS_DLL_DECL event_npc_emperorAI : public ScriptedAI
 
         if (ShadowPast_Timer < diff)
         {
-            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                 DoCast(pTarget, SPELL_SHADOW_PAST);
 
             ShadowPast_Timer = 8000;

@@ -18,7 +18,7 @@
 SDName: CUSTOM_EVENTS
 SDAuthor: Nembi, Shiro, Janu
 SD%Complete: 100
-SDComment: maybe needs some more code cleanup
+SDComment: Version 3.0 - Insert Image of Kruul, Insert some Texts, Some Bugfixes, Special Thx to Shiro for the Gossip Menu
 SDCategory: Custom
 EndScriptData */
 
@@ -29,6 +29,7 @@ event_npc_hound								addition to event_boss_kruul
 event_npc_imp								addition to event_boss_kruul
 event_npc_emperor							addition to event_boss_kruul
 event_npc_fel_reaver						addition to event_boss_kruul
+event_npc_image_kruul						addition to event_boss_kruul
 EndContentData */
 
 #include "precompiled.h"
@@ -50,6 +51,16 @@ EndContentData */
 #define SPELL_ENRAGE				47008
 #define SPELL_CURSE					60121 
 #define SPELL_POLYMORPH				68311
+
+#define SAY_KILL					-1000295
+#define SAY_COMBAT1					-1619040				
+#define SAY_COMBAT2					-1619041
+#define SAY_COMBAT3					-1619042
+#define SAY_COMBAT4					-1619043
+#define SAY_COMBAT5					-1619044
+#define SAY_COMBAT6					-1619045
+#define SAY_COMBAT7					-1619046
+#define SAY_ENDE					-1619047
 
 struct MANGOS_DLL_DECL event_boss_kruulAI : public ScriptedAI
 {
@@ -74,13 +85,15 @@ struct MANGOS_DLL_DECL event_boss_kruulAI : public ScriptedAI
     Creature* Summoned;
 
 	bool m_bRage;
-	bool m_bMorph1;
-	bool m_bMorph2;
-	bool m_bMorph3;
+
+	bool m_bCombat1;
+	bool m_bCombat2;
+	bool m_bCombat3;
+	bool m_bCombat4;
 	
     void Reset()
     {
-        TwistedReflection_Timer = 31000;
+        TwistedReflection_Timer = 30000;
         VoidBolt_Timer = 35000;
         Hound_Timer = 8000;
 		ManaDetonation_Timer = 20000;
@@ -94,16 +107,30 @@ struct MANGOS_DLL_DECL event_boss_kruulAI : public ScriptedAI
 		Polymorph_Timer = 4000;
 
 		m_creature->SetDisplayId(18650);
-		m_creature->SetFloatValue(OBJECT_FIELD_SCALE_X, 0.75);
+		m_creature->SetFloatValue(OBJECT_FIELD_SCALE_X, 1);
 		m_bRage = false;
-		m_bMorph1 = false;
-		m_bMorph2 = false;
-		m_bMorph3 = false;
+
+		m_bCombat1 = false;
+		m_bCombat2 = false;
+		m_bCombat3 = false;
+		m_bCombat4 = false;
     }
 
     void KilledUnit()
     {
         DoCast(m_creature,SPELL_CAPTURESOUL);
+		DoScriptText(SAY_KILL, m_creature);
+    }
+
+	
+    void EnterCombat(Unit* who)
+    {
+        DoScriptText(SAY_COMBAT1, m_creature);
+    }
+
+	void JustDied(Unit* pKiller)
+    {
+		DoScriptText(SAY_ENDE, m_creature);
     }
 
     void SummonHounds(Unit* victim)
@@ -127,7 +154,7 @@ struct MANGOS_DLL_DECL event_boss_kruulAI : public ScriptedAI
 
         Rand = 0;
         Summoned = DoSpawnCreature(19207, RandX, RandY, 0, 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);    // Hund
-		Summoned = DoSpawnCreature(988001, RandX, RandY, 0, 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);  // Sukkubus
+		Summoned = DoSpawnCreature(400000, RandX, RandY, 0, 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);  // Sukkubus
 
         if (Summoned)
             ((CreatureAI*)Summoned->AI())->AttackStart(victim);
@@ -140,7 +167,7 @@ struct MANGOS_DLL_DECL event_boss_kruulAI : public ScriptedAI
 
         if (ManaDetonation_Timer < diff)
         {
-            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
                 DoCast(pTarget,SPELL_MANA_DETONATION);
 
             ManaDetonation_Timer = 20000;
@@ -148,7 +175,7 @@ struct MANGOS_DLL_DECL event_boss_kruulAI : public ScriptedAI
 
         if (Curse_Timer < diff)
         {
-            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
                 DoCast(pTarget,SPELL_CURSE);
 
             Curse_Timer = 38000;
@@ -156,15 +183,15 @@ struct MANGOS_DLL_DECL event_boss_kruulAI : public ScriptedAI
 
         if (Polymorph_Timer < diff)
         {
-            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
                 DoCast(pTarget,SPELL_POLYMORPH);
 
-            Polymorph_Timer = 4000;
+            Polymorph_Timer = 12000;
         }else Polymorph_Timer -= diff;
 
         if (FrostBlast_Timer < diff)
         {
-            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
                 DoCast(pTarget, SPELL_FROST_BLAST);
 
             FrostBlast_Timer = (rand()%60)*1000;
@@ -178,8 +205,9 @@ struct MANGOS_DLL_DECL event_boss_kruulAI : public ScriptedAI
 
 		if (Enrage_Timer < diff)
 		{
-            DoCast(m_creature, SPELL_RAGE);
-			Enrage_Timer = 600000;
+            DoCast(m_creature, SPELL_ENRAGE);
+			DoScriptText(SAY_COMBAT6, m_creature);
+			Enrage_Timer = 900000;
 		}else Enrage_Timer -= diff;
 
 		if (FrozenBlows_Timer < diff)
@@ -190,7 +218,7 @@ struct MANGOS_DLL_DECL event_boss_kruulAI : public ScriptedAI
 
 		if (LightningWhirl_Timer < diff)
         {
-            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
                 DoCast(pTarget,SPELL_LIGHTNING_WHIRL);
 
 			LightningWhirl_Timer = 25000;
@@ -198,10 +226,10 @@ struct MANGOS_DLL_DECL event_boss_kruulAI : public ScriptedAI
 		
 		if (ShadowCrash_Timer < diff)
         {
-            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
                 DoCast(pTarget,SPELL_SHADOW_CRASH);
 
-			ShadowCrash_Timer = 25000;
+			ShadowCrash_Timer = 21000;
         }else ShadowCrash_Timer -= diff;
 		
         if (TwistedReflection_Timer < diff)
@@ -222,32 +250,46 @@ struct MANGOS_DLL_DECL event_boss_kruulAI : public ScriptedAI
         {
 			SummonHounds(m_creature->getVictim());
 		    SummonHounds(m_creature->getVictim());
+			DoScriptText(SAY_COMBAT7, m_creature);
             
             Hound_Timer = 45000;
         }else Hound_Timer -= diff;
 
-		if ( (m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 70) && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth() > 40) )
+		if (!m_bCombat1 && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 80))
         {
              m_creature->SetDisplayId(21069);
-			 m_bMorph1 = true;
+			 DoScriptText(SAY_COMBAT2, m_creature);
+			 m_bCombat1 = true;
+
         }
 
-		if ( (m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 40) && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth() > 10) )
+		if (!m_bCombat2 && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 60))
         {
              m_creature->SetDisplayId(14173);
-			 m_bMorph2 = true;
+			 DoScriptText(SAY_COMBAT3, m_creature);
+			 m_bCombat2 = true;
         }
 
-		if (m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 10)
+		if (!m_bCombat3 && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 40))
         {
              m_creature->SetDisplayId(1912);
              m_creature->SetFloatValue(OBJECT_FIELD_SCALE_X, 3);
-			 m_bMorph3 = true;
+			 DoScriptText(SAY_COMBAT4, m_creature);
+			 m_bCombat3 = true;
+        }
+
+		if (!m_bCombat4 && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 20))
+        {
+             m_creature->SetDisplayId(18650);
+             m_creature->SetFloatValue(OBJECT_FIELD_SCALE_X, 1);
+			 DoScriptText(SAY_COMBAT5, m_creature);
+			 m_bCombat4 = true;
         }
 
 	    if (!m_bRage && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) < 10)
         {
             DoCast(m_creature, SPELL_RAGE);
+			DoScriptText(SAY_COMBAT5, m_creature);
             m_bRage = true;
         }
 
@@ -261,11 +303,185 @@ CreatureAI* GetAI_event_boss_kruul(Creature* pCreature)
 }
 
 /*######
+## event_npc_image_kruul
+######*/
+
+#define SPELL_ROCK_SHOWER			60923
+#define	SPELL_ROCK_RUMBLE			38777
+#define SPELL_PUMPKIN				44212
+#define	SPELL_FIREBALL_BARRAGE		37540
+#define SPELL_FLAME_VENTS			63847
+#define SPELL_ABYSSAL_STRIKE		37633
+
+#define SAY_START					-1575018
+#define SAY_FIGHT1					-1619034				
+#define SAY_FIGHT2					-1619035
+#define SAY_FIGHT3					-1619036
+#define SAY_FIGHT4					-1619037
+#define SAY_END						-1619038
+
+struct MANGOS_DLL_DECL event_npc_image_kruulAI : public ScriptedAI
+{
+    event_npc_image_kruulAI(Creature* pCreature) : ScriptedAI(pCreature) {Reset();}
+
+	uint32 RockShower_Timer;
+	uint32 RockRumble_Timer;
+	uint32 Pumpkin_Timer;
+	uint32 FireballBarrage_Timer;
+	uint32 FlameVents_Timer;
+	uint32 AbyssalStrike_Timer;
+
+	bool m_bFight2;
+	bool m_bFight3;
+	bool m_bFight4;
+	bool m_bEnd;
+
+	void Reset()
+    {
+		RockShower_Timer = 11000;
+		RockRumble_Timer = 15000;
+		Pumpkin_Timer = 4000;
+		FireballBarrage_Timer = 17000;
+		FlameVents_Timer = 28000;
+		AbyssalStrike_Timer = 14000;
+
+		m_bFight2 = false;
+		m_bFight3 = false;
+		m_bFight4 = false;
+		m_bEnd = false;
+
+		m_creature->setFaction(14);
+		m_creature->SetDisplayId(18650);
+		m_creature->SetFloatValue(OBJECT_FIELD_SCALE_X, 0.5);
+	}
+
+    void EnterCombat(Unit* who)
+    {
+        DoScriptText(SAY_START, m_creature);
+		DoScriptText(SAY_FIGHT1, m_creature);
+    }
+
+	void UpdateAI(const uint32 diff)
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+        if (RockShower_Timer < diff)
+        {
+            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+                DoCast(pTarget,SPELL_ROCK_SHOWER);
+				
+            RockShower_Timer = 11000;
+        }else RockShower_Timer -= diff;
+
+		if (AbyssalStrike_Timer < diff)
+        {
+            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+                DoCast(pTarget,SPELL_ABYSSAL_STRIKE);
+
+            AbyssalStrike_Timer = 14000;
+        }else AbyssalStrike_Timer -= diff;
+
+        if (RockRumble_Timer < diff)
+        {
+            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+                DoCast(pTarget,SPELL_ROCK_RUMBLE);
+
+            RockRumble_Timer = 15000;
+        }else RockRumble_Timer -= diff;
+
+        if (Pumpkin_Timer < diff)
+        {
+            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+                DoCast(pTarget,SPELL_PUMPKIN);
+
+            Pumpkin_Timer = 25000;
+        }else Pumpkin_Timer -= diff;
+
+        if (FireballBarrage_Timer < diff)
+        {
+                DoCast(m_creature->getVictim(),SPELL_FIREBALL_BARRAGE);
+
+            FireballBarrage_Timer = 17000;
+        }else FireballBarrage_Timer -= diff;
+
+        if (FlameVents_Timer < diff)
+        {
+                DoCast(m_creature->getVictim(),SPELL_FLAME_VENTS);
+
+            FlameVents_Timer = 28000;
+        }else FlameVents_Timer -= diff;
+	
+		if (!m_bFight2 && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 70))
+        {
+			DoScriptText(SAY_FIGHT2, m_creature);
+			m_bFight2 = true;
+		}
+
+		if (!m_bFight3 && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 50))
+        {
+			DoScriptText(SAY_FIGHT3, m_creature);
+			m_bFight3 = true;
+		}
+
+		if (!m_bFight4 && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 30))
+        {
+			DoScriptText(SAY_FIGHT4, m_creature);
+			m_bFight4 = true;
+		}
+
+		/* Here we will support the Teleport Gossip Menu */
+		if (m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 10)
+        {
+             m_creature->SetDisplayId(28186);
+             m_creature->setFaction(35);
+			 m_creature->SetFloatValue(OBJECT_FIELD_SCALE_X, 2);
+			 m_creature->DeleteThreatList();
+			 m_creature->CombatStop(true);
+			 m_creature->AttackStop();
+			 m_creature->GetMotionMaster()->MovePoint(0, -100.458000f, 149.860992f,  -40.382599f);
+		 	 DoScriptText(SAY_END, m_creature);
+			 m_bEnd = true;
+        }
+	
+		DoMeleeAttackIfReady();
+    }
+};
+
+bool GossipHello_event_npc_image_kruul(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->getFaction() == 35)
+    	pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Bringt mich zu Kruul!" , GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+    
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    return true;
+};
+
+bool GossipSelect_event_npc_image_kruul(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    switch(uiAction)
+    {
+		case GOSSIP_ACTION_INFO_DEF+1:
+            pPlayer->CLOSE_GOSSIP_MENU();
+			pPlayer->TeleportTo(1, 5628.802734f, -3011.315430f, 1560.144653f, 0.046409f);
+            break;
+    };
+    return true;
+};
+
+CreatureAI* GetAI_event_npc_image_kruul(Creature* pCreature)
+{
+    return new event_npc_image_kruulAI(pCreature);
+}
+
+/*######
 ## event_npc_succubus
 ######*/
 
 #define SPELL_SHADOW_SHOCK			54889	
 #define SPELL_LASH					59678
+#define SPELL_INFECTION				39032
+#define SPELL_SINGED				65280
 
 struct MANGOS_DLL_DECL event_npc_succubusAI : public ScriptedAI
 {
@@ -273,11 +489,15 @@ struct MANGOS_DLL_DECL event_npc_succubusAI : public ScriptedAI
 
 	uint32 ShadowShock_Timer;
 	uint32 Lash_Timer;
+	uint32 Infection_Timer;
+	uint32 Singed_Timer;
 
 	void Reset()
     {
 		ShadowShock_Timer = 4000;
 		Lash_Timer = 10000;
+		Infection_Timer = 4000;
+		Singed_Timer = 8000;
 	}
 
     void UpdateAI(const uint32 diff)
@@ -287,7 +507,7 @@ struct MANGOS_DLL_DECL event_npc_succubusAI : public ScriptedAI
 
         if (ShadowShock_Timer < diff)
         {
-            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
                 DoCast(pTarget,SPELL_SHADOW_SHOCK);
 
             ShadowShock_Timer = 4000;
@@ -299,6 +519,20 @@ struct MANGOS_DLL_DECL event_npc_succubusAI : public ScriptedAI
 
             Lash_Timer = 10000;
         }else Lash_Timer -= diff;
+
+        if (Infection_Timer < diff)
+        {
+                DoCast(m_creature->getVictim(),SPELL_INFECTION);
+
+            Infection_Timer = 4000;
+        }else Infection_Timer -= diff;
+
+        if (Singed_Timer < diff)
+        {
+                DoCast(m_creature->getVictim(),SPELL_INFECTION);
+
+            Singed_Timer = 8000;
+        }else Singed_Timer -= diff;
 
 		DoMeleeAttackIfReady();
     }
@@ -316,6 +550,7 @@ CreatureAI* GetAI_event_npc_succubus(Creature* pCreature)
 #define SPELL_FIRE_SPIT				67634
 #define SPELL_FLAME_BREATH			59469
 #define SPELL_CAUTERIZING_FLAMES	59466
+#define SPELL_FLAME_VENTS			63847
 
 struct MANGOS_DLL_DECL event_npc_houndAI : public ScriptedAI
 {
@@ -324,12 +559,14 @@ struct MANGOS_DLL_DECL event_npc_houndAI : public ScriptedAI
 	uint32 FireSpit_Timer;
 	uint32 FlameBreath_Timer;
 	uint32 CauterizingFlames_Timer;
+	uint32 FlameVents_Timer;
 
 	void Reset()
     {
 		FireSpit_Timer = 15000;
 		FlameBreath_Timer = 5000;
 		CauterizingFlames_Timer = 10000;
+		FlameVents_Timer = 8000;
 	}
 
     void UpdateAI(const uint32 diff)
@@ -351,9 +588,16 @@ struct MANGOS_DLL_DECL event_npc_houndAI : public ScriptedAI
             FlameBreath_Timer = 5000;
         }else FlameBreath_Timer -= diff;
 
+        if (FlameVents_Timer < diff)
+        {
+			DoCast(m_creature->getVictim(),SPELL_FLAME_VENTS);
+
+            FlameVents_Timer = 8000;
+        }else FlameVents_Timer -= diff;
+
         if (CauterizingFlames_Timer < diff)
         {
-            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
                 DoCast(pTarget,SPELL_CAUTERIZING_FLAMES);
 
             CauterizingFlames_Timer = 10000;
@@ -407,7 +651,7 @@ CreatureAI* GetAI_event_npc_imp(Creature* pCreature)
 }
 
 /*######
-## npc_imperator
+## npc_emperor
 ######*/
 
 #define SPELL_WOUND					66620
@@ -442,7 +686,7 @@ struct MANGOS_DLL_DECL event_npc_emperorAI : public ScriptedAI
 
         if (Wound_Timer < diff)
         {
-            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
                 DoCast(pTarget, SPELL_WOUND);
 
             Wound_Timer = 5000;
@@ -450,7 +694,7 @@ struct MANGOS_DLL_DECL event_npc_emperorAI : public ScriptedAI
 
         if (ShadowPast_Timer < diff)
         {
-            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
                 DoCast(pTarget, SPELL_SHADOW_PAST);
 
             ShadowPast_Timer = 8000;
@@ -534,5 +778,12 @@ void AddSC_custom_events()
 	newscript = new Script;
     newscript->Name = "event_npc_fel_reaver";
     newscript->GetAI = &GetAI_event_npc_fel_reaver;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "event_npc_image_kruul";
+    newscript->GetAI = &GetAI_event_npc_image_kruul;
+    newscript->pGossipHello = &GossipHello_event_npc_image_kruul;
+    newscript->pGossipSelect = &GossipSelect_event_npc_image_kruul;
     newscript->RegisterSelf();
 }

@@ -714,28 +714,84 @@ struct MANGOS_DLL_DECL npc_arthasAI : public npc_escortAI
         switch(m_uiWaveCount)
         {
            case 1:
-              m_creature->SummonCreature(NPC_GHOUL,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
-              m_creature->SummonCreature(NPC_GHOUL,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
+              if(Creature* pGhoul = m_creature->SummonCreature(NPC_GHOUL,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pGhoul->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pGhoul->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
+              if(Creature* pGhoul = m_creature->SummonCreature(NPC_GHOUL,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pGhoul->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pGhoul->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
               break;
            case 2:
-              m_creature->SummonCreature(NPC_GHOUL,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
-              m_creature->SummonCreature(NPC_GHOUL,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
-              m_creature->SummonCreature(NPC_NECROMANCER,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
-              m_creature->SummonCreature(NPC_FIEND,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
+              if(Creature* pGhoul = m_creature->SummonCreature(NPC_GHOUL,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pGhoul->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pGhoul->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
+              if(Creature* pGhoul = m_creature->SummonCreature(NPC_GHOUL,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pGhoul->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pGhoul->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
+              if(Creature* pNecro = m_creature->SummonCreature(NPC_NECROMANCER,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pNecro->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pNecro->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
+              if(Creature* pFiend = m_creature->SummonCreature(NPC_FIEND,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pFiend->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pFiend->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
               break;
            case 3:
               m_pInstance->SetData(TYPE_WING, LEFT);
-              m_creature->SummonCreature(NPC_GHOUL,2272.773f, 1331.824f, 124.171f, 3.12f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
-              m_creature->SummonCreature(NPC_NECROMANCER,2272.773f, 1331.824f, 124.171f, 3.12f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
-              m_creature->SummonCreature(NPC_NECROMANCER,2272.773f, 1331.824f, 124.171f, 3.12f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
-              m_creature->SummonCreature(NPC_FIEND,2272.773f, 1331.824f, 124.171f, 3.12f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
+              if(Creature* pGhoul = m_creature->SummonCreature(NPC_GHOUL,2272.773f, 1331.824f, 124.171f, 3.12f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pGhoul->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pGhoul->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
+              if(Creature* pNecro = m_creature->SummonCreature(NPC_NECROMANCER,2272.773f, 1331.824f, 124.171f, 3.12f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pNecro->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pNecro->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
+              if(Creature* pNecro = m_creature->SummonCreature(NPC_NECROMANCER,2272.773f, 1331.824f, 124.171f, 3.12f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pNecro->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pNecro->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
+              if(Creature* pFiend = m_creature->SummonCreature(NPC_FIEND,2272.773f, 1331.824f, 124.171f, 3.12f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pFiend->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pFiend->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
               break;
            case 4:
               m_pInstance->SetData(TYPE_WING, RIGHT);
-              m_creature->SummonCreature(NPC_ACOLYTE,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
-              m_creature->SummonCreature(NPC_NECROMANCER,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
-              m_creature->SummonCreature(NPC_ACOLYTE,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
-              m_creature->SummonCreature(NPC_FIEND,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
+              if(Creature* pAcolyte = m_creature->SummonCreature(NPC_ACOLYTE,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pAcolyte->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pAcolyte->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
+              if(Creature* pNecro = m_creature->SummonCreature(NPC_NECROMANCER,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pNecro->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pNecro->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
+              if(Creature* pAcolyte = m_creature->SummonCreature(NPC_ACOLYTE,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pAcolyte->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pAcolyte->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
+              if(Creature* pFiend = m_creature->SummonCreature(NPC_FIEND,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pFiend->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pFiend->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
               break;
            case 5:
               m_pInstance->SetData(TYPE_PHASE, 4);
@@ -748,34 +804,110 @@ struct MANGOS_DLL_DECL npc_arthasAI : public npc_escortAI
               break;
            case 6:
               m_pInstance->SetData(TYPE_WING, LEFT);
-              m_creature->SummonCreature(NPC_GHOUL,2272.773f, 1331.824f, 124.171f, 3.12f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
-              m_creature->SummonCreature(NPC_NECROMANCER,2272.773f, 1331.824f, 124.171f, 3.12f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
-              m_creature->SummonCreature(NPC_NECROMANCER,2272.773f, 1331.824f, 124.171f, 3.12f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
-              m_creature->SummonCreature(NPC_FIEND,2272.773f, 1331.824f, 124.171f, 3.12f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
-              m_creature->SummonCreature(NPC_FIEND,2272.773f, 1331.824f, 124.171f, 3.12f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
+              if(Creature* pGhoul = m_creature->SummonCreature(NPC_GHOUL,2272.773f, 1331.824f, 124.171f, 3.12f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pGhoul->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pGhoul->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
+              if(Creature* pNecro = m_creature->SummonCreature(NPC_NECROMANCER,2272.773f, 1331.824f, 124.171f, 3.12f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pNecro->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pNecro->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
+              if(Creature* pNecro = m_creature->SummonCreature(NPC_NECROMANCER,2272.773f, 1331.824f, 124.171f, 3.12f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pNecro->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pNecro->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
+              if(Creature* pFiend = m_creature->SummonCreature(NPC_FIEND,2272.773f, 1331.824f, 124.171f, 3.12f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pFiend->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pFiend->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
+              if(Creature* pFiend = m_creature->SummonCreature(NPC_FIEND,2272.773f, 1331.824f, 124.171f, 3.12f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pFiend->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pFiend->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
               break;
            case 7:
               m_pInstance->SetData(TYPE_WING, RIGHT);
-              m_creature->SummonCreature(NPC_CONSTRUCT,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
-              m_creature->SummonCreature(NPC_GHOUL,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
-              m_creature->SummonCreature(NPC_GHOUL,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
-              m_creature->SummonCreature(NPC_GHOUL,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
+              if(Creature* pConst = m_creature->SummonCreature(NPC_CONSTRUCT,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pConst->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pConst->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
+              if(Creature* pGhoul = m_creature->SummonCreature(NPC_GHOUL,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pGhoul->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pGhoul->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
+              if(Creature* pGhoul = m_creature->SummonCreature(NPC_GHOUL,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pGhoul->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pGhoul->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
+              if(Creature* pGhoul = m_creature->SummonCreature(NPC_GHOUL,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pGhoul->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pGhoul->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
               break;
            case 8:
               m_pInstance->SetData(TYPE_WING, LEFT);
-              m_creature->SummonCreature(NPC_CONSTRUCT,2272.773f, 1331.824f, 124.171f, 3.12f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
-              m_creature->SummonCreature(NPC_NECROMANCER,2272.773f, 1331.824f, 124.171f, 3.12f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
-              m_creature->SummonCreature(NPC_GHOUL,2272.773f, 1331.824f, 124.171f, 3.12f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
-              m_creature->SummonCreature(NPC_GHOUL,2272.773f, 1331.824f, 124.171f, 3.12f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
-              m_creature->SummonCreature(NPC_NECROMANCER,2272.773f, 1331.824f, 124.171f, 3.12f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
+              if(Creature* pConst = m_creature->SummonCreature(NPC_CONSTRUCT,2272.773f, 1331.824f, 124.171f, 3.12f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pConst->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pConst->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
+              if(Creature* pNecro = m_creature->SummonCreature(NPC_NECROMANCER,2272.773f, 1331.824f, 124.171f, 3.12f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pNecro->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pNecro->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
+              if(Creature* pGhoul = m_creature->SummonCreature(NPC_GHOUL,2272.773f, 1331.824f, 124.171f, 3.12f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pGhoul->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pGhoul->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
+              if(Creature* pGhoul = m_creature->SummonCreature(NPC_GHOUL,2272.773f, 1331.824f, 124.171f, 3.12f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pGhoul->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pGhoul->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
+              if(Creature* pNecro = m_creature->SummonCreature(NPC_NECROMANCER,2272.773f, 1331.824f, 124.171f, 3.12f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pNecro->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pNecro->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
               break;
            case 9:
               m_pInstance->SetData(TYPE_WING, RIGHT);
-              m_creature->SummonCreature(NPC_CONSTRUCT,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
-              m_creature->SummonCreature(NPC_FIEND,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
-              m_creature->SummonCreature(NPC_NECROMANCER,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
-              m_creature->SummonCreature(NPC_NECROMANCER,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
-              m_creature->SummonCreature(NPC_GHOUL,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000);
+              if(Creature* pConst = m_creature->SummonCreature(NPC_CONSTRUCT,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pConst->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pConst->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
+              if(Creature* pFiend = m_creature->SummonCreature(NPC_FIEND,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pFiend->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pFiend->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
+              if(Creature* pNecro = m_creature->SummonCreature(NPC_NECROMANCER,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pNecro->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pNecro->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
+              if(Creature* pNecro = m_creature->SummonCreature(NPC_NECROMANCER,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pNecro->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pNecro->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
+              if(Creature* pGhoul = m_creature->SummonCreature(NPC_GHOUL,2340.058f, 1253.570f, 132.733f, 5.09f,TEMPSUMMON_CORPSE_TIMED_DESPAWN,29000))
+			  {
+                 pGhoul->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+                 pGhoul->GetMotionMaster()->MovePoint(0, 2196.036f, 1328.818f, 129.997f);
+			  }
               break;
            case 10:
               m_pInstance->SetData(TYPE_PHASE, 4);

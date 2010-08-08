@@ -1,5 +1,8 @@
 -- Onyxias Lair
 
+-- instance script
+UPDATE instance_template SET ScriptName='instance_onyxias_lair' WHERE map = 249;
+
 -- SPELL_BREATH_EAST_TO_WEST
 DELETE FROM spell_target_position WHERE id IN (18576, 18578, 18579, 18580, 18581, 18582, 18583);
 INSERT INTO spell_target_position VALUES (18576, 249, -37.743851, -243.667923, -88.217651, 1.416);

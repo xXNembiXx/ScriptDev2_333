@@ -72,7 +72,11 @@ enum
     PHASE_BREATH                = 2,
     PHASE_END                   = 3,
     PHASE_BREATH_PRE            = 4,
-    PHASE_BREATH_POST           = 5
+    PHASE_BREATH_POST           = 5,
+
+	//Achievements
+	ACHIEV_MORE_DOTS            = 4402,
+	ACHIEV_MORE_DOTS_H          = 4405
 };
 
 struct sOnyxMove
@@ -138,6 +142,9 @@ struct MANGOS_DLL_DECL boss_onyxiaAI : public ScriptedAI
     bool m_bIsSummoningWhelps;
 
 	uint32 m_uiEvadeCheckCooldown;
+	uint32 m_uiMoreDotsTimer;
+
+	bool m_bIsInTimeAchiev;
 
     void Reset()
     {
@@ -166,6 +173,9 @@ struct MANGOS_DLL_DECL boss_onyxiaAI : public ScriptedAI
         m_bIsSummoningWhelps = false;
 
 		m_uiEvadeCheckCooldown = 2000;
+		m_uiMoreDotsTimer = 300000;
+
+		m_bIsInTimeAchiev = true;
     }
 
     void Aggro(Unit* pWho)
@@ -231,6 +241,25 @@ struct MANGOS_DLL_DECL boss_onyxiaAI : public ScriptedAI
         return NULL;
     }
 
+    void JustDied(Unit* pKiller)
+    {
+        if (m_bIsInTimeAchiev)
+        {
+            AchievementEntry const *AchievMoreDots = GetAchievementStore()->LookupEntry(m_bIsRegularMode ? ACHIEV_MORE_DOTS : ACHIEV_MORE_DOTS_H);
+            if (AchievMoreDots)
+            {
+                Map* pMap = m_creature->GetMap();
+                if (pMap && pMap->IsDungeon())
+                {
+                    Map::PlayerList const &players = pMap->GetPlayers();
+                    for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
+                        itr->getSource()->CompletedAchievement(AchievMoreDots);
+                }
+            }
+        }
+
+    }
+
     void MovementInform(uint32 uiMoveType, uint32 uiPointId)
     {
         if (uiMoveType != POINT_MOTION_TYPE || !m_pInstance)
@@ -256,6 +285,13 @@ struct MANGOS_DLL_DECL boss_onyxiaAI : public ScriptedAI
         }
         else
             m_uiEvadeCheckCooldown -= uiDiff;
+
+        if (m_uiMoreDotsTimer < uiDiff)
+        {
+            m_bIsInTimeAchiev = false;
+        }
+        else
+            m_uiMoreDotsTimer -= uiDiff;
 
         switch (m_uiPhase)
         {

@@ -506,6 +506,84 @@ CreatureAI* GetAI_npc_nerubar_sinkhole(Creature* pCreature)
     return new npc_nerubar_sinkholeAI(pCreature);
 }
 
+/*######
+## trident_of_nazjan
+######*/
+
+enum
+{
+	AREA_LEVIROTH	= 4029	,
+	LEVIROTH_ENTRY	= 26452
+};
+
+bool ItemUse_trident_of_nazjan(Player* pPlayer, Item* pItem, SpellCastTargets const& scTargets)
+{
+	Creature *c = GetClosestCreatureWithEntry(pPlayer,LEVIROTH_ENTRY,9.0f);
+
+	if( pPlayer->GetAreaId() != AREA_LEVIROTH )
+	{
+		pPlayer->SendEquipError(EQUIP_ERR_CANT_DO_RIGHT_NOW, NULL);
+		return true;
+	}
+	else if( !c )
+	{
+		pPlayer->SendEquipError(EQUIP_ERR_OUT_OF_RANGE, pItem, NULL);
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+/*######
+## npc_leviroth
+######*/ 
+
+struct MANGOS_DLL_DECL npc_levirothAI : public ScriptedAI
+{
+    bool spellHit;
+
+    npc_levirothAI(Creature* pCreature) : ScriptedAI(pCreature)
+	{
+		Reset();
+	}
+
+    void Reset()
+    {
+		m_creature->SetStandState(UNIT_STAND_STATE_DEAD);
+        spellHit = false;
+    }
+
+    void MoveInLineOfSight(Unit *who)
+	{
+	
+	}
+
+    void UpdateAI(const uint32 diff)
+    {
+		if(spellHit)
+			DoMeleeAttackIfReady();
+    }
+
+    void SpellHit(Unit *Hitter, const SpellEntry *spellkind)
+    {
+        if (spellkind->Id == 47170)
+        {
+			m_creature->SetHealthPercent(8.0);
+			m_creature->SetStandState(UNIT_STAND_STATE_STAND);
+			m_creature->AI()->AttackStart(Hitter);
+
+            spellHit = true;
+        }
+	}
+};
+
+CreatureAI* GetAI_npc_leviroth(Creature* pCreature)
+{
+    return new npc_levirothAI(pCreature);
+}
+
 void AddSC_borean_tundra()
 {
     Script *newscript;
@@ -555,4 +633,14 @@ void AddSC_borean_tundra()
 	newscript->Name = "npc_nerubar_sinkhole";
 	newscript->GetAI = &GetAI_npc_nerubar_sinkhole;
 	newscript->RegisterSelf();
+
+	newscript = new Script;
+    newscript->Name = "trident_of_nazjan";
+    newscript->pItemUse = &ItemUse_trident_of_nazjan;
+    newscript->RegisterSelf();
+
+	newscript = new Script;
+    newscript->Name = "npc_leviroth";
+    newscript->GetAI = &GetAI_npc_leviroth;
+    newscript->RegisterSelf();
 }

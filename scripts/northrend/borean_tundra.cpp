@@ -584,6 +584,40 @@ CreatureAI* GetAI_npc_leviroth(Creature* pCreature)
     return new npc_levirothAI(pCreature);
 }
 
+/*######
+## npc_scourged_flamespitter
+######*/
+
+struct MANGOS_DLL_DECL npc_scourged_flamespitterAI : public ScriptedAI
+{
+    npc_scourged_flamespitterAI(Creature* pCreature) : ScriptedAI(pCreature)
+	{
+		Reset();
+	}
+
+    void Reset()
+    {
+    }
+
+    void UpdateAI(const uint32 diff)
+    {
+		DoMeleeAttackIfReady();
+    }
+
+    void SpellHit(Unit *hitter, const SpellEntry *spellkind)
+    {
+        if (spellkind->Id == 46361)
+        {
+			m_creature->AI()->AttackStart(hitter);
+        }
+	}
+};
+
+CreatureAI* GetAI_npc_scourged_flamespitter(Creature* pCreature)
+{
+    return new npc_scourged_flamespitterAI(pCreature);
+}
+
 void AddSC_borean_tundra()
 {
     Script *newscript;
@@ -642,5 +676,10 @@ void AddSC_borean_tundra()
 	newscript = new Script;
     newscript->Name = "npc_leviroth";
     newscript->GetAI = &GetAI_npc_leviroth;
+    newscript->RegisterSelf();
+
+	newscript = new Script;
+    newscript->Name = "npc_scourged_flamespitter";
+    newscript->GetAI = &GetAI_npc_scourged_flamespitter;
     newscript->RegisterSelf();
 }

@@ -618,6 +618,47 @@ CreatureAI* GetAI_npc_scourged_flamespitter(Creature* pCreature)
     return new npc_scourged_flamespitterAI(pCreature);
 }
 
+/*######
+## npc_gnome_soul
+######*/
+
+struct MANGOS_DLL_DECL npc_gnome_soulAI : public ScriptedAI
+{
+    npc_gnome_soulAI(Creature* pCreature) : ScriptedAI(pCreature)
+	{
+		Reset();
+	}
+
+	uint32 m_uiWaitTimer;
+	Player* pPlayer;
+
+    void Reset()
+    {
+		pPlayer = NULL;
+		pPlayer = GetPlayerAtMinimumRange(20.0f);
+		m_uiWaitTimer = 3000;
+    }
+
+    void UpdateAI(const uint32 diff)
+    {
+		if(pPlayer)
+		{
+			if(m_uiWaitTimer <= diff)
+			{
+				m_creature->DealDamage(m_creature, m_creature->GetHealth(), NULL,DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL ,false); 
+				pPlayer->KilledMonsterCredit(m_creature->GetEntry(), pPlayer->GetGUID());
+			}
+			else
+				m_uiWaitTimer-=diff;
+		}
+    }
+};
+
+CreatureAI* GetAI_npc_gnome_soul(Creature* pCreature)
+{
+    return new npc_gnome_soulAI(pCreature);
+}
+
 void AddSC_borean_tundra()
 {
     Script *newscript;
@@ -681,5 +722,10 @@ void AddSC_borean_tundra()
 	newscript = new Script;
     newscript->Name = "npc_scourged_flamespitter";
     newscript->GetAI = &GetAI_npc_scourged_flamespitter;
+    newscript->RegisterSelf();
+
+	newscript = new Script;
+    newscript->Name = "npc_gnome_soul";
+    newscript->GetAI = &GetAI_npc_gnome_soul;
     newscript->RegisterSelf();
 }

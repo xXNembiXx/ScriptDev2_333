@@ -22,6 +22,7 @@ SDCategory: Gundrak
 EndScriptData */
 
 #include "precompiled.h"
+#include "gundrak.h"
 
 enum
 {
@@ -48,6 +49,18 @@ struct MANGOS_DLL_DECL boss_colossusAI : public ScriptedAI
 
     void Reset()
     {
+    }
+
+	void Aggro(Unit* pWho)
+    {
+        if (m_pInstance)
+            m_pInstance->SetData(TYPE_COLOSSUS, IN_PROGRESS);
+    }
+
+	void JustDied(Unit* pKiller)
+    {
+        if (m_pInstance)
+            m_pInstance->SetData(TYPE_COLOSSUS, DONE);
     }
 
     void UpdateAI(const uint32 uiDiff)

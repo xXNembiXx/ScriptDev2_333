@@ -57,12 +57,20 @@ struct MANGOS_DLL_DECL instance_gundrak : public ScriptedInstance
     uint64 m_uiSnakeKeyGUID;
     uint64 m_uiMammothKeyGUID;
     uint64 m_uiTrollKeyGUID;
+	uint64 m_uiRhinoKeyGUID;
     uint64 m_uiAltarOfSladranGUID;
     uint64 m_uiAltarOfMoorabiGUID;
     uint64 m_uiAltarOfColossusGUID;
     uint64 m_uiBridgeGUID;
+	uint64 m_uiCollisionGUID;
 
     uint64 m_uiSladranGUID;
+	uint64 m_uiColossusGUID;
+	uint64 m_uiMoorabiGUID;
+	uint64 m_uiEckGUID;
+	uint64 m_uiGaldarahGUID;
+
+	bool m_bBridgeActivated;
 
     void Initialize()
     {
@@ -79,9 +87,18 @@ struct MANGOS_DLL_DECL instance_gundrak : public ScriptedInstance
         m_uiSnakeKeyGUID          = 0;
         m_uiTrollKeyGUID          = 0;
         m_uiMammothKeyGUID        = 0;
+		m_uiRhinoKeyGUID		  = 0;
         m_uiBridgeGUID            = 0;
+		m_uiCollisionGUID		  = 0;
 
         m_uiSladranGUID           = 0;
+		m_uiColossusGUID		  = 0;
+		m_uiMoorabiGUID			  = 0;
+		m_uiEckGUID				  = 0;
+		m_uiGaldarahGUID		  = 0;
+
+		m_bBridgeActivated		  = false;
+
     }
 
     void OnCreatureCreate(Creature* pCreature)
@@ -89,6 +106,10 @@ struct MANGOS_DLL_DECL instance_gundrak : public ScriptedInstance
         switch(pCreature->GetEntry())
         {
             case NPC_SLADRAN: m_uiSladranGUID = pCreature->GetGUID(); break;
+			case NPC_COLOSSUS: m_uiColossusGUID = pCreature->GetGUID(); break;
+			case NPC_MOORABI: m_uiMoorabiGUID = pCreature->GetGUID(); break;
+			case NPC_ECK: m_uiEckGUID = pCreature->GetGUID(); break;
+			case NPC_GALDARAH: m_uiGaldarahGUID = pCreature->GetGUID(); break;
         }
     }
 
@@ -150,9 +171,17 @@ struct MANGOS_DLL_DECL instance_gundrak : public ScriptedInstance
                 if (m_auiEncounter[2] == SPECIAL)
                     DoUseDoorOrButton(m_uiMammothKeyGUID);
                 break;
+			case GO_RHINO_KEY:
+				m_uiRhinoKeyGUID = pGo->GetGUID();
+				if (m_auiEncounter[0] == SPECIAL && m_auiEncounter[1] == SPECIAL && m_auiEncounter[2] == SPECIAL)
+					DoUseDoorOrButton(m_uiRhinoKeyGUID);
+				break;
             case GO_BRIDGE: 
                 m_uiBridgeGUID = pGo->GetGUID();
                 break;
+			case GO_COLLISION:
+				m_uiCollisionGUID = pGo->GetGUID();
+				break;
         }
     }
     
@@ -275,9 +304,45 @@ struct MANGOS_DLL_DECL instance_gundrak : public ScriptedInstance
         {
             case NPC_SLADRAN:
                 return m_uiSladranGUID;
+			case NPC_COLOSSUS:
+				return m_uiColossusGUID;
+			case NPC_MOORABI:
+				return m_uiMoorabiGUID;
+			case NPC_ECK:
+				return m_uiEckGUID;
+			case NPC_GALDARAH:
+				return m_uiGaldarahGUID;
         }
         return 0;
     }
+
+	void Update(uint32)
+	{
+		if (GetData(TYPE_SLADRAN) == SPECIAL && GetData(TYPE_COLOSSUS) == SPECIAL && GetData(TYPE_MOORABI) == SPECIAL)
+		{
+			if (!m_bBridgeActivated)
+			{
+				GameObject* pBridge = instance->GetGameObject(m_uiBridgeGUID);
+				GameObject* pCollision = instance->GetGameObject(m_uiCollisionGUID);
+				GameObject* pSnakeKey = instance->GetGameObject(m_uiSnakeKeyGUID);
+				GameObject* pMammothKey = instance->GetGameObject(m_uiMammothKeyGUID);
+				GameObject* pTrollKey = instance->GetGameObject(m_uiTrollKeyGUID);
+				GameObject* pRhinoKey = instance->GetGameObject(m_uiRhinoKeyGUID);
+
+				if (pBridge && pCollision && pSnakeKey && pMammothKey && pTrollKey && pRhinoKey)
+				{
+					pBridge->SetGoState(GO_STATE_ACTIVE_ALTERNATIVE);
+					pCollision->SetGoState(GO_STATE_ACTIVE_ALTERNATIVE);
+					pSnakeKey->SetGoState(GO_STATE_ACTIVE_ALTERNATIVE);
+					pMammothKey->SetGoState(GO_STATE_ACTIVE_ALTERNATIVE);
+					pTrollKey->SetGoState(GO_STATE_ACTIVE_ALTERNATIVE);
+					pRhinoKey->SetGoState(GO_STATE_ACTIVE_ALTERNATIVE);
+				}
+
+				m_bBridgeActivated = true;
+			}
+		}
+	}
 };
 
 InstanceData* GetInstanceData_instance_gundrak(Map* pMap)

@@ -40,8 +40,10 @@ enum
     GO_SNAKE_KEY           = 192564,
     GO_TROLL_KEY           = 192567,
     GO_MAMMOTH_KEY         = 192565,
+	GO_RHINO_KEY		   = 192566,
 
-    GO_BRIDGE              = 193188
+    GO_BRIDGE              = 193188,
+	GO_COLLISION		   = 192633
 };
 
 #endif

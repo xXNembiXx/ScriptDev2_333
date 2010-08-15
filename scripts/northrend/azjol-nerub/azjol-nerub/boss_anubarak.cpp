@@ -48,7 +48,10 @@ enum
     SAY_LOCUST_3                                  = -1601007,
     SAY_SUBMERGE_1                                = -1601008,
     SAY_SUBMERGE_2                                = -1601009,
-    SAY_DEATH                                     = -1601004
+    SAY_DEATH                                     = -1601004,
+	
+    //Achievement Speed Kill
+    ACHIEV_GOTTA_GO								  =  1860
 };
 
 struct Locations
@@ -68,10 +71,15 @@ struct MANGOS_DLL_DECL boss_anubarakAI : public ScriptedAI
     boss_anubarakAI(Creature *pCreature) : ScriptedAI(pCreature)
     {
         pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+        m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
         Reset();
     }
 
     ScriptedInstance *pInstance;
+    bool m_bIsRegularMode;
+
+    bool m_bIsInTimeAchiev;
+    uint32 m_uiAchievTimer;
 
     bool bChanneling;
     bool bGuardianSummoned;
@@ -94,6 +102,9 @@ struct MANGOS_DLL_DECL boss_anubarakAI : public ScriptedAI
 
     void Reset()
     {
+
+        m_bIsInTimeAchiev = true;
+        m_uiAchievTimer = 240000;
 
         uiCarrionBeetlesTimer = 8000;
         uiLeechingSwarmTimer = 20000;
@@ -161,6 +172,34 @@ struct MANGOS_DLL_DECL boss_anubarakAI : public ScriptedAI
             pInstance->SetData(TYPE_ANUBARAK, IN_PROGRESS);
     }
 
+
+	void JustDied(Unit *pKiller)
+    {
+        DoScriptText(SAY_DEATH, m_creature);
+
+        if (pInstance)
+            pInstance->SetData(TYPE_ANUBARAK, DONE);
+	
+		if (!m_bIsRegularMode)
+		{
+			if (m_bIsInTimeAchiev)
+			{
+				AchievementEntry const *AchievGottaGo = GetAchievementStore()->LookupEntry(ACHIEV_GOTTA_GO);
+				if (AchievGottaGo)
+				{
+					Map* pMap = m_creature->GetMap();
+					if (pMap && pMap->IsDungeon())
+					{
+						Map::PlayerList const &players = pMap->GetPlayers();
+						for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
+							itr->getSource()->CompletedAchievement(AchievGottaGo);
+					}
+				}
+			}
+		}
+	}
+
+
     void NextPhase()
     {
         m_creature->InterruptNonMeleeSpells(false);
@@ -193,6 +232,13 @@ struct MANGOS_DLL_DECL boss_anubarakAI : public ScriptedAI
                 DoCast(m_creature->getVictim(), SPELL_SUMMON_CARRION_BEETLES, true);
             bChanneling = false;
         }
+
+        if (m_uiAchievTimer < diff)
+        {
+            m_bIsInTimeAchiev = false;
+        }
+		else
+			m_uiAchievTimer -= diff;
 
         if (uiPhase == 1)
         {
@@ -316,13 +362,6 @@ struct MANGOS_DLL_DECL boss_anubarakAI : public ScriptedAI
             NextPhase();
     }
 
-    void JustDied(Unit *pKiller)
-    {
-        DoScriptText(SAY_DEATH, m_creature);
-
-        if (pInstance)
-            pInstance->SetData(TYPE_ANUBARAK, DONE);
-    }
 
     void KilledUnit(Unit *pVictim)
     {

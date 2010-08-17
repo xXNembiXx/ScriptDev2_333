@@ -24,6 +24,8 @@ EndScriptData */
 /* ContentData
 npc_barnes
 npc_berthold
+npc_kara_mana_feeder
+npc_kara_mana_warp
 EndContentData */
 
 #include "precompiled.h"
@@ -414,6 +416,104 @@ bool GossipSelect_npc_berthold(Player* pPlayer, Creature* pCreature, uint32 uiSe
     return true;
 }
 
+/*######
+# npc_kara_mana_feeder
+######*/
+
+enum
+{
+	SPELL_ASTRAL_BITE			= 29908
+};
+
+struct MANGOS_DLL_DECL npc_kara_mana_feederAI : public ScriptedAI
+{
+    npc_kara_mana_feederAI(Creature* pCreature) : ScriptedAI(pCreature) {Reset();}
+
+	uint32 m_bIsAstralBiteTimer;
+
+	bool m_bIsAstralBite;
+
+    void Reset()
+    {
+		m_bIsAstralBiteTimer = 500;
+		m_bIsAstralBite = false;
+
+		m_creature->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_ARCANE, true);
+		m_creature->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_FROST, true);
+		m_creature->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_NATURE, true);
+		m_creature->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_FIRE, true);
+		m_creature->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_HOLY, true);
+		m_creature->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_SHADOW, true);
+	}
+
+	void UpdateAI(const uint32 uiDiff)
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+		if (m_bIsAstralBiteTimer < uiDiff)
+        {
+			DoCastSpellIfCan(m_creature, SPELL_ASTRAL_BITE);
+			m_creature->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_ARCANE, true);
+			m_creature->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_FROST, true);
+			m_creature->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_NATURE, true);
+			m_creature->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_FIRE, true);
+			m_creature->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_HOLY, true);
+			m_creature->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_SHADOW, true);
+			m_bIsAstralBite = true;
+
+            m_bIsAstralBiteTimer = 500;
+        }else m_bIsAstralBiteTimer -= uiDiff;
+
+        DoMeleeAttackIfReady();
+    }
+};
+
+CreatureAI* GetAI_npc_kara_mana_feeder(Creature* pCreature)
+{
+    return new npc_kara_mana_feederAI(pCreature);
+}
+
+/*######
+# npc_kara_mana_warp
+######*/
+
+enum
+{
+	SPELL_WARP_BREACH			= 29919
+};
+
+struct MANGOS_DLL_DECL npc_kara_mana_warpAI : public ScriptedAI
+{
+    npc_kara_mana_warpAI(Creature* pCreature) : ScriptedAI(pCreature) {Reset();}
+
+	bool m_bIsWarpBreach;
+
+    void Reset()
+    {
+		m_bIsWarpBreach = false;
+	}
+
+	void UpdateAI(const uint32 uiDiff)
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+		if (!m_bIsWarpBreach && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 10))
+        {
+			DoCastSpellIfCan(m_creature, SPELL_WARP_BREACH);
+			m_bIsWarpBreach = true;
+        }
+
+        DoMeleeAttackIfReady();
+    }
+};
+
+CreatureAI* GetAI_npc_kara_mana_warp(Creature* pCreature)
+{
+    return new npc_kara_mana_warpAI(pCreature);
+}
+
 void AddSC_karazhan()
 {
     Script* newscript;
@@ -429,5 +529,15 @@ void AddSC_karazhan()
     newscript->Name = "npc_berthold";
     newscript->pGossipHello = &GossipHello_npc_berthold;
     newscript->pGossipSelect = &GossipSelect_npc_berthold;
+    newscript->RegisterSelf();
+
+	newscript = new Script;
+    newscript->Name = "npc_kara_mana_feeder";
+    newscript->GetAI = &GetAI_npc_kara_mana_feeder;
+    newscript->RegisterSelf();
+
+	newscript = new Script;
+    newscript->Name = "npc_kara_mana_warp";
+    newscript->GetAI = &GetAI_npc_kara_mana_warp;
     newscript->RegisterSelf();
 }

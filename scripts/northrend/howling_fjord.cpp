@@ -17,7 +17,7 @@
 /* ScriptData
 SDName: Howling_Fjord
 SD%Complete: ?
-SDComment: Quest support: 11221, 11483
+SDComment: Quest support: 11221, 11483, 11317, 11322
 SDCategory: Howling Fjord
 EndScriptData */
 
@@ -172,6 +172,90 @@ bool GossipSelect_npc_mcgoyver(Player* pPlayer, Creature* pCreature, uint32 uiSe
     return true;
 }
 
+/*####################
+## YourInnerTurmoil ##
+####################*/
+
+enum
+{
+	SAY_SUMMON_1			= -2500001,
+	SAY_SUMMON_2			= -2500002,
+	SAY_LOW_HEALTH			= -2500003,
+	SAY_DEATH				= -2500004,
+
+	SPELL_SLOW_FALL			=	50238
+};
+
+struct MANGOS_DLL_DECL npc_your_inner_turmoilAI : public ScriptedAI
+{
+	npc_your_inner_turmoilAI(Creature* pCreature) : ScriptedAI(pCreature)
+	{
+		Reset();
+	}
+
+	bool m_bSaySummon;
+	bool m_bSaySummon2;
+	bool m_bSayLowHealth;
+
+	uint32 m_uiSaySummon2Timer;
+
+	void Reset()
+	{
+		m_bSaySummon = true;
+		m_bSaySummon2 = true;
+		m_bSayLowHealth = true;
+
+		uint32 m_uiSaySummon2Timer = 2000;
+	}
+
+	void JustDied(Unit* pKiller)
+	{
+		DoScriptText(SAY_DEATH, m_creature);
+
+		if(pKiller)
+		{
+			if(pKiller->GetTypeId() == TYPEID_PLAYER)
+				m_creature->CastSpell(pKiller, SPELL_SLOW_FALL, true);
+		}
+	}
+
+	void UpdateAI(const uint32 uiDiff)
+	{
+		if(!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+			return;
+		
+		if(m_bSaySummon)
+		{
+			DoScriptText(SAY_SUMMON_1, m_creature);
+			m_bSaySummon = false;
+		}
+		
+		if(m_bSaySummon2)
+		{
+			if(m_uiSaySummon2Timer < uiDiff)
+			{
+				DoScriptText(SAY_SUMMON_2, m_creature);
+				m_bSaySummon2 = false;
+			}
+			else
+				m_uiSaySummon2Timer -= uiDiff;
+		}
+		
+		if(m_creature->GetHealthPercent() <= 50.0f && m_bSayLowHealth)
+		{
+			DoScriptText(SAY_LOW_HEALTH, m_creature);
+			m_bSayLowHealth = false;
+		}
+
+		DoMeleeAttackIfReady();
+	}
+};
+
+CreatureAI* GetAI_npc_your_inner_turmoil(Creature* pCreature)
+{
+	return new npc_your_inner_turmoilAI(pCreature);
+}
+
 void AddSC_howling_fjord()
 {
     Script* newscript;
@@ -193,4 +277,9 @@ void AddSC_howling_fjord()
     newscript->pGossipHello = &GossipHello_npc_mcgoyver;
     newscript->pGossipSelect = &GossipSelect_npc_mcgoyver;
     newscript->RegisterSelf();
+	
+	newscript = new Script;
+	newscript->Name = "npc_your_inner_turmoil";
+	newscript->GetAI = &GetAI_npc_your_inner_turmoil;
+	newscript->RegisterSelf();
 }

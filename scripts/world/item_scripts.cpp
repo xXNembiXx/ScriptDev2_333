@@ -142,6 +142,116 @@ bool ItemUse_item_petrov_cluster_bombs(Player* pPlayer, Item* pItem, const Spell
     return false;
 }
 
+/*#####
+# item_uthers_tribute
+#####*/
+
+enum
+{
+	SPELL_HUMAN_TRIBUTE		= 24105,
+	SPELL_DWARF_TRIBUTE		= 24107,
+	SPELL_NIGHTELF_TRIBUTE	= 24108,
+	SPELL_GNOME_TRIBUTE		= 24106,
+	SPELL_DRAENEI_TRIBUTE	= 69533,
+	GO_HUMAN_TRIBUTE		= 180210,
+	GO_NIGHTELF_TRIBUTE		= 180213,
+	GO_DWARF_TRIBUTE		= 180214,
+	GO_GNOME_TRIBUTE		= 180211,
+	GO_DRAENEI_TRIBUTE		= 201294,
+	AREA_UTHERS_TOMB_STATUE	= 196,
+	ITEM_UTHERS_TRIBUTE		= 19850
+};
+
+bool ItemUse_item_uthers_tribute(Player* pPlayer, Item* pItem, const SpellCastTargets &pTargets)
+{
+	if (pPlayer->GetTeam() != ALLIANCE)
+		return false;
+	if (pPlayer->GetAreaId() != AREA_UTHERS_TOMB_STATUE)
+		return false;
+
+	switch (pPlayer->getRace()) {
+
+		case RACE_HUMAN:
+			pPlayer->CastSpell(pPlayer, SPELL_HUMAN_TRIBUTE, false);
+			pPlayer->SummonGameobject(GO_HUMAN_TRIBUTE,pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(),0, 5);
+			break;
+		case RACE_DWARF:
+			pPlayer->CastSpell(pPlayer, SPELL_DWARF_TRIBUTE, false);
+			pPlayer->SummonGameobject(GO_DWARF_TRIBUTE,pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(),0, 5);
+			break;
+		case RACE_NIGHTELF:
+			pPlayer->CastSpell(pPlayer, SPELL_NIGHTELF_TRIBUTE, false);
+			pPlayer->SummonGameobject(GO_NIGHTELF_TRIBUTE,pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(),0, 5);
+			break;
+		case RACE_GNOME:
+			pPlayer->CastSpell(pPlayer, SPELL_GNOME_TRIBUTE, false);
+			pPlayer->SummonGameobject(GO_GNOME_TRIBUTE,pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(),0, 5);
+			break;
+		case RACE_DRAENEI:
+			pPlayer->CastSpell(pPlayer, SPELL_DRAENEI_TRIBUTE, false);
+			pPlayer->SummonGameobject(GO_DRAENEI_TRIBUTE,pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(),0, 5);
+			break;
+	}
+	pPlayer->DestroyItemCount(ITEM_UTHERS_TRIBUTE, 1, true);
+	return true;
+}
+
+/*#####
+# item_uthers_tribute
+#####*/
+
+enum
+{
+	SPELL_ORC_TRIBUTE		= 24104,
+	SPELL_UNDEAD_TRIBUTE	= 24103,
+	SPELL_TAUREN_TRIBUTE	= 24102,
+	SPELL_TROLL_TRIBUTE		= 24101,
+	SPELL_BLOODELF_TRIBUTE	= 69530,
+	GO_ORC_TRIBUTE			= 180207,
+	GO_UNDEAD_TRIBUTE		= 180208,
+	GO_TAUREN_TRIBUTE		= 180209,
+	GO_TROLL_TRIBUTE		= 180206,
+	GO_BLOODELF_TRIBUTE		= 180212,
+	GO_GROMS_MONUMENT		= 21004,
+	ITEM_GROMS_TRIBUTE		= 19851
+};
+
+bool ItemUse_item_groms_tribute(Player* pPlayer, Item* pItem, const SpellCastTargets &pTargets)
+{
+	if (pPlayer->GetTeam() != HORDE)
+		return false;
+
+	if (GameObject* MonumentGO = GetClosestGameObjectWithEntry(pPlayer, GO_GROMS_MONUMENT, 10.0f)) {
+		switch (pPlayer->getRace()) {
+
+		case RACE_ORC:
+			pPlayer->CastSpell(pPlayer, SPELL_ORC_TRIBUTE, false);
+			pPlayer->SummonGameobject(GO_ORC_TRIBUTE,pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(),0, 5);
+			break;
+			case RACE_UNDEAD_PLAYER:
+			pPlayer->CastSpell(pPlayer, SPELL_UNDEAD_TRIBUTE, false);
+			pPlayer->SummonGameobject(GO_UNDEAD_TRIBUTE,pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(),0, 5);
+			break;
+		case RACE_TAUREN:
+			pPlayer->CastSpell(pPlayer, SPELL_TAUREN_TRIBUTE, false);
+			pPlayer->SummonGameobject(GO_TAUREN_TRIBUTE,pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(),0, 5);
+			break;
+		case RACE_TROLL:
+			pPlayer->CastSpell(pPlayer, SPELL_TROLL_TRIBUTE, false);
+			pPlayer->SummonGameobject(GO_TROLL_TRIBUTE,pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(),0, 5);
+			break;
+		case RACE_BLOODELF:
+			pPlayer->CastSpell(pPlayer, SPELL_BLOODELF_TRIBUTE, false);
+			pPlayer->SummonGameobject(GO_BLOODELF_TRIBUTE,pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(),0, 5);
+			break;
+		}
+		pPlayer->DestroyItemCount(ITEM_GROMS_TRIBUTE, 1, true);
+		return true;
+	}
+	else
+		return false;
+}
+  
 void AddSC_item_scripts()
 {
     Script *newscript;
@@ -169,5 +279,15 @@ void AddSC_item_scripts()
     newscript = new Script;
     newscript->Name = "item_petrov_cluster_bombs";
     newscript->pItemUse = &ItemUse_item_petrov_cluster_bombs;
+    newscript->RegisterSelf();
+
+	newscript = new Script;
+    newscript->Name = "item_uthers_tribute";
+    newscript->pItemUse = &ItemUse_item_uthers_tribute;
+    newscript->RegisterSelf();
+
+	newscript = new Script;
+    newscript->Name = "item_groms_tribute";
+    newscript->pItemUse = &ItemUse_item_groms_tribute;
     newscript->RegisterSelf();
 }

@@ -17,7 +17,7 @@
 /* ScriptData
 SDName: GO_Scripts
 SD%Complete: 100
-SDComment: Quest support: 4285,4287,4288(crystal pylons), 4296, 5088, 6481, 10990, 10991, 10992. Field_Repair_Bot->Teaches spell 22704. Barov_journal->Teaches spell 26089
+SDComment: Quest support: 4285,4287,4288(crystal pylons), 4296, 5088, 6481, 10990, 10991, 10992, 12916. Field_Repair_Bot->Teaches spell 22704. Barov_journal->Teaches spell 26089
 SDCategory: Game Objects
 EndScriptData */
 
@@ -38,6 +38,7 @@ go_tablet_of_madness
 go_tablet_of_the_seven
 go_tele_to_dalaran_crystal
 go_tele_to_violet_stand
+go_scourge_enclosure
 EndContentData */
 
 #include "precompiled.h"
@@ -406,6 +407,32 @@ bool GOHello_go_blood_filled_orb(Player* pPlayer, GameObject* pGo)
     return false;
 }
 
+/*######
+## go_scourge_enclosure
+######*/
+
+enum
+{
+    SPELL_GYMER_LOCK_EXPLOSION      = 55529,
+    NPC_GYMER_LOCK_DUMMY            = 29928
+
+};
+
+bool GOHello_go_scourge_enclosure(Player* pPlayer, GameObject* pGo)
+{
+    std::list<Creature*> m_lResearchersList;
+    GetCreatureListWithEntryInGrid(m_lResearchersList, pGo, NPC_GYMER_LOCK_DUMMY, 15.0f);
+    if (!m_lResearchersList.empty())
+    {
+        for(std::list<Creature*>::iterator itr = m_lResearchersList.begin(); itr != m_lResearchersList.end(); ++itr)
+        {
+            (*itr)->CastSpell((*itr),SPELL_GYMER_LOCK_EXPLOSION,true);
+        }
+    }
+    pPlayer->KilledMonsterCredit(NPC_GYMER_LOCK_DUMMY, 0);
+    return true;
+}
+
 void AddSC_go_scripts()
 {
     Script *newscript;
@@ -503,5 +530,10 @@ void AddSC_go_scripts()
     newscript = new Script;
     newscript->Name = "go_blood_filled_orb";
     newscript->pGOHello =           &GOHello_go_blood_filled_orb;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_scourge_enclosure";
+    newscript->pGOHello =          &GOHello_go_scourge_enclosure;
     newscript->RegisterSelf();
 }

@@ -17,7 +17,7 @@
 /* ScriptData
 SDName: Terokkar_Forest
 SD%Complete: 80
-SDComment: Quest support: 9889, 10009, 10873, 10896, 10446/10447, 10887, 10922, 11096. Skettis->Ogri'la Flight
+SDComment: Quest support: 9889, 10009, 10873, 10896, 10446/10447, 10852, 10887, 10922, 11096. Skettis->Ogri'la Flight
 SDCategory: Terokkar Forest
 EndScriptData */
 
@@ -33,6 +33,7 @@ npc_mana_bomb_exp_trigger
 go_mana_bomb
 npc_skyguard_handler_deesak
 npc_slim
+go_veil_skith_cage
 EndContentData */
 
 #include "precompiled.h"
@@ -873,6 +874,41 @@ bool GossipSelect_npc_slim(Player* pPlayer, Creature* pCreature, uint32 uiSender
     return true;
 }
 
+/*#####
+## go_veil_skith_cage
+#####*/
+
+enum
+{
+    QUEST_MISSING_FRIENDS     = 10852,
+    NPC_CAPTIVE_CHILD         = 22314,
+    SAY_THANKS_1              = -1000050,
+    SAY_THANKS_2              = -1000051,
+    SAY_THANKS_3              = -1000052,
+    SPELL_DESPAWN_SELF		  =  43014
+};
+
+bool GOHello_veil_skith_cage(Player* pPlayer, GameObject* pGo)
+{
+    if (pPlayer->GetQuestStatus(QUEST_MISSING_FRIENDS) == QUEST_STATUS_INCOMPLETE)
+    {
+     Creature *pCreature = GetClosestCreatureWithEntry(pGo, NPC_CAPTIVE_CHILD, INTERACTION_DISTANCE);
+        if(pCreature)
+        {
+            pPlayer->KilledMonsterCredit(NPC_CAPTIVE_CHILD, pCreature->GetGUID());
+                switch(urand(0,2))
+                {
+                    case 0: DoScriptText(SAY_THANKS_1, pCreature); break;
+                    case 1: DoScriptText(SAY_THANKS_2, pCreature); break;
+                    default: DoScriptText(SAY_THANKS_3, pCreature); break;
+                }
+		
+            pCreature->CastSpell(pCreature, SPELL_DESPAWN_SELF, false);
+        }
+    }
+    return false;
+};
+
 void AddSC_terokkar_forest()
 {
     Script *newscript;
@@ -938,4 +974,8 @@ void AddSC_terokkar_forest()
     newscript->pGossipSelect = &GossipSelect_npc_slim;
     newscript->RegisterSelf();
 
+    newscript = new Script;
+    newscript->Name = "go_veil_skith_cage";
+    newscript->pGOHello = &GOHello_veil_skith_cage;
+    newscript->RegisterSelf();
 }

@@ -49,7 +49,8 @@ npc_winter_reveler		100%	Winterveil event
 npc_metzen				100%	Winterveil event
 npc_death_knight_gargoyle		AI for summoned gargoyle of deathknights
 npc_training_dummy		100%	AI for training dummies
-npc_experience_eliminator		NPC to stop gaining experience 
+npc_experience_eliminator		NPC to stop gaining experience
+npc_dread_captain_demeza100%	Pirates' Day
 EndContentData */
 
 /*########
@@ -2492,6 +2493,36 @@ bool GossipSelect_npc_experience_eliminator(Player* pPlayer, Creature* pCreature
     return true;
 }
 
+/*######
+## npc_dread_captain_demeza
+######*/
+enum 
+{
+    SPELL_DREAD_CORSAIR	= 50517,
+    ACHIEVEMENT_THE_CAPTAINS_BOOTY	= 3457
+};
+#define GOSSIP_TEXT_DEMEZA	"Ich möchte eurer Crew beitreten"
+
+bool GossipHello_npc_dread_captain_demeza(Player* pPlayer, Creature* pCreature)
+{
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_DEMEZA, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_dread_captain_demeza(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if(uiAction == GOSSIP_ACTION_INFO_DEF+1)
+    {
+        pPlayer->CastSpell(pPlayer,SPELL_DREAD_CORSAIR, false);
+        AchievementEntry const *AchievDeMeza = GetAchievementStore()->LookupEntry(ACHIEVEMENT_THE_CAPTAINS_BOOTY);
+        if (AchievDeMeza)
+            pPlayer->CompletedAchievement(AchievDeMeza);
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_npcs_special()
 {
     Script* newscript;
@@ -2622,5 +2653,11 @@ void AddSC_npcs_special()
     newscript->Name = "npc_experience_eliminator";
     newscript->pGossipHello = &GossipHello_npc_experience_eliminator;
     newscript->pGossipSelect = &GossipSelect_npc_experience_eliminator;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_dread_captain_demeza";
+    newscript->pGossipHello =  &GossipHello_npc_dread_captain_demeza;
+    newscript->pGossipSelect = &GossipSelect_npc_dread_captain_demeza;
     newscript->RegisterSelf();
 }

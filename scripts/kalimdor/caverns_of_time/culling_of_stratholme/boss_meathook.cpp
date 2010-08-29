@@ -46,7 +46,6 @@ struct MANGOS_DLL_DECL boss_meathookAI : public ScriptedAI
    {
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
         m_bIsHeroic = pCreature->GetMap()->IsRaidOrHeroicDungeon();
-        m_creature->SetActiveObjectState(true);
         Reset();
    }
 

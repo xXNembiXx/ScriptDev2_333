@@ -128,7 +128,6 @@ struct MANGOS_DLL_DECL npc_arthasAI : public npc_escortAI
     {
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
         m_bIsHeroic = pCreature->GetMap()->IsRaidOrHeroicDungeon();
-        m_creature->SetActiveObjectState(true);
         m_creature->SetSpeedRate(MOVE_RUN, 1);
         Reset();
     }
@@ -1089,7 +1088,6 @@ struct MANGOS_DLL_DECL npc_utherAI : public npc_escortAI
     npc_utherAI(Creature* pCreature) : npc_escortAI(pCreature)
     {
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
-        m_creature->SetActiveObjectState(true);
         Reset();
     }
 
@@ -1250,7 +1248,6 @@ struct MANGOS_DLL_DECL npc_chromi_middleAI : public ScriptedAI
     npc_chromi_middleAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
-        m_creature->SetActiveObjectState(true);
         m_bUtherHere = false;
         Reset();
     }
@@ -1609,7 +1606,6 @@ struct MANGOS_DLL_DECL npc_dark_conversionAI : public ScriptedAI
    npc_dark_conversionAI(Creature *pCreature) : ScriptedAI(pCreature)
    {
     m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
-    m_creature->SetActiveObjectState(true);
 
     if (m_pInstance && m_pInstance->GetData(TYPE_ENCOUNTER) == IN_PROGRESS)
         m_creature->UpdateEntry(NPC_ZOMBIE);

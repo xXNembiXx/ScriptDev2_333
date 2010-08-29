@@ -97,7 +97,6 @@ struct MANGOS_DLL_DECL npc_chromi_startAI : public ScriptedAI
     npc_chromi_startAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
-        m_creature->SetActiveObjectState(true);
         m_bCounterHere = false;
         Reset();
     }
@@ -151,7 +150,6 @@ struct MANGOS_DLL_DECL npc_mikeAI : public ScriptedAI
     npc_mikeAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
-        m_creature->SetActiveObjectState(true);
         Reset();
     }
 
@@ -314,7 +312,6 @@ struct MANGOS_DLL_DECL npc_rogerAI : public ScriptedAI
     npc_rogerAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
-        m_creature->SetActiveObjectState(true);
         Reset();
     }
 
@@ -454,7 +451,6 @@ struct MANGOS_DLL_DECL npc_moriganAI : public ScriptedAI
     npc_moriganAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
-        m_creature->SetActiveObjectState(true);
         Reset();
     }
 
@@ -605,7 +601,6 @@ struct MANGOS_DLL_DECL npc_jenaAI : public ScriptedAI
     npc_jenaAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
-        m_creature->SetActiveObjectState(true);
         Reset();
     }
 
@@ -794,7 +789,6 @@ struct MANGOS_DLL_DECL npc_malcolmAI : public ScriptedAI
     npc_malcolmAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
-        m_creature->SetActiveObjectState(true);
         Reset();
     }
 
@@ -982,7 +976,6 @@ struct MANGOS_DLL_DECL npc_bartleby_csAI : public ScriptedAI
     npc_bartleby_csAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
-        m_creature->SetActiveObjectState(true);
         Reset();
     }
 
@@ -1135,7 +1128,6 @@ struct MANGOS_DLL_DECL npc_stratholme_cratesAI : public ScriptedAI
     npc_stratholme_cratesAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
-        m_creature->SetActiveObjectState(true);
         Reset();
     }
 

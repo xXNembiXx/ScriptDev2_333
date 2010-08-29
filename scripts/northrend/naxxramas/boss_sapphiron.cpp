@@ -259,7 +259,7 @@ struct MANGOS_DLL_DECL boss_sapphironAI : public ScriptedAI
                                     {
                                         if(!(*itr)->isAlive())
                                             return;
-                                        if (pUnit->GetDistance2d(*itr) <= 5 && (*itr)->HasAura(SPELL_ICEBOLT))
+                                        if (pUnit->IsInMap(m_creature) && pUnit->IsWithinDist(*itr, 5.0f) && (*itr)->HasAura(SPELL_ICEBOLT))
                                             pUnit->ApplySpellImmune(0, IMMUNITY_SCHOOL, SPELL_SCHOOL_MASK_FROST, true);
                                     }
                                 }

@@ -14,6 +14,7 @@ extern void AddSC_boss_vanndar();
 //custom
 extern void AddSC_npc_arena_honor();
 extern void AddSC_teleguy();
+extern void AddSC_custom_events();
 
 //examples
 extern void AddSC_example_creature();
@@ -536,6 +537,7 @@ void AddScripts()
     //custom
     AddSC_npc_arena_honor();
     AddSC_teleguy();
+    AddSC_custom_events();
 
     //examples
     AddSC_example_creature();

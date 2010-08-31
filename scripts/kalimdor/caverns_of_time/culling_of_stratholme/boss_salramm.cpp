@@ -56,6 +56,7 @@ struct MANGOS_DLL_DECL boss_salrammAI : public ScriptedAI
    {
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
         m_bIsHeroic = pCreature->GetMap()->IsRaidOrHeroicDungeon();
+        m_creature->SetActiveObjectState(true);
         Reset();
    }
 
@@ -170,6 +171,7 @@ struct MANGOS_DLL_DECL npc_salramm_gnoulAI : public ScriptedAI
    {
        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
        m_bIsHeroic = pCreature->GetMap()->IsRaidOrHeroicDungeon();
+       m_creature->SetActiveObjectState(true);
        Reset();
    }
 

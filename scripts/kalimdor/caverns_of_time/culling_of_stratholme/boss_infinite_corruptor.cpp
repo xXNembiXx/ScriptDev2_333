@@ -36,6 +36,7 @@ struct MANGOS_DLL_DECL boss_infinite_corruptorAI : public ScriptedAI
    boss_infinite_corruptorAI(Creature *pCreature) : ScriptedAI(pCreature)
    {
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+        m_creature->SetActiveObjectState(true);
         Reset();
    }
 

@@ -40,6 +40,7 @@ struct MANGOS_DLL_DECL npc_cs_gnoulAI : public ScriptedAI
    {
        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
        m_bIsHeroic = pCreature->GetMap()->IsRaidOrHeroicDungeon();
+       m_creature->SetActiveObjectState(true);
        Reset();
    }
 
@@ -218,6 +219,7 @@ struct MANGOS_DLL_DECL npc_cs_necromancerAI : public ScriptedAI
    {
        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
        m_bIsHeroic = pCreature->GetMap()->IsRaidOrHeroicDungeon();
+       m_creature->SetActiveObjectState(true);
        SetCombatMovement(false);
        Reset();
    }
@@ -412,6 +414,7 @@ struct MANGOS_DLL_DECL npc_cs_fieldAI : public ScriptedAI
    {
        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
        m_bIsHeroic = pCreature->GetMap()->IsRaidOrHeroicDungeon();
+       m_creature->SetActiveObjectState(true);
        Reset();
    }
 
@@ -604,6 +607,7 @@ struct MANGOS_DLL_DECL npc_cs_acolyteAI : public ScriptedAI
    {
        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
        m_bIsHeroic = pCreature->GetMap()->IsRaidOrHeroicDungeon();
+       m_creature->SetActiveObjectState(true);
        SetCombatMovement(false);
        Reset();
    }
@@ -818,6 +822,7 @@ struct MANGOS_DLL_DECL npc_cs_butcherAI : public ScriptedAI
    {
        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
        m_bIsHeroic = pCreature->GetMap()->IsRaidOrHeroicDungeon();
+       m_creature->SetActiveObjectState(true);
        Reset();
    }
 
@@ -976,6 +981,7 @@ struct MANGOS_DLL_DECL npc_time_riftCSAI : public ScriptedAI
    {
        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
        m_bIsHeroic = pCreature->GetMap()->IsRaidOrHeroicDungeon();
+       m_creature->SetActiveObjectState(true);
        Reset();
    }
 

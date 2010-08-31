@@ -116,9 +116,11 @@ struct MANGOS_DLL_DECL instance_culling_of_stratholme : public ScriptedInstance
         switch(pCreature->GetEntry())
         {
             case NPC_CHROMI01: 
+                         pCreature->SetActiveObjectState(true);
                          m_uiChromi01GUID = pCreature->GetGUID();
                          break;
             case NPC_CHROMI02:
+                         pCreature->SetActiveObjectState(true);
                          m_uiChromi02GUID = pCreature->GetGUID();
                          if (m_auiEncounter[0] == DONE)
                             pCreature->SetVisibility(VISIBILITY_ON);
@@ -129,21 +131,26 @@ struct MANGOS_DLL_DECL instance_culling_of_stratholme : public ScriptedInstance
                          m_uiMikeGUID = pCreature->GetGUID();
                          break;
             case NPC_MAL_CORICS: 
+                         pCreature->SetActiveObjectState(true);
                          m_uiMalCoricsGUID = pCreature->GetGUID();
                          break;
             case NPC_GRIAN_STONE: 
+                         pCreature->SetActiveObjectState(true);
                          pCreature->SetStandState(UNIT_STAND_STATE_SIT_MEDIUM_CHAIR);
                          m_uiGrianStoneGUID = pCreature->GetGUID();
                          break;
             case NPC_JAMES: 
+                         pCreature->SetActiveObjectState(true);
                          pCreature->SetStandState(UNIT_STAND_STATE_SIT_MEDIUM_CHAIR);
                          m_uiJamesGUID = pCreature->GetGUID();
                          break;
             case NPC_FRAS_FRASIABI:
+                         pCreature->SetActiveObjectState(true);
                          pCreature->SetStandState(UNIT_STAND_STATE_SIT_MEDIUM_CHAIR); 
                          m_uiFrasCiabiGUID = pCreature->GetGUID();
                          break;
             case NPC_FORRESTER: 
+                         pCreature->SetActiveObjectState(true);
                          pCreature->SetStandState(UNIT_STAND_STATE_SIT_MEDIUM_CHAIR);
                          m_uiForrestenGUID = pCreature->GetGUID();
                          break;
@@ -154,6 +161,7 @@ struct MANGOS_DLL_DECL instance_culling_of_stratholme : public ScriptedInstance
                          m_uiMoriganGUID = pCreature->GetGUID();
                          break;
             case NPC_PERELLI:
+                         pCreature->SetActiveObjectState(true);
                          m_uiPerelliGUID = pCreature->GetGUID();
                          break;
             case NPC_JENA:
@@ -161,12 +169,14 @@ struct MANGOS_DLL_DECL instance_culling_of_stratholme : public ScriptedInstance
                          break;
             case NPC_MARTHA:
                          pCreature->CastSpell(pCreature, 58925, false);
+                         pCreature->SetActiveObjectState(true);
                          m_uiMarthaGUID = pCreature->GetGUID();
                          break;
             case NPC_MALCOLM:
                          m_uiMalcolmGUID = pCreature->GetGUID();
                          break;
             case NPC_DOG:
+                         pCreature->SetActiveObjectState(true);
                          m_uiDogGUID = pCreature->GetGUID();
                          break;
             case NPC_BARTLEBY:
@@ -179,6 +189,7 @@ struct MANGOS_DLL_DECL instance_culling_of_stratholme : public ScriptedInstance
                          m_uiArthasGUID = pCreature->GetGUID();
                          break;
             case NPC_JAINA:
+                         pCreature->SetActiveObjectState(true);
                          m_uiJainaGUID = pCreature->GetGUID();
                          break;
             case NPC_INFINITE_CORRUPTOR: 

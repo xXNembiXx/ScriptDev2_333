@@ -24,7 +24,9 @@ EndScriptData */
 #include "precompiled.h"
 #include "ahnkahet.h"
 
-enum
+bool AchievEldersFalse; // needed for achievement: Respect Your Elders(2038)
+
+enum eEnums
 {
     SAY_AGGRO                     = -1619000,
     SAY_SUMMON_EGG_1              = -1619001,
@@ -50,7 +52,12 @@ enum
     NPC_AHNKAHAR_GUARDIAN_EGG     = 30173,
     NPC_AHNKAHAR_SWARM_EGG        = 30172,
     NPC_AHNKAHAR_GUARDIAN         = 30176,
-    NPC_AHNKAHAR_SWARMER          = 30178
+    NPC_AHNKAHAR_SWARMER          = 30178,
+
+    //Guard Spells
+    SPELL_SPRINT				  = 56354,
+
+    ACHIEVEMENT_RESPECT_ELDERS	  = 2038
 };
 
 /*######
@@ -116,6 +123,8 @@ struct MANGOS_DLL_DECL boss_nadoxAI : public ScriptedAI
 
     void Reset()
     {
+        AchievEldersFalse = false;
+
         m_bBerserk = false;
         m_uiGuardianCount = 3;
         m_uiSummonTimer = 5000;
@@ -155,6 +164,21 @@ struct MANGOS_DLL_DECL boss_nadoxAI : public ScriptedAI
     void JustDied(Unit* pKiller)
     {
         DoScriptText(SAY_DEATH, m_creature);
+
+        if (!m_bIsRegularMode && !AchievEldersFalse)
+        {
+            AchievementEntry const *AchievRespectElders = GetAchievementStore()->LookupEntry(ACHIEVEMENT_RESPECT_ELDERS);
+            if (AchievRespectElders)
+            {
+                Map* pMap = m_creature->GetMap();
+                if (pMap && pMap->IsDungeon())
+                {
+                    Map::PlayerList const &players = pMap->GetPlayers();
+                    for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
+                        itr->getSource()->CompletedAchievement(AchievRespectElders);
+                }
+            }
+        }
     }
 
     void UpdateAI(const uint32 uiDiff)
@@ -232,6 +256,46 @@ CreatureAI* GetAI_boss_nadox(Creature* pCreature)
     return new boss_nadoxAI(pCreature);
 }
 
+/*######
+## mob_ankahar_guard
+######*/
+
+struct MANGOS_DLL_DECL mob_ankahar_guardAI : public ScriptedAI
+{
+    mob_ankahar_guardAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+        Reset();
+    }
+
+    ScriptedInstance* m_pInstance;
+
+    void Reset(){}
+
+    void JustDied(Unit *killer)
+    {
+        AchievEldersFalse = true;
+    }
+
+    void Aggro(Unit* pWho)
+    {
+        DoCast(m_creature, SPELL_SPRINT);
+    }
+
+    void UpdateAI(const uint32 uiDiff)
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+        DoMeleeAttackIfReady();
+    }
+};
+
+CreatureAI* GetAI_mob_ankahar_guard(Creature* pCreature)
+{
+    return new mob_ankahar_guardAI(pCreature);
+}
+
 void AddSC_boss_nadox()
 {
     Script *newscript;
@@ -244,5 +308,10 @@ void AddSC_boss_nadox()
     newscript = new Script;
     newscript->Name = "mob_ahnkahar_egg";
     newscript->GetAI = &GetAI_mob_ahnkahar_egg;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "mob_ankahar_guard";
+    newscript->GetAI = &GetAI_mob_ankahar_guard;
     newscript->RegisterSelf();
 }

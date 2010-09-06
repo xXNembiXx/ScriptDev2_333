@@ -45,7 +45,9 @@ enum
     H_SPELL_CORPSE_EXPLODE_PROC        = 59809,
 
     NPC_DRAKKARI_INVADER            = 27753,
-    NPC_TROLLGORE                    = 26630
+    NPC_TROLLGORE                    = 26630,
+
+    ACHIEV_CON_JUN					= 2151
 };
 
 const float PosSummon1[3] = {-259.59f, -652.49f, 26.52f};
@@ -69,6 +71,9 @@ struct MANGOS_DLL_DECL boss_trollgoreAI : public ScriptedAI
     ScriptedInstance* m_pInstance;
     bool m_bIsRegularMode;
 
+    bool m_bIsAchievFalse;
+    uint8 StackCount;
+
     uint32 Consume_Timer;
     uint32 Crush_Timer;
     uint32 InfectedWound_Timer;
@@ -77,6 +82,9 @@ struct MANGOS_DLL_DECL boss_trollgoreAI : public ScriptedAI
 
     void Reset()
     {
+        m_bIsAchievFalse = false;
+        StackCount = 0;
+
         CorpseExplode_Timer = 10000;
         Consume_Timer = 5000;
         Crush_Timer = 10000;
@@ -98,6 +106,24 @@ struct MANGOS_DLL_DECL boss_trollgoreAI : public ScriptedAI
     void JustDied(Unit* pKiller)
     {
         DoScriptText(SAY_DEATH, m_creature);
+
+        if (!m_bIsRegularMode)
+        {
+            if (!m_bIsAchievFalse)
+            {
+                AchievementEntry const *AchievConJun = GetAchievementStore()->LookupEntry(ACHIEV_CON_JUN);
+                if (AchievConJun)
+                {
+                    Map* pMap = m_creature->GetMap();
+                    if (pMap && pMap->IsDungeon())
+                    {
+                        Map::PlayerList const &players = pMap->GetPlayers();
+                        for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
+                            itr->getSource()->CompletedAchievement(AchievConJun);
+                    }
+                }
+            }
+        }
     }
 
     void SummonWaves()
@@ -141,8 +167,12 @@ struct MANGOS_DLL_DECL boss_trollgoreAI : public ScriptedAI
         {
             m_creature->CastSpell(m_creature->getVictim(),  m_bIsRegularMode ? SPELL_CONSUME : H_SPELL_CONSUME, true);
             m_creature->CastSpell(m_creature, m_bIsRegularMode ? SPELL_CONSUME_BUFF : H_SPELL_CONSUME_BUFF, true);
+            StackCount++;
             Consume_Timer = 15000;
         }else Consume_Timer -= uiDiff;
+
+        if (StackCount == 10)
+            m_bIsAchievFalse = true;
 
         //Corpse Explosion
         if (CorpseExplode_Timer < uiDiff)

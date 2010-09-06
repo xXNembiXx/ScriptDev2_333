@@ -41,6 +41,8 @@ enum
     SPELL_SHOCK_OF_SORROW_H     = 59726,
     SPELL_STORM_OF_GRIEF        = 50752,
     SPELL_STORM_OF_GRIEF_H      = 59772,
+
+    ACHIEV_GOOD_GRIEF			= 1866,
 };
 
 /*######
@@ -59,6 +61,9 @@ struct MANGOS_DLL_DECL boss_maiden_of_griefAI : public ScriptedAI
     ScriptedInstance* m_pInstance;
     bool m_bIsRegularMode;
 
+    bool m_bIsAchievInTime;
+    uint32 m_uiAchievTimer;
+
     uint32 m_uiPartingSorrow_Timer;
     uint32 m_uiPillarWoe_Timer;
     uint32 m_uiShockSorrow_Timer;
@@ -66,6 +71,9 @@ struct MANGOS_DLL_DECL boss_maiden_of_griefAI : public ScriptedAI
 
     void Reset()
     {
+        m_uiAchievTimer = 60000;
+        m_bIsAchievInTime = true;
+
         m_uiPartingSorrow_Timer = 9000 + rand()%5000;
         m_uiPillarWoe_Timer = 3000 + rand()%4000;
         m_uiStorm_Timer = 10000 + rand()%5000;
@@ -100,12 +108,36 @@ struct MANGOS_DLL_DECL boss_maiden_of_griefAI : public ScriptedAI
 
         if (m_pInstance)
             m_pInstance->SetData(TYPE_GRIEF, DONE);
+
+        if (!m_bIsRegularMode)
+        {
+            if (m_bIsAchievInTime)
+            {
+                AchievementEntry const *AchievGoodGrief = GetAchievementStore()->LookupEntry(ACHIEV_GOOD_GRIEF);
+                if (AchievGoodGrief)
+                {
+                    Map* pMap = m_creature->GetMap();
+                    if (pMap && pMap->IsDungeon())
+                    {
+                        Map::PlayerList const &players = pMap->GetPlayers();
+                        for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
+                            itr->getSource()->CompletedAchievement(AchievGoodGrief);
+                    }
+                }
+            }
+        }
     }
 
     void UpdateAI(const uint32 uiDiff)
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
+
+        if (m_bIsAchievInTime && (m_uiAchievTimer < uiDiff))
+        {
+                m_bIsAchievInTime = false;
+            m_uiAchievTimer = 60000;
+        }else m_uiAchievTimer -= uiDiff;
 
         if (m_uiPartingSorrow_Timer < uiDiff)
         {

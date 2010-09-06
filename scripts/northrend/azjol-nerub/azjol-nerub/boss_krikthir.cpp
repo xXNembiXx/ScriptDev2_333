@@ -71,7 +71,7 @@ enum Spells
     SAY_PREFIGHT_2                                = -1601018,
     SAY_PREFIGHT_3                                = -1601019,
 
-    ACHIEV_WATH_HIM_DIE                           = 1296
+    ACHIEV_WATCH_HIM_DIE                          = 1296
 };
 
 struct Locations
@@ -96,10 +96,12 @@ struct MANGOS_DLL_DECL boss_krikthirAI : public ScriptedAI
     boss_krikthirAI(Creature *pCreature) : ScriptedAI(pCreature)
     {
         pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+        m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
         Reset();
     }
 
     ScriptedInstance* pInstance;
+    bool m_bIsRegularMode;
 
     uint32 uiMindFlayTimer;
     uint32 uiCurseFatigueTimer;
@@ -177,6 +179,7 @@ struct MANGOS_DLL_DECL boss_krikthirAI : public ScriptedAI
 
         DoMeleeAttackIfReady();
     }
+
     void JustDied(Unit* killer)
     {
         DoScriptText(SAY_DEATH, m_creature);
@@ -184,15 +187,26 @@ struct MANGOS_DLL_DECL boss_krikthirAI : public ScriptedAI
         if (pInstance)
         {
             pInstance->SetData(TYPE_KRIKTHIR, DONE);
+
             //Achievement: Watch him die
-            //Creature *pAdd1, *pAdd2, *pAdd3;
-            //if ((pAdd1 = pInstance->instance->GetCreature(pInstance->GetData64(DATA_WATCHER_GASHRA))) && pAdd1->isAlive() &&
-                //(pAdd2 = pInstance->instance->GetCreature(pInstance->GetData64(DATA_WATCHER_SILTHIK))) && pAdd2->isAlive() &&
-                //(pAdd3 = pInstance->instance->GetCreature(pInstance->GetData64(DATA_WATCHER_NARJIL))) && pAdd3->isAlive() &&
-                //m_bIsRegularMode)
-                //pInstance->DoCompleteAchievement(ACHIEV_WATH_HIM_DIE);
+            if (!m_bIsRegularMode)
+            {
+                AchievementEntry const *AchievWatchHimDie = GetAchievementStore()->LookupEntry(ACHIEV_WATCH_HIM_DIE);
+                Map* pMap = m_creature->GetMap();
+                Creature *pAdd1, *pAdd2, *pAdd3;
+                 if ((pAdd1 = Unit::GetCreature(*m_creature, pInstance->GetData64(DATA_WATCHER_GASHRA))) && pAdd1->isAlive() &&
+                    (pAdd2 = Unit::GetCreature(*m_creature, pInstance->GetData64(DATA_WATCHER_SILTHIK))) && pAdd2->isAlive() &&
+                    (pAdd3 = Unit::GetCreature(*m_creature, pInstance->GetData64(DATA_WATCHER_NARJIL))) && pAdd3->isAlive() &&
+                    pMap && pMap->IsDungeon() && AchievWatchHimDie)
+                {
+                    Map::PlayerList const &players = pMap->GetPlayers();
+                    for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
+                        itr->getSource()->CompletedAchievement(AchievWatchHimDie);
+                }
+            }
         }
     }
+
     void KilledUnit(Unit *victim)
     {
         if (victim == m_creature)

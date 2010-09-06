@@ -47,7 +47,9 @@ enum
 
     SPELL_PULSING_SHOCKWAVE_N           = 52961,
     SPELL_PULSING_SHOCKWAVE_H           = 59836,
-    SPELL_PULSING_SHOCKWAVE_AURA        = 59414
+    SPELL_PULSING_SHOCKWAVE_AURA        = 59414,
+
+    ACHIEV_TIMELY_DEATH                 = 1867,
 };
 
 /*######
@@ -68,6 +70,9 @@ struct MANGOS_DLL_DECL boss_lokenAI : public ScriptedAI
     bool m_bIsRegularMode;
     bool m_bIsAura;
 
+    bool m_bIsAchievInTime;
+    uint32 m_uiAchievTimer;
+
     uint32 m_uiArcLightning_Timer;
     uint32 m_uiLightningNova_Timer;
     uint32 m_uiPulsingShockwave_Timer;
@@ -77,6 +82,9 @@ struct MANGOS_DLL_DECL boss_lokenAI : public ScriptedAI
 
     void Reset()
     {
+        m_uiAchievTimer = 120000;
+        m_bIsAchievInTime = true;
+
         m_bIsAura = false;
 
         m_uiArcLightning_Timer = 15000;
@@ -104,6 +112,24 @@ struct MANGOS_DLL_DECL boss_lokenAI : public ScriptedAI
 
         if (m_pInstance)
             m_pInstance->SetData(TYPE_LOKEN, DONE);
+
+        if (!m_bIsRegularMode)
+        {
+            if (m_bIsAchievInTime)
+            {
+                AchievementEntry const *AchievTimelyDeath = GetAchievementStore()->LookupEntry(ACHIEV_TIMELY_DEATH);
+                if (AchievTimelyDeath)
+                {
+                    Map* pMap = m_creature->GetMap();
+                    if (pMap && pMap->IsDungeon())
+                    {
+                        Map::PlayerList const &players = pMap->GetPlayers();
+                        for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
+                            itr->getSource()->CompletedAchievement(AchievTimelyDeath);
+                    }
+                }
+            }
+        }
     }
 
     void KilledUnit(Unit* pVictim)
@@ -121,6 +147,12 @@ struct MANGOS_DLL_DECL boss_lokenAI : public ScriptedAI
         //Return since we have no target
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
+
+        if (m_bIsAchievInTime && (m_uiAchievTimer < uiDiff))
+        {
+                m_bIsAchievInTime = false;
+            m_uiAchievTimer = 120000;
+        }else m_uiAchievTimer -= uiDiff;
 
         if (m_bIsAura)
         {

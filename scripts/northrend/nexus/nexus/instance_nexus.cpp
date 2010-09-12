@@ -213,9 +213,9 @@ struct MANGOS_DLL_DECL instance_nexus : public ScriptedInstance
         return 0;
     }
 
-    std::string GetSaveData()
+    const char* Save()
     {
-        return strInstData;
+        return strInstData.c_str();
     }
 
     void Load(const char *chrIn)

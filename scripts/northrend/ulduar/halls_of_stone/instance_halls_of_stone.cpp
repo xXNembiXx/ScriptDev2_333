@@ -140,15 +140,16 @@ struct MANGOS_DLL_DECL instance_halls_of_stone : public ScriptedInstance
                     CloseDoor(m_uiGriefDoorGUID);
                     else OpenDoor(m_uiGriefDoorGUID);
                 break;
-            case GO_BRANN_DOOR:
+/*         case GO_BRANN_DOOR:							//Eventdoor -> Untargable in DB, beacause possible Crash
                 m_uiBrannDoorGUID = pGo->GetGUID();
                 if (m_auiEncounter[1] != DONE)
                     CloseDoor(m_uiBrannDoorGUID);
                     else OpenDoor(m_uiBrannDoorGUID);
-                break;
+                break;*/
             case GO_SJONNIR_DOOR:
                 m_uiSjonnirDoorGUID = pGo->GetGUID();
-                if (m_auiEncounter[2] != DONE)
+                //if (m_auiEncounter[2] != DONE)		//Eventdoor -> Untargable in DB, beacause possible Crash
+				if (m_auiEncounter[1] != DONE)			// The Player should reach the Endboss without Event
                     CloseDoor(m_uiSjonnirDoorGUID);
                     else OpenDoor(m_uiSjonnirDoorGUID);
                 break;
@@ -181,9 +182,12 @@ struct MANGOS_DLL_DECL instance_halls_of_stone : public ScriptedInstance
                 if (m_auiEncounter[0] != DONE)
                     CloseDoor(m_uiGriefDoorGUID);
                     else OpenDoor(m_uiGriefDoorGUID);
-                if (m_auiEncounter[1] != DONE)
-                    CloseDoor(m_uiBrannDoorGUID);
-                    else OpenDoor(m_uiBrannDoorGUID);
+               // if (m_auiEncounter[1] != DONE)			//Eventdoor -> Untargable in DB, beacause possible Crash
+                    //CloseDoor(m_uiBrannDoorGUID);
+                   // else OpenDoor(m_uiBrannDoorGUID);
+                if (m_auiEncounter[1] != DONE)				// The Player should reach the Endboss without Event		
+                    CloseDoor(m_uiSjonnirDoorGUID);
+                    else OpenDoor(m_uiSjonnirDoorGUID);
                 if (m_auiEncounter[2] != DONE)
                     CloseDoor(m_uiSjonnirDoorGUID);
                     else OpenDoor(m_uiSjonnirDoorGUID);
@@ -200,7 +204,8 @@ struct MANGOS_DLL_DECL instance_halls_of_stone : public ScriptedInstance
                 break;
             case TYPE_GRIEF:
                 if (uiData == DONE)
-                OpenDoor(m_uiBrannDoorGUID);
+                //OpenDoor(m_uiBrannDoorGUID);  <- Eventdoor -> Untargable in DB, beacause possible Crash
+				OpenDoor(m_uiSjonnirDoorGUID); // The Player should reach the Endboss without Event
                 m_auiEncounter[1] = uiData;
                 break;
             case TYPE_BRANN:
@@ -222,8 +227,8 @@ struct MANGOS_DLL_DECL instance_halls_of_stone : public ScriptedInstance
 
             std::ostringstream saveStream;
 
-            for(uint8 i = 0; i < MAX_ENCOUNTER; ++i)
-                saveStream << m_auiEncounter[i] << " ";
+            saveStream << m_auiEncounter[0] << " " << m_auiEncounter[1] << " " << m_auiEncounter[2]
+			<< " " << m_auiEncounter[3];
 
             strSaveData = saveStream.str();
 
@@ -298,13 +303,15 @@ struct MANGOS_DLL_DECL instance_halls_of_stone : public ScriptedInstance
 
         std::istringstream loadStream(chrIn);
 
-        for(uint8 i = 0; i < MAX_ENCOUNTER; ++i)
-        {
-            loadStream >> m_auiEncounter[i];
+        
+        loadStream >> m_auiEncounter[0] >> m_auiEncounter[1] >> m_auiEncounter[2]
+		>> m_auiEncounter[3];
 
-            if (m_auiEncounter[i] == IN_PROGRESS)
-                m_auiEncounter[i] = NOT_STARTED;
-        }
+		for(uint8 i = 0; i < MAX_ENCOUNTER; ++i)
+		{
+			if (m_auiEncounter[i] == IN_PROGRESS)
+				m_auiEncounter[i] = NOT_STARTED;
+		}
 
         OUT_LOAD_INST_DATA_COMPLETE;
     }

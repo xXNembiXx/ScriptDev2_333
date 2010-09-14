@@ -39,8 +39,8 @@ enum
     NPC_MARNAK              = 30897, // right
 
     GO_GRIEF_DOOR           = 191292,
-    GO_BRANN_DOOR           = 191293,
-    GO_SJONNIR_DOOR         = 191296,
+    GO_BRANN_DOOR           = 191293, //Eventdoor -> Untargable in DB, beacause possible Crash
+    GO_SJONNIR_DOOR         = 191296, //Enddoor
 
     GO_KADDRAK              = 191671, // left
     GO_ABEDNEUM             = 191669, // middle

@@ -63,7 +63,7 @@ struct MANGOS_DLL_DECL instance_utgarde_keep : public ScriptedInstance
 
     uint32 m_auiEncounter[MAX_ENCOUNTER];
     uint32 forge_event[3];
-    std::string str_data;
+    std::string strInstData;
 
    void Initialize()
    {
@@ -126,62 +126,62 @@ struct MANGOS_DLL_DECL instance_utgarde_keep : public ScriptedInstance
     {
         switch(pGo->GetEntry())
         {
-			//door and object id
-			case ENTRY_BELLOW_1:
-				forge_bellow[0] = pGo->GetGUID();
-				if (forge_event[0] != NOT_STARTED)
-					HandleGameObject(NULL,true,pGo);
-				break;
-			case ENTRY_BELLOW_2:
-				forge_bellow[1] = pGo->GetGUID();
-				if (forge_event[1] != NOT_STARTED)
-					HandleGameObject(NULL,true,pGo);
-				break;
-			case ENTRY_BELLOW_3:
-				forge_bellow[2] = pGo->GetGUID();
-				if (forge_event[2] != NOT_STARTED)
-					HandleGameObject(NULL,true,pGo);
-				break;
-			case ENTRY_FORGEFIRE_1:
-				forge_fire[0] = pGo->GetGUID();
-				if (forge_event[0] != NOT_STARTED)
-					HandleGameObject(NULL,true,pGo);
-				break;
-			case ENTRY_FORGEFIRE_2:
-				forge_fire[1] = pGo->GetGUID();
-				if (forge_event[1] != NOT_STARTED)
-					HandleGameObject(NULL,true,pGo);
-				break;
-			case ENTRY_FORGEFIRE_3:
-				forge_fire[2] = pGo->GetGUID();
-				if (forge_event[2] != NOT_STARTED)
-					HandleGameObject(NULL,true,pGo);
-				break;
-			case ENTRY_GLOWING_ANVIL_1:
-				forge_anvil[0] = pGo->GetGUID();
-				if (forge_event[0] != NOT_STARTED)
-					HandleGameObject(NULL,true,pGo);
-				break;
-			case ENTRY_GLOWING_ANVIL_2:
-				forge_anvil[1] = pGo->GetGUID();
-				if (forge_event[1] != NOT_STARTED)
-					HandleGameObject(NULL,true,pGo);
-				break;
-			case ENTRY_GLOWING_ANVIL_3:
-				forge_anvil[2] = pGo->GetGUID();
-				if (forge_event[2] != NOT_STARTED)
-					HandleGameObject(NULL,true,pGo);
-				break;
-			case ENTRY_GIANT_PORTCULLIS_1:
-				portcullis[0] = pGo->GetGUID();
-				if (m_auiEncounter[2] == DONE)
-					HandleGameObject(NULL,true,pGo);
-				break;
-			case ENTRY_GIANT_PORTCULLIS_2:
-				portcullis[1] = pGo->GetGUID();
-				if (m_auiEncounter[2] == DONE)
-					HandleGameObject(NULL,true,pGo);
-				break;
+            //door and object id
+            case ENTRY_BELLOW_1:
+                forge_bellow[0] = pGo->GetGUID();
+                if (forge_event[0] != NOT_STARTED)
+                    HandleGameObject(NULL,true,pGo);
+                break;
+            case ENTRY_BELLOW_2:
+                forge_bellow[1] = pGo->GetGUID();
+                if (forge_event[1] != NOT_STARTED)
+                    HandleGameObject(NULL,true,pGo);
+                break;
+            case ENTRY_BELLOW_3:
+                forge_bellow[2] = pGo->GetGUID();
+                if (forge_event[2] != NOT_STARTED)
+                    HandleGameObject(NULL,true,pGo);
+                break;
+            case ENTRY_FORGEFIRE_1:
+                forge_fire[0] = pGo->GetGUID();
+                if (forge_event[0] != NOT_STARTED)
+                    HandleGameObject(NULL,true,pGo);
+                break;
+            case ENTRY_FORGEFIRE_2:
+                forge_fire[1] = pGo->GetGUID();
+                if (forge_event[1] != NOT_STARTED)
+                    HandleGameObject(NULL,true,pGo);
+                break;
+            case ENTRY_FORGEFIRE_3:
+                forge_fire[2] = pGo->GetGUID();
+                if (forge_event[2] != NOT_STARTED)
+                    HandleGameObject(NULL,true,pGo);
+                break;
+            case ENTRY_GLOWING_ANVIL_1:
+                forge_anvil[0] = pGo->GetGUID();
+                if (forge_event[0] != NOT_STARTED)
+                    HandleGameObject(NULL,true,pGo);
+                break;
+            case ENTRY_GLOWING_ANVIL_2:
+                forge_anvil[1] = pGo->GetGUID();
+                if (forge_event[1] != NOT_STARTED)
+                    HandleGameObject(NULL,true,pGo);
+                break;
+            case ENTRY_GLOWING_ANVIL_3:
+                forge_anvil[2] = pGo->GetGUID();
+                if (forge_event[2] != NOT_STARTED)
+                    HandleGameObject(NULL,true,pGo);
+                break;
+            case ENTRY_GIANT_PORTCULLIS_1:
+                portcullis[0] = pGo->GetGUID();
+                if (m_auiEncounter[2] == DONE)
+                    HandleGameObject(NULL,true,pGo);
+                break;
+            case ENTRY_GIANT_PORTCULLIS_2:
+                portcullis[1] = pGo->GetGUID();
+                if (m_auiEncounter[2] == DONE)
+                    HandleGameObject(NULL,true,pGo);
+                break;
         }
     }
 
@@ -262,7 +262,15 @@ struct MANGOS_DLL_DECL instance_utgarde_keep : public ScriptedInstance
 
         if (data == DONE)
         {
+            OUT_SAVE_INST_DATA;
+
+            std::ostringstream saveStream;
+            saveStream << m_auiEncounter[0] << " " << m_auiEncounter[1] << " " << m_auiEncounter[2] << " "
+                << forge_event[0] << " " << forge_event[1] << " " << forge_event[2];
+
+            strInstData = saveStream.str();
             SaveToDB();
+            OUT_SAVE_INST_DATA_COMPLETE;
         }
     }
 
@@ -278,51 +286,27 @@ struct MANGOS_DLL_DECL instance_utgarde_keep : public ScriptedInstance
         return 0;
     }
 
-    std::string GetSaveData()
+    const char* Save()
     {
-        OUT_SAVE_INST_DATA;
-
-        std::ostringstream saveStream;
-        saveStream << "U K " << m_auiEncounter[0] << " " << m_auiEncounter[1] << " "
-            << m_auiEncounter[2] << " " << forge_event[0] << " " << forge_event[1] << " " << forge_event[2];
-
-        str_data = saveStream.str();
-
-        OUT_SAVE_INST_DATA_COMPLETE;
-        return str_data;
+        return strInstData.c_str();
     }
 
-    void Load(const char* in)
+    void Load(const char* chrIn)
     {
-        if (!in)
+        if (!chrIn)
         {
             OUT_LOAD_INST_DATA_FAIL;
             return;
         }
 
-        OUT_LOAD_INST_DATA(in);
+        OUT_LOAD_INST_DATA(chrIn);
 
-        char dataHead1, dataHead2;
-        uint16 data0, data1, data2, data3, data4, data5;
+        std::istringstream loadStream(chrIn);
+        loadStream >> m_auiEncounter[0] >> m_auiEncounter[1] >> m_auiEncounter[2] >> forge_event[0] >> forge_event[1] >> forge_event[2];
 
-        std::istringstream loadStream(in);
-        loadStream >> dataHead1 >> dataHead2 >> data0 >> data1 >> data2 >> data3 >> data4 >> data5;
-
-        if (dataHead1 == 'U' && dataHead2 == 'K')
-        {
-            m_auiEncounter[0] = data0;
-            m_auiEncounter[1] = data1;
-            m_auiEncounter[2] = data2;
-
-            for (uint8 i = 0; i < MAX_ENCOUNTER; ++i)
-                if (m_auiEncounter[i] == IN_PROGRESS)
-                    m_auiEncounter[i] = NOT_STARTED;
-
-            forge_event[0] = data3;
-            forge_event[1] = data4;
-            forge_event[2] = data5;
-
-        } else OUT_LOAD_INST_DATA_FAIL;
+        for (uint8 i = 0; i < MAX_ENCOUNTER; ++i)
+            if (m_auiEncounter[i] == IN_PROGRESS)
+                m_auiEncounter[i] = NOT_STARTED;
 
         OUT_LOAD_INST_DATA_COMPLETE;
     }

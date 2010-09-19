@@ -2523,6 +2523,42 @@ bool GossipSelect_npc_dread_captain_demeza(Player* pPlayer, Creature* pCreature,
     return true;
 }
 
+/*######
+## npc_wild_wolpertinger
+######*/
+enum 
+{
+	SPELL_CREATE_STUNNED_WOLPERTINGER_ITEM	= 41622,
+	SPELL_WOLPERTINGER_NET	= 41621,
+	QUEST_CATCH_THE_WILD_WOLPERTINGER_A = 11117,
+	QUEST_CATCH_THE_WILD_WOLPERTINGER_H = 11431
+};
+struct MANGOS_DLL_DECL npc_wild_wolpertingerAI : public ScriptedAI
+{
+	npc_wild_wolpertingerAI(Creature* pCreature) : ScriptedAI(pCreature) {Reset();}
+	
+	void Reset()
+    {
+
+	}
+
+	void SpellHit(Unit *caster, const SpellEntry *spell)
+	{
+        if (caster->GetTypeId() == TYPEID_PLAYER && m_creature->isAlive() && spell->Id == SPELL_WOLPERTINGER_NET)
+        {
+            if ((((Player*)caster)->GetQuestStatus(QUEST_CATCH_THE_WILD_WOLPERTINGER_A) == QUEST_STATUS_INCOMPLETE) || (((Player*)caster)->GetQuestStatus(QUEST_CATCH_THE_WILD_WOLPERTINGER_H) == QUEST_STATUS_INCOMPLETE))
+            {
+				((Player*)caster)->CastSpell(caster, SPELL_CREATE_STUNNED_WOLPERTINGER_ITEM, false);
+			}
+			m_creature->ForcedDespawn();
+		}
+	}
+};
+CreatureAI* GetAI_npc_wild_wolpertinger(Creature* pCreature)
+{
+    return new npc_wild_wolpertingerAI(pCreature);
+}
+
 void AddSC_npcs_special()
 {
     Script* newscript;
@@ -2659,5 +2695,10 @@ void AddSC_npcs_special()
     newscript->Name = "npc_dread_captain_demeza";
     newscript->pGossipHello =  &GossipHello_npc_dread_captain_demeza;
     newscript->pGossipSelect = &GossipSelect_npc_dread_captain_demeza;
+    newscript->RegisterSelf();
+
+	newscript = new Script;
+    newscript->Name = "npc_wild_wolpertinger";
+    newscript->GetAI = &GetAI_npc_wild_wolpertinger;
     newscript->RegisterSelf();
 }

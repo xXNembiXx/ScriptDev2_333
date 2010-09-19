@@ -252,6 +252,29 @@ bool ItemUse_item_groms_tribute(Player* pPlayer, Item* pItem, const SpellCastTar
 		return false;
 }
   
+/*#####
+# item_complimentary_brewfest_sampler
+#####*/
+
+enum
+{
+	NPC_SCOUT	= 24108,
+	QUEST_CHUG_AND_CHUCK_A = 12022,
+	QUEST_CHUG_AND_CHUCK_H = 12191
+};
+
+bool ItemUse_item_complimentary_brewfest_sampler(Player* pPlayer, Item* pItem, const SpellCastTargets &pTargets)
+{
+	Unit* pTarget = Unit::GetUnit(*pPlayer, pPlayer->GetTargetGUID());
+	if (pTarget)
+	{
+		if ((pTarget->GetEntry() == NPC_SCOUT) && ((pPlayer->GetQuestStatus(QUEST_CHUG_AND_CHUCK_A) == QUEST_STATUS_INCOMPLETE) || (pPlayer->GetQuestStatus(QUEST_CHUG_AND_CHUCK_H) == QUEST_STATUS_INCOMPLETE)))
+			pPlayer->KilledMonsterCredit(NPC_SCOUT,0);
+	}
+	pPlayer->CastSpell(pPlayer, 42436, false);
+	return true;
+}
+
 void AddSC_item_scripts()
 {
     Script *newscript;
@@ -289,5 +312,10 @@ void AddSC_item_scripts()
 	newscript = new Script;
     newscript->Name = "item_groms_tribute";
     newscript->pItemUse = &ItemUse_item_groms_tribute;
+    newscript->RegisterSelf();
+
+	newscript = new Script;
+    newscript->Name = "item_complimentary_brewfest_sampler";
+    newscript->pItemUse = &ItemUse_item_complimentary_brewfest_sampler;
     newscript->RegisterSelf();
 }

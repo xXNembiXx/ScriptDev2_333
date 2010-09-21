@@ -2559,6 +2559,113 @@ CreatureAI* GetAI_npc_wild_wolpertinger(Creature* pCreature)
     return new npc_wild_wolpertingerAI(pCreature);
 }
 
+/*######
+## npc_flynn_firebrew
+######*/
+enum 
+{
+	QUEST_THERE_AND_BACK_AGAIN_A	= 11122,
+	QUEST_THERE_AND_BACK_AGAIN_H	= 11412,
+	ITEM_PORTABLE_BREWFEST_KEG	= 33797,
+	SPELL_BREWFEST_THROW_KEG	= 43660,
+	SPELL_BREWFEST_CREATE_PROTABLE_BREWFEST_KEG	= 42414,
+	SPELL_BREWFEST_THROW_KEG_PLAYER	= 43662
+};
+
+struct MANGOS_DLL_DECL npc_flynn_firebrewAI : public ScriptedAI
+{
+	npc_flynn_firebrewAI(Creature* pCreature) : ScriptedAI(pCreature) {Reset();}
+	
+	void Reset()
+    {
+
+	};
+
+	void MoveInLineOfSight(Unit* pUnit)
+	{
+		 if ( pUnit && pUnit->GetTypeId() != TYPEID_PLAYER )
+			return;
+
+		if (((Player*)pUnit)->GetQuestStatus(QUEST_THERE_AND_BACK_AGAIN_A) == QUEST_STATUS_INCOMPLETE)
+		{
+			if (((Player*)pUnit)->HasItemCount(ITEM_PORTABLE_BREWFEST_KEG, 1) == false)
+			{
+				m_creature->CastSpell(pUnit,SPELL_BREWFEST_THROW_KEG,false);
+				((Player*)pUnit)->CastSpell(pUnit,SPELL_BREWFEST_CREATE_PROTABLE_BREWFEST_KEG,false);
+			};
+		};
+	};
+};
+CreatureAI* GetAI_npc_flynn_firebrew(Creature* pCreature)
+{
+    return new npc_flynn_firebrewAI(pCreature);
+}
+
+/*######
+## npc_slurpo_fizzykeg
+######*/
+struct MANGOS_DLL_DECL npc_slurpo_fizzykegAI : public ScriptedAI
+{
+	npc_slurpo_fizzykegAI(Creature* pCreature) : ScriptedAI(pCreature) {Reset();}
+	
+	void Reset()
+    {
+
+	};
+
+	void MoveInLineOfSight(Unit* pUnit)
+	{
+		 if ( pUnit && pUnit->GetTypeId() != TYPEID_PLAYER )
+			return;
+
+		if (((Player*)pUnit)->GetQuestStatus(QUEST_THERE_AND_BACK_AGAIN_H) == QUEST_STATUS_INCOMPLETE)
+		{
+			if (((Player*)pUnit)->HasItemCount(ITEM_PORTABLE_BREWFEST_KEG, 1) == false)
+			{
+				m_creature->CastSpell(pUnit,SPELL_BREWFEST_THROW_KEG,false);
+				((Player*)pUnit)->CastSpell(pUnit,SPELL_BREWFEST_CREATE_PROTABLE_BREWFEST_KEG,false);
+			};
+		};
+	};
+};
+CreatureAI* GetAI_npc_slurpo_fizzykeg(Creature* pCreature)
+{
+    return new npc_slurpo_fizzykegAI(pCreature);
+}
+
+/*######
+## npc_brewfest_delivery_bunny
+######*/
+struct MANGOS_DLL_DECL npc_brewfest_delivery_bunnyAI : public ScriptedAI
+{
+	npc_brewfest_delivery_bunnyAI(Creature* pCreature) : ScriptedAI(pCreature) {Reset();}
+	
+	void Reset()
+    {
+
+	};
+
+	void MoveInLineOfSight(Unit* pUnit)
+	{
+		 if ( pUnit && pUnit->GetTypeId() != TYPEID_PLAYER )
+			return;
+
+		if ((((Player*)pUnit)->GetQuestStatus(QUEST_THERE_AND_BACK_AGAIN_A) == QUEST_STATUS_INCOMPLETE) || (((Player*)pUnit)->GetQuestStatus(QUEST_THERE_AND_BACK_AGAIN_H) == QUEST_STATUS_INCOMPLETE))
+		{
+			if (((Player*)pUnit)->HasItemCount(ITEM_PORTABLE_BREWFEST_KEG, 1))
+			{
+				((Player*)pUnit)->CastSpell(m_creature,SPELL_BREWFEST_THROW_KEG_PLAYER,false);
+				((Player*)pUnit)->KilledMonsterCredit(24337,0);
+				((Player*)pUnit)->DestroyItemCount(ITEM_PORTABLE_BREWFEST_KEG,1,true);
+			};
+		};
+	};
+};
+CreatureAI* GetAI_npc_brewfest_delivery_bunny(Creature* pCreature)
+{
+    return new npc_brewfest_delivery_bunnyAI(pCreature);
+}
+
 void AddSC_npcs_special()
 {
     Script* newscript;
@@ -2700,5 +2807,20 @@ void AddSC_npcs_special()
 	newscript = new Script;
     newscript->Name = "npc_wild_wolpertinger";
     newscript->GetAI = &GetAI_npc_wild_wolpertinger;
+    newscript->RegisterSelf();
+
+	newscript = new Script;
+    newscript->Name = "npc_flynn_firebrew";
+    newscript->GetAI = &GetAI_npc_flynn_firebrew;
+    newscript->RegisterSelf();
+
+	newscript = new Script;
+    newscript->Name = "npc_slurpo_fizzykeg";
+    newscript->GetAI = &GetAI_npc_slurpo_fizzykeg;
+    newscript->RegisterSelf();
+
+	newscript = new Script;
+    newscript->Name = "npc_brewfest_delivery_bunny";
+    newscript->GetAI = &GetAI_npc_brewfest_delivery_bunny;
     newscript->RegisterSelf();
 }

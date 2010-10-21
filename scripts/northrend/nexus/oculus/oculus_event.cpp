@@ -30,6 +30,9 @@ EndContentData */
 #include "oculus.h"
 
 
+
+															/* *** ROOM 1 *** */
+
 /*######
 ## oculus_event_edwin
 ######*/
@@ -101,6 +104,28 @@ struct MANGOS_DLL_DECL oculus_event_edwinAI : public ScriptedAI
 	}
 };
 
+
+/*######
+## Room 1 EndGate1
+######*/
+
+
+//Need: Animation!
+bool GOHello_go_oculus_cannon(Player* pPlayer, GameObject* pGo)
+{
+    ScriptedInstance* m_pInstance = (ScriptedInstance*)pGo->GetInstanceData();
+
+    if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_DATA_COLLISION)))
+            pGate->SetGoState(GO_STATE_ACTIVE);
+	if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_DATA_GATE1)))
+		pGate->SetPhaseMask(0, true);
+
+	m_pInstance->SetData(GO_DATA_CANNON, IN_PROGRESS);
+    return false;
+
+}
+
+
 CreatureAI* GetAI_oculus_event_edwin(Creature* pCreature)
 {
     return new oculus_event_edwinAI(pCreature);
@@ -113,5 +138,10 @@ void AddSC_oculus_event()
     newscript = new Script;
     newscript->Name = "oculus_event_edwin";
     newscript->GetAI = &GetAI_oculus_event_edwin;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_oculus_cannon";
+    newscript->pGOHello = &GOHello_go_oculus_cannon;
     newscript->RegisterSelf();
 }

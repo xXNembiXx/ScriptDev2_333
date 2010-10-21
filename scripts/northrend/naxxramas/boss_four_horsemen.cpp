@@ -24,8 +24,18 @@ EndScriptData */
 #include "precompiled.h"
 #include "naxxramas.h"
 
+//Achiev
+bool m_bIsLadyDead;
+bool m_bIsBaronDead;
+bool m_bIsThaneDead;
+bool m_bIsZeliekDead;
+
 enum
 {
+	//Achiev
+	ACHIEV_MILITARY_QUARTER		= 568,
+	H_ACHIEV_MILITARY_QUARTER	= 569,
+
     //all horsemen
     SPELL_SHIELDWALL        = 29061,
     SPELL_BESERK            = 26662,
@@ -147,6 +157,8 @@ struct MANGOS_DLL_DECL boss_lady_blaumeuxAI : public ScriptedAI
 
         ShieldWall1 = true;
         ShieldWall2 = true;
+
+		m_bIsLadyDead = false;
     }
 
     void Aggro(Unit *who)
@@ -158,6 +170,7 @@ struct MANGOS_DLL_DECL boss_lady_blaumeuxAI : public ScriptedAI
 
         m_creature->AddThreat(who, HIGH_THREAT);
         m_creature->CallForHelp(50.0f);
+		m_creature->SetInCombatWithZone();
     }
 
     void KilledUnit(Unit* Victim)
@@ -227,6 +240,24 @@ struct MANGOS_DLL_DECL boss_lady_blaumeuxAI : public ScriptedAI
         
         if (m_pInstance)
             m_pInstance->SetData(TYPE_BLAUMEUX, DONE);
+		
+		//Achiev
+		m_bIsLadyDead = true;
+
+		if (m_bIsLadyDead && m_bIsBaronDead && m_bIsThaneDead && m_bIsZeliekDead)
+		{
+			AchievementEntry const *AchievMiliQuart = GetAchievementStore()->LookupEntry(m_bIsRegularMode ? ACHIEV_MILITARY_QUARTER : H_ACHIEV_MILITARY_QUARTER);
+			if (AchievMiliQuart)
+			{
+				Map* pMap = m_creature->GetMap();
+				if (pMap && pMap->IsDungeon())
+				{
+					Map::PlayerList const &players = pMap->GetPlayers();
+					for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
+						itr->getSource()->CompletedAchievement(AchievMiliQuart);
+				}
+			}
+		}
     }
 
     void UpdateAI(const uint32 uiDiff)
@@ -316,6 +347,8 @@ struct MANGOS_DLL_DECL boss_rivendare_naxxAI : public ScriptedAI
         ShieldWall1 = true;
         ShieldWall2 = true;
 
+		m_bIsBaronDead = false;
+
         if (m_pInstance)
             m_pInstance->SetData(TYPE_FOUR_HORSEMEN, NOT_STARTED);
     }
@@ -335,6 +368,7 @@ struct MANGOS_DLL_DECL boss_rivendare_naxxAI : public ScriptedAI
 
         m_creature->AddThreat(who, HIGH_THREAT);
         m_creature->CallForHelp(50.0f);
+		m_creature->SetInCombatWithZone();
     }
 
     void KilledUnit(Unit* Victim)
@@ -352,6 +386,24 @@ struct MANGOS_DLL_DECL boss_rivendare_naxxAI : public ScriptedAI
 
         if (m_pInstance)
             m_pInstance->SetData(TYPE_RIVENDARE, DONE);
+
+		//Achiev
+		m_bIsBaronDead = true;
+
+		if (m_bIsLadyDead && m_bIsBaronDead && m_bIsThaneDead && m_bIsZeliekDead)
+		{
+			AchievementEntry const *AchievMiliQuart = GetAchievementStore()->LookupEntry(m_bIsRegularMode ? ACHIEV_MILITARY_QUARTER : H_ACHIEV_MILITARY_QUARTER);
+			if (AchievMiliQuart)
+			{
+				Map* pMap = m_creature->GetMap();
+				if (pMap && pMap->IsDungeon())
+				{
+					Map::PlayerList const &players = pMap->GetPlayers();
+					for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
+						itr->getSource()->CompletedAchievement(AchievMiliQuart);
+				}
+			}
+		}
     }
 
     void UpdateAI(const uint32 diff)
@@ -444,6 +496,8 @@ struct MANGOS_DLL_DECL boss_thane_korthazzAI : public ScriptedAI
         Attack_Check = true;
         ShieldWall1 = true;
         ShieldWall2 = true;
+
+		m_bIsThaneDead = false;
     }
 
     void KilledUnit(Unit* Victim)
@@ -460,6 +514,7 @@ struct MANGOS_DLL_DECL boss_thane_korthazzAI : public ScriptedAI
 
         m_creature->AddThreat(who, HIGH_THREAT);
         m_creature->CallForHelp(50.0f);
+		m_creature->SetInCombatWithZone();
     }
 
     void JustDied(Unit* Killer)
@@ -468,6 +523,24 @@ struct MANGOS_DLL_DECL boss_thane_korthazzAI : public ScriptedAI
 
         if (m_pInstance)
             m_pInstance->SetData(TYPE_KORTHAZZ, DONE);
+
+		//Achiev
+		m_bIsThaneDead = true;
+
+		if (m_bIsLadyDead && m_bIsBaronDead && m_bIsThaneDead && m_bIsZeliekDead)
+		{
+			AchievementEntry const *AchievMiliQuart = GetAchievementStore()->LookupEntry(m_bIsRegularMode ? ACHIEV_MILITARY_QUARTER : H_ACHIEV_MILITARY_QUARTER);
+			if (AchievMiliQuart)
+			{
+				Map* pMap = m_creature->GetMap();
+				if (pMap && pMap->IsDungeon())
+				{
+					Map::PlayerList const &players = pMap->GetPlayers();
+					for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
+						itr->getSource()->CompletedAchievement(AchievMiliQuart);
+				}
+			}
+		}
     }
 
     void UpdateAI(const uint32 uiDiff)
@@ -563,6 +636,8 @@ struct MANGOS_DLL_DECL boss_sir_zeliekAI : public ScriptedAI
         
         ShieldWall1 = true;
         ShieldWall2 = true;
+
+		m_bIsZeliekDead = false;
     }
 
     void Aggro(Unit *who)
@@ -574,6 +649,7 @@ struct MANGOS_DLL_DECL boss_sir_zeliekAI : public ScriptedAI
 
         m_creature->AddThreat(who, HIGH_THREAT);
         m_creature->CallForHelp(50.0f);
+		m_creature->SetInCombatWithZone();
     }
 
     Unit *PickNearestPlayer()
@@ -639,6 +715,24 @@ struct MANGOS_DLL_DECL boss_sir_zeliekAI : public ScriptedAI
 
         if (m_pInstance)
             m_pInstance->SetData(TYPE_ZELIEK, DONE);
+
+		//Achiev
+		m_bIsZeliekDead = true;
+
+		if (m_bIsLadyDead && m_bIsBaronDead && m_bIsThaneDead && m_bIsZeliekDead)
+		{
+			AchievementEntry const *AchievMiliQuart = GetAchievementStore()->LookupEntry(m_bIsRegularMode ? ACHIEV_MILITARY_QUARTER : H_ACHIEV_MILITARY_QUARTER);
+			if (AchievMiliQuart)
+			{
+				Map* pMap = m_creature->GetMap();
+				if (pMap && pMap->IsDungeon())
+				{
+					Map::PlayerList const &players = pMap->GetPlayers();
+					for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
+						itr->getSource()->CompletedAchievement(AchievMiliQuart);
+				}
+			}
+		}
     }
 
     void UpdateAI(const uint32 uiDiff)

@@ -57,6 +57,10 @@ EndScriptData */
 #define TRIGGER_Z 273.667f
 #define TRIGGER_O 0
 
+//Achiev
+#define ACHIEV_SAFETY_DANCE 1996
+#define H_ACHIEV_SAFETY_DANCE 2139
+
 struct MANGOS_DLL_DECL boss_heiganAI : public ScriptedAI
 {
     boss_heiganAI(Creature* pCreature) : ScriptedAI(pCreature)
@@ -79,6 +83,8 @@ struct MANGOS_DLL_DECL boss_heiganAI : public ScriptedAI
 
     uint8 phase;
 
+	bool m_bIsPlayerKilled;
+
     void Reset()
     {
         if(m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE))
@@ -87,6 +93,8 @@ struct MANGOS_DLL_DECL boss_heiganAI : public ScriptedAI
 
         if(m_pInstance)
             m_pInstance->SetData(TYPE_HEIGAN, NOT_STARTED);
+
+		m_bIsPlayerKilled = false;
     }
 
     void AttackStart(Unit* pWho)
@@ -158,11 +166,15 @@ struct MANGOS_DLL_DECL boss_heiganAI : public ScriptedAI
 
         if(m_pInstance)
             m_pInstance->SetData(TYPE_HEIGAN, IN_PROGRESS);
+
+		m_creature->SetInCombatWithZone();
     }
 
     void KilledUnit(Unit* victim)
     {
         DoScriptText(SAY_SLAY, m_creature);
+		//Achiev
+		m_bIsPlayerKilled = true;
     }
 
     void JustDied(Unit* Killer)
@@ -171,6 +183,21 @@ struct MANGOS_DLL_DECL boss_heiganAI : public ScriptedAI
 
         if(m_pInstance)
             m_pInstance->SetData(TYPE_HEIGAN, DONE);
+
+		if (!m_bIsPlayerKilled)
+		{
+			AchievementEntry const *AchievSafetyDance = GetAchievementStore()->LookupEntry(m_bIsRegularMode ? ACHIEV_SAFETY_DANCE : H_ACHIEV_SAFETY_DANCE);
+			if (AchievSafetyDance)
+			{
+				Map* pMap = m_creature->GetMap();
+				if (pMap && pMap->IsDungeon())
+				{
+					Map::PlayerList const &players = pMap->GetPlayers();
+					for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
+						itr->getSource()->CompletedAchievement(AchievSafetyDance);
+				}
+			}
+		}
     }
 
     void UpdateAI(const uint32 diff)

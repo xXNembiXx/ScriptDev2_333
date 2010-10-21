@@ -24,8 +24,14 @@ EndScriptData */
 #include "precompiled.h"
 #include "naxxramas.h"
 
+bool m_bIsSporeLoserDead; // needed for achievement: Spore Loser(2182 + 2183)
+
 enum
 {
+	//Achievements
+	ACHIEV_SPORE_LOSER	  = 2182,
+	H_ACHIEV_SPORE_LOSER  = 2183,
+
     SAY_NECROTIC_AURA_FADE    = -1533130,
     
     SPELL_DEATHBLOOM        = 29865,
@@ -80,18 +86,37 @@ struct MANGOS_DLL_DECL boss_loathebAI : public ScriptedAI
         SummonTimer = 8000;
         NecroticAuraTimer = 1000;
         NecroticAuraFadeWarning = 15000;
+
+		m_bIsSporeLoserDead = false;
     }
 
     void Aggro(Unit* pWho)
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_LOATHEB, IN_PROGRESS);
+
+		m_creature->SetInCombatWithZone();
     }
 
     void JustDied(Unit* pKiller)
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_LOATHEB, DONE);
+
+		if (!m_bIsSporeLoserDead)
+		{
+			AchievementEntry const *AchievSporeLoser = GetAchievementStore()->LookupEntry(m_bIsRegularMode ? ACHIEV_SPORE_LOSER : H_ACHIEV_SPORE_LOSER);
+			if (AchievSporeLoser)
+			{
+				Map* pMap = m_creature->GetMap();
+				if (pMap && pMap->IsDungeon())
+				{
+					Map::PlayerList const &players = pMap->GetPlayers();
+					for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
+						itr->getSource()->CompletedAchievement(AchievSporeLoser);
+				}
+			}
+		}
     }
 
     void JustReachedHome()
@@ -209,6 +234,8 @@ struct MANGOS_DLL_DECL npc_loatheb_sporesAI : public ScriptedAI
             if (DieDelay_Timer < diff)
             {
                 m_creature->ForcedDespawn();
+				//Achiev
+				m_bIsSporeLoserDead = true;
                 DieDelay_Timer = 0;
             }else DieDelay_Timer -= diff;
 

@@ -387,7 +387,7 @@ struct MANGOS_DLL_DECL instance_naxxramas : public ScriptedInstance
                 if (uiData == DONE)
                 {
                      DoUseDoorOrButton(m_uiNothExitDoorGUID);
-                     //DoUseDoorOrButton(m_uiHeigEntryDoorGUID);
+                     DoUseDoorOrButton(m_uiHeigEntryDoorGUID);
                 }
                 break;
             case TYPE_HEIGAN:

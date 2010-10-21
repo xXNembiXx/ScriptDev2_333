@@ -26,6 +26,10 @@ EndScriptData */
 
 enum
 {
+	//Achievements
+	ACHIEV_MAKE_QUICK	  = 1856,
+	H_ACHIEV_MAKE_QUICK	  = 1857,
+
     SAY_AGGRO1            = -1533017,
     SAY_AGGRO2            = -1533018,
     SAY_SLAY              = -1533019,
@@ -59,6 +63,10 @@ struct MANGOS_DLL_DECL boss_patchwerkAI : public ScriptedAI
     bool   m_bEnraged;
     bool   m_bBerserk;
 
+	//Achievements
+	bool m_bIsAchievInTime;
+	uint32 m_bIsAchievTimer;
+
     void Reset()
     {
         m_uiHatefulStrikeTimer = 1000;                      //1 second
@@ -66,6 +74,10 @@ struct MANGOS_DLL_DECL boss_patchwerkAI : public ScriptedAI
         m_uiSlimeboltTimer = 10000;
         m_bEnraged = false;
         m_bBerserk = false;
+
+		//Achievements
+		m_bIsAchievInTime = true;
+		m_bIsAchievTimer = 180000;
     }
 
     void KilledUnit(Unit* pVictim)
@@ -82,6 +94,21 @@ struct MANGOS_DLL_DECL boss_patchwerkAI : public ScriptedAI
 
         if (m_pInstance)
             m_pInstance->SetData(TYPE_PATCHWERK, DONE);
+
+		if (m_bIsAchievInTime)
+		{
+			AchievementEntry const *AchievMakeQuick = GetAchievementStore()->LookupEntry(m_bIsRegularMode ? ACHIEV_MAKE_QUICK : H_ACHIEV_MAKE_QUICK);
+			if (AchievMakeQuick)
+			{
+				Map* pMap = m_creature->GetMap();
+				if (pMap && pMap->IsDungeon())
+				{
+					Map::PlayerList const &players = pMap->GetPlayers();
+					for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
+						itr->getSource()->CompletedAchievement(AchievMakeQuick);
+				}
+			}
+		}
     }
 
     void Aggro(Unit* pWho)
@@ -90,6 +117,8 @@ struct MANGOS_DLL_DECL boss_patchwerkAI : public ScriptedAI
 
         if (m_pInstance)
             m_pInstance->SetData(TYPE_PATCHWERK, IN_PROGRESS);
+
+		m_creature->SetInCombatWithZone();
     }
 
     void JustReachedHome()
@@ -129,6 +158,14 @@ struct MANGOS_DLL_DECL boss_patchwerkAI : public ScriptedAI
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
+
+		//Achievments
+		if (m_bIsAchievInTime && (m_bIsAchievTimer < uiDiff))
+        {
+            m_bIsAchievInTime = false;
+        }
+        else
+            m_bIsAchievTimer -= uiDiff;
 
         // Hateful Strike
         if (m_uiHatefulStrikeTimer < uiDiff)

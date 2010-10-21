@@ -147,6 +147,8 @@ struct MANGOS_DLL_DECL boss_gothikAI : public Scripted_NoMovementAI
     uint32 ShadowBolt_Timer;
     uint32 Blink_Timer;
 
+	bool m_bIsLowHPReached;      //When he has reached 30%, he should stop teleporting and opening the Gate
+
     void Reset()
     {
         SummonPhase = false;
@@ -161,7 +163,12 @@ struct MANGOS_DLL_DECL boss_gothikAI : public Scripted_NoMovementAI
         ShadowBolt_Timer = 1000;
         Blink_Timer = 30000;
 
+		m_bIsLowHPReached = false;
+
         m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+	    //Door support
+		if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_MILI_GOTH_COMBAT_GATE)))
+            pGate->SetGoState(GO_STATE_ACTIVE);
 
         if (m_pInstance)
             m_pInstance->SetData(TYPE_GOTHIK, NOT_STARTED);
@@ -175,12 +182,12 @@ struct MANGOS_DLL_DECL boss_gothikAI : public Scripted_NoMovementAI
         m_creature->GetMap()->CreatureRelocation(m_creature, PosPlatform[0], PosPlatform[1], PosPlatform[2], PosPlatform[3]);
         m_creature->SetInCombatWithZone();
 
+	    if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_MILI_GOTH_COMBAT_GATE)))
+            pGate->SetGoState(GO_STATE_READY);
+
         if (m_pInstance)
         {
             m_pInstance->SetData(TYPE_GOTHIK, IN_PROGRESS);
-
-            if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(DATA_GOTHIK_GATE)))
-                pGate->SetGoState(GO_STATE_READY);
         }
     }
 
@@ -196,6 +203,13 @@ struct MANGOS_DLL_DECL boss_gothikAI : public Scripted_NoMovementAI
 
         if (m_pInstance)
             m_pInstance->SetData(TYPE_GOTHIK, DONE);
+
+		//Open Gate, if he will die ... and it won`t open
+		if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_MILI_GOTH_COMBAT_GATE)))
+            pGate->SetGoState(GO_STATE_ACTIVE);
+		if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_MILI_GOTH_ENTRY_GATE)))
+            pGate->SetGoState(GO_STATE_ACTIVE);
+
     }
 
     void JustSummoned(Creature* pSummon)
@@ -207,6 +221,16 @@ struct MANGOS_DLL_DECL boss_gothikAI : public Scripted_NoMovementAI
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
+
+		//When he has reached 30%, he should stop teleporting and opening the Gate
+        if (!m_bIsLowHPReached && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) < 30)
+        {
+			{
+				if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_MILI_GOTH_COMBAT_GATE)))
+					pGate->SetGoState(GO_STATE_ACTIVE);
+			}
+            m_bIsLowHPReached = true;
+        }
 
         if (SummonPhase)
         {
@@ -222,7 +246,8 @@ struct MANGOS_DLL_DECL boss_gothikAI : public Scripted_NoMovementAI
                 ShadowBolt_Timer = 1000 + rand()%500;
             }else ShadowBolt_Timer -= diff;
 
-            if (Blink_Timer < diff)
+			//When he has reached 30%, he should stop teleporting and opening the Gate
+			if (!m_bIsLowHPReached && (Blink_Timer < diff))
             {
                 if (BlinkPhase)
                 {

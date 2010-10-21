@@ -16,9 +16,9 @@
 
 /* ScriptData
 SDName: Event
-SDAuthor: Nembi, Sys
+SDAuthor: Nembi & Sys
 SD%Complete: 100
-SDComment: Inferna Christmas PreEvent
+SDComment: Inferna Christmas PreEvent == Trial Phase 1
 SDCategory: Oculus
 EndScriptData */
 
@@ -55,7 +55,6 @@ struct MANGOS_DLL_DECL oculus_event_edwinAI : public ScriptedAI
 	{
 		m_uiSummonTimmer = 15000;
 		m_uiTrashTimer = 8000;
-		m_creature->SetDisplayId(2029); //Test
 	}
 
     void JustSummoned(Creature* pSummoned)
@@ -77,7 +76,6 @@ struct MANGOS_DLL_DECL oculus_event_edwinAI : public ScriptedAI
     {
 		m_creature->PlayDirectSound(11803,0);
         m_creature->PlayDistanceSound(11803,0);
-		m_creature->SetDisplayId(1912);//Test
     }
 
 

@@ -696,10 +696,6 @@
 					</File>
 				</Filter>
 				<Filter
-					Name="gnomeregan"
-					>
-				</Filter>
-				<Filter
 					Name="karazhan"
 					>
 					<File
@@ -1200,6 +1196,22 @@
 					</File>
 					<File
 						RelativePath="..\scripts\eastern_kingdoms\zulgurub\zulgurub.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="gnomeregan"
+					>
+					<File
+						RelativePath="..\scripts\eastern_kingdoms\gnomeregan\event_boss_pucky.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\scripts\eastern_kingdoms\gnomeregan\gnomeregan.h"
+						>
+					</File>
+					<File
+						RelativePath="..\scripts\eastern_kingdoms\gnomeregan\instance_gnomeregan.cpp"
 						>
 					</File>
 				</Filter>
@@ -1993,6 +2005,18 @@
 					<Filter
 						Name="oculus"
 						>
+						<File
+							RelativePath="..\scripts\northrend\nexus\oculus\instance_oculus.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\northrend\nexus\oculus\oculus.h"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\northrend\nexus\oculus\oculus_event.cpp"
+							>
+						</File>
 					</Filter>
 				</Filter>
 				<Filter

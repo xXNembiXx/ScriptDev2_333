@@ -183,6 +183,8 @@ extern void AddSC_boss_thekal();
 extern void AddSC_boss_venoxis();
 extern void AddSC_boss_wushoolay();
 extern void AddSC_instance_zulgurub();
+extern void AddSC_instance_gnomeregan();
+extern void AddSC_event_boss_pucky();
 
 //extern void AddSC_alterac_mountains();
 extern void AddSC_arathi_highlands();
@@ -290,6 +292,9 @@ extern void AddSC_winterspring();
 
 //northrend
 
+extern void AddSC_instance_oculus();						//Oculus
+extern void AddSC_oculus_event();							//Inferna Christmas PreEvent
+
 extern void AddSC_trial_of_the_champion();                  //trial_of_the_champion
 extern void AddSC_boss_argent_challenge(); 
 extern void AddSC_boss_black_knight();
@@ -326,6 +331,7 @@ extern void AddSC_boss_sladran();
 extern void AddSC_instance_gundrak();
 extern void AddSC_boss_anubrekhan();                        //naxxramas
 extern void AddSC_boss_four_horsemen();
+//extern void AddSC_boss_thaddius();
 extern void AddSC_boss_faerlina();
 extern void AddSC_boss_grobbulus();
 extern void AddSC_boss_gluth();
@@ -707,6 +713,9 @@ void AddScripts()
     AddSC_boss_wushoolay();
     AddSC_instance_zulgurub();
 
+	AddSC_event_boss_pucky();
+	AddSC_instance_gnomeregan();
+
     //AddSC_alterac_mountains();
     AddSC_arathi_highlands();
     AddSC_blasted_lands();
@@ -802,6 +811,9 @@ void AddScripts()
     AddSC_winterspring();
 
     //northrend
+	AddSC_instance_oculus();						//Oculus
+	AddSC_oculus_event();							//Inferna Christmas PreEvent
+
     AddSC_trial_of_the_champion();                            //trial_of_the_champion
     AddSC_boss_argent_challenge();
     AddSC_boss_black_knight();
@@ -838,6 +850,7 @@ void AddScripts()
     AddSC_instance_gundrak();
     AddSC_boss_anubrekhan();                                //naxxramas
     AddSC_boss_four_horsemen();
+	//AddSC_boss_thaddius();
     AddSC_boss_faerlina();
     AddSC_boss_gluth();
     AddSC_boss_gothik();

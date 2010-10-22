@@ -293,7 +293,8 @@ extern void AddSC_winterspring();
 //northrend
 
 extern void AddSC_instance_oculus();						//Oculus
-extern void AddSC_oculus_event();							//Inferna Christmas PreEvent
+extern void AddSC_oculus_event();							//Addition to Inferna Christmas PreEvent
+extern void AddSC_oculus_start();							//Addition to Inferna Christmas PreEvent							
 
 extern void AddSC_trial_of_the_champion();                  //trial_of_the_champion
 extern void AddSC_boss_argent_challenge(); 
@@ -551,16 +552,16 @@ void AddScripts()
     AddSC_example_gossip_codebox();
     AddSC_example_misc();
 
-	//guards
-	AddSC_ancient_of_war();
-	AddSC_archbishop_benedictus();
-	AddSC_g_marcus_jonathan();
-	AddSC_high_fire_mage();
-	AddSC_high_sorcerer_andromath();
-	AddSC_highlord_bolvar_fordragon();
-	AddSC_city_officer();
-	AddSC_overlord_saurfang();
-	AddSC_thrall();
+    //guards
+    AddSC_ancient_of_war();
+    AddSC_archbishop_benedictus();
+    AddSC_g_marcus_jonathan();
+    AddSC_high_fire_mage();
+    AddSC_high_sorcerer_andromath();
+    AddSC_highlord_bolvar_fordragon();
+    AddSC_city_officer();
+    AddSC_overlord_saurfang();
+    AddSC_thrall();
 
     //world
     AddSC_areatrigger_scripts();
@@ -713,8 +714,8 @@ void AddScripts()
     AddSC_boss_wushoolay();
     AddSC_instance_zulgurub();
 
-	AddSC_event_boss_pucky();
-	AddSC_instance_gnomeregan();
+    AddSC_event_boss_pucky();
+    AddSC_instance_gnomeregan();
 
     //AddSC_alterac_mountains();
     AddSC_arathi_highlands();
@@ -751,7 +752,7 @@ void AddScripts()
     AddSC_dark_portal();
     AddSC_instance_dark_portal();
     AddSC_hyjal();                                          // Battle of Mount Hyjal
-	AddSC_boss_anetheron();
+    AddSC_boss_anetheron();
     AddSC_boss_archimonde();
     AddSC_boss_azgalor();
     AddSC_boss_kazrogal();
@@ -766,7 +767,7 @@ void AddScripts()
     AddSC_boss_noxxion();
     AddSC_boss_ptheradras();
     AddSC_boss_onyxia();                                    //onyxias_lair
-	AddSC_instance_onyxias_lair();
+    AddSC_instance_onyxias_lair();
     AddSC_boss_amnennar_the_coldbringer();                  //razorfen_downs
     AddSC_razorfen_downs();
     AddSC_instance_razorfen_kraul();                        //razorfen_kraul
@@ -793,7 +794,7 @@ void AddScripts()
     AddSC_boss_azuregos();
     AddSC_darkshore();
     AddSC_desolace();
-	AddSC_durotar();
+    AddSC_durotar();
     AddSC_dustwallow_marsh();
     AddSC_felwood();
     AddSC_feralas();
@@ -811,8 +812,9 @@ void AddScripts()
     AddSC_winterspring();
 
     //northrend
-	AddSC_instance_oculus();						//Oculus
-	AddSC_oculus_event();							//Inferna Christmas PreEvent
+    AddSC_instance_oculus();						          //Oculus
+    AddSC_oculus_event();									  //Addition to Inferna Christmas PreEvent
+    AddSC_oculus_start();									  //Addition to Inferna Christmas PreEvent
 
     AddSC_trial_of_the_champion();                            //trial_of_the_champion
     AddSC_boss_argent_challenge();
@@ -850,7 +852,7 @@ void AddScripts()
     AddSC_instance_gundrak();
     AddSC_boss_anubrekhan();                                //naxxramas
     AddSC_boss_four_horsemen();
-	//AddSC_boss_thaddius();
+    //AddSC_boss_thaddius();
     AddSC_boss_faerlina();
     AddSC_boss_gluth();
     AddSC_boss_gothik();
@@ -868,8 +870,8 @@ void AddScripts()
     AddSC_boss_keristrasza();
     AddSC_boss_ormorok();
     AddSC_boss_telestra();
-	AddSC_boss_commander_kolurg();
-	AddSC_boss_commander_stoutbeard();
+    AddSC_boss_commander_kolurg();
+    AddSC_boss_commander_stoutbeard();
     AddSC_instance_nexus();
     AddSC_boss_sartharion();                                //obsidian_sanctum
     AddSC_instance_obsidian_sanctum();
@@ -1036,7 +1038,7 @@ void AddScripts()
     AddSC_boss_kaelthas();                                  //TK, the_eye
     AddSC_boss_void_reaver();
     AddSC_boss_high_astromancer_solarian();
-	AddSC_boss_alar();
+    AddSC_boss_alar();
     AddSC_instance_the_eye();
     AddSC_the_eye();
     AddSC_boss_gatewatcher_iron_hand();                     //TK, the_mechanar
@@ -1052,7 +1054,7 @@ void AddScripts()
     AddSC_culling_of_stratholme();
     AddSC_culling_of_stratholmeAI();
     AddSC_instance_culling_of_stratholme();
-	AddSC_trash_culling_of_stratholme();
+    AddSC_trash_culling_of_stratholme();
 
     AddSC_blades_edge_mountains();
     AddSC_boss_doomlordkazzak();

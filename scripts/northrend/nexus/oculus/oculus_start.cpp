@@ -46,11 +46,9 @@ struct MANGOS_DLL_DECL oculus_start_image_oramus1_trigger1AI : public ScriptedAI
     }
 
 	ScriptedInstance* m_pInstance;
-	uint32 m_bIsSpawned;
 
 	void Reset()
 	{
-		m_bIsSpawned = false;
 	}
 
 	void MoveInLineOfSight(Unit *pWho) 

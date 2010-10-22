@@ -31,9 +31,19 @@ enum
 	NPC_ORAMUS			= 400053,
 	NPC_EDWIN			= 400054,
 
+	//Room1
 	GO_OCULUS_CANNON	= 400005,
 	GO_OCULUS_GATE1		= 400004,
 	GO_OCULUS_COLLISION	= 192633,
+
+	//Room2
+	GO_OCULUS_STATUE1	= 400006,
+	GO_OCULUS_STATUE2	= 400007,
+	GO_OCULUS_STATUE3	= 400008,
+	GO_OCULUS_STATUE4	= 400009,
+	GO_OCULUS_STATUE5	= 400010,
+	GO_GATE2			= 400013,
+	GO_GATE2_ROOTS		= 400011,
 };
 
 struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
@@ -50,6 +60,14 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 	uint64 m_uiCannonGUID;
 	uint64 m_uiGate1GUID;
 
+	uint64 m_uiGate2GUID;
+	uint64 m_uiGate2RootsGUID;
+	uint64 m_uiStatue1GUID;
+	uint64 m_uiStatue2GUID;
+	uint64 m_uiStatue3GUID;
+	uint64 m_uiStatue4GUID;
+	uint64 m_uiStatue5GUID;
+
 
 	void Initialize()
 	{
@@ -61,6 +79,14 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 		m_uiCannonGUID = 0;
 		m_uiGate1GUID = 0;
 		m_uiCollisionGUID = 0;
+
+		m_uiGate2GUID = 0;
+		m_uiGate2RootsGUID = 0;
+		m_uiStatue1GUID = 0;
+		m_uiStatue2GUID = 0;
+		m_uiStatue3GUID = 0;
+		m_uiStatue4GUID = 0;
+		m_uiStatue5GUID = 0;
 	}
 
 	void OnCreatureCreate(Creature* pCreature)
@@ -80,6 +106,13 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 			case GO_OCULUS_CANNON: m_uiCannonGUID = pGo->GetGUID(); break;
 			case GO_OCULUS_GATE1: m_uiGate1GUID = pGo->GetGUID(); break;
 			case GO_OCULUS_COLLISION: m_uiCollisionGUID = pGo->GetGUID(); break;
+			case GO_DATA_GATE2_ROOTS: m_uiGate2RootsGUID = pGo->GetGUID(); break;
+			case GO_DATA_GATE2: m_uiGate2GUID = pGo->GetGUID(); break;
+			case GO_DATA_STATUE1: m_uiStatue1GUID = pGo->GetGUID(); break;
+			case GO_DATA_STATUE2: m_uiStatue2GUID = pGo->GetGUID(); break;
+			case GO_DATA_STATUE3: m_uiStatue3GUID = pGo->GetGUID(); break;
+			case GO_DATA_STATUE4: m_uiStatue4GUID = pGo->GetGUID(); break;
+			case GO_DATA_STATUE5: m_uiStatue5GUID = pGo->GetGUID(); break;
 		}
 	}
 
@@ -137,6 +170,21 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 				return m_uiGate1GUID;
 			case GO_DATA_CANNON:
 				return m_uiCannonGUID;
+			case GO_DATA_GATE2:
+				return m_uiGate2GUID;
+			case GO_DATA_GATE2_ROOTS:
+				return m_uiGate2RootsGUID;
+			case GO_DATA_STATUE1:
+				return m_uiStatue1GUID;
+			case GO_DATA_STATUE2:
+				return m_uiStatue2GUID;
+			case GO_DATA_STATUE3:
+				return m_uiStatue3GUID;
+			case GO_DATA_STATUE4:
+				return m_uiStatue4GUID;
+			case GO_DATA_STATUE5:
+				return m_uiStatue5GUID;
+
 		}
 		return 0;
 	}

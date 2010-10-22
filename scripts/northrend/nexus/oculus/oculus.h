@@ -14,10 +14,20 @@ enum
 
 	DATA_ORAMUS						= 10,
 	DATA_EDWIN						= 11,
-
+	
+	//Room1
 	GO_DATA_COLLISION				= 20,
 	GO_DATA_CANNON					= 21,
-	GO_DATA_GATE1					= 22			
+	GO_DATA_GATE1					= 22,
+
+	//Room2
+	GO_DATA_GATE2_ROOTS				= 23,
+	GO_DATA_GATE2					= 24,
+	GO_DATA_STATUE1					= 25,
+	GO_DATA_STATUE2					= 26,
+	GO_DATA_STATUE3					= 27,
+	GO_DATA_STATUE4					= 28,
+	GO_DATA_STATUE5					= 29
 };
 
 #endif

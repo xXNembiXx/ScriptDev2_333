@@ -34,6 +34,7 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 
 	uint64 m_uiOramusGUID;
 	uint64 m_uiEdwinGUID;
+	uint64 m_uiOssirianGUID;
 
 	uint64 m_uiCollisionGUID;
 	uint64 m_uiCannonGUID;
@@ -46,6 +47,8 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 	uint64 m_uiStatue3GUID;
 	uint64 m_uiStatue4GUID;
 	uint64 m_uiStatue5GUID;
+	uint64 m_uiLight1GUID;
+	uint64 m_uiLight2GUID;
 
 
 	void Initialize()
@@ -66,6 +69,8 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 		m_uiStatue3GUID = 0;
 		m_uiStatue4GUID = 0;
 		m_uiStatue5GUID = 0;
+		m_uiLight1GUID = 0;
+		m_uiLight2GUID = 0;
 	}
 
 	void OnCreatureCreate(Creature* pCreature)
@@ -74,6 +79,7 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 		{
 			case NPC_ORAMUS: m_uiOramusGUID = pCreature->GetGUID(); break;
 			case NPC_EDWIN: m_uiEdwinGUID = pCreature->GetGUID(); break;
+			case NPC_OSSIRIAN: m_uiOssirianGUID = pCreature->GetGUID(); break;
 		}
 	}
 
@@ -83,15 +89,53 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 		switch(pGo->GetEntry())
 		{
 			case GO_OCULUS_CANNON: m_uiCannonGUID = pGo->GetGUID(); break;
-			case GO_OCULUS_GATE1: m_uiGate1GUID = pGo->GetGUID(); break;
-			case GO_OCULUS_COLLISION: m_uiCollisionGUID = pGo->GetGUID(); break;
-			case GO_GATE2_ROOTS: m_uiGate2RootsGUID = pGo->GetGUID(); break;
-			case GO_GATE2: m_uiGate2GUID = pGo->GetGUID(); break;
-			case GO_OCULUS_STATUE1: m_uiStatue1GUID = pGo->GetGUID(); break;
-			case GO_OCULUS_STATUE2: m_uiStatue2GUID = pGo->GetGUID(); break;
-			case GO_OCULUS_STATUE3: m_uiStatue3GUID = pGo->GetGUID(); break;
-			case GO_OCULUS_STATUE4: m_uiStatue4GUID = pGo->GetGUID(); break;
-			case GO_OCULUS_STATUE5: m_uiStatue5GUID = pGo->GetGUID(); break;
+			case GO_OCULUS_GATE1: 
+				m_uiGate1GUID = pGo->GetGUID();
+				if(m_auiEncounter[1] == DONE)
+					pGo->SetPhaseMask(128, true);
+				break;
+			case GO_OCULUS_COLLISION: 
+				m_uiCollisionGUID = pGo->GetGUID(); 
+				if(m_auiEncounter[1] == DONE)
+					pGo->SetGoState(GO_STATE_ACTIVE);
+				break;
+			case GO_GATE2_ROOTS: 
+				m_uiGate2RootsGUID = pGo->GetGUID(); 
+				if(m_auiEncounter[2] == DONE)
+					pGo->SetGoState(GO_STATE_ACTIVE);
+				break;
+			case GO_GATE2: 
+				m_uiGate2GUID = pGo->GetGUID(); 
+				if(m_auiEncounter[2] == DONE)
+					pGo->SetGoState(GO_STATE_ACTIVE);
+				break;
+			case GO_OCULUS_STATUE1: 
+				m_uiStatue1GUID = pGo->GetGUID(); 
+				if(m_auiEncounter[2] == DONE)
+					pGo->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
+				break;
+			case GO_OCULUS_STATUE2: 
+				m_uiStatue2GUID = pGo->GetGUID();
+				if(m_auiEncounter[2] == DONE)
+					pGo->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
+				break;
+			case GO_OCULUS_STATUE3: 
+				m_uiStatue3GUID = pGo->GetGUID();
+				if(m_auiEncounter[2] == DONE)
+					pGo->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
+				break;
+			case GO_OCULUS_STATUE4: 
+				m_uiStatue4GUID = pGo->GetGUID();
+				if(m_auiEncounter[2] == DONE)
+					pGo->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
+				break;
+			case GO_OCULUS_STATUE5: 
+				m_uiStatue5GUID = pGo->GetGUID();
+				if(m_auiEncounter[2] == DONE)
+					pGo->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
+				break;
+			case GO_LIGHT1: m_uiLight1GUID = pGo->GetGUID(); break;
+			case GO_LIGHT2: m_uiLight2GUID = pGo->GetGUID(); break;
 		}
 	}
 
@@ -106,6 +150,9 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 			case TYPE_EDWIN:
 				m_auiEncounter[1] = uiData;
 				break;
+			case TYPE_OSSIRIAN:
+				m_auiEncounter[2] = uiData;
+				break;
 		}
 
 		if (uiData == DONE)
@@ -113,7 +160,7 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 			OUT_SAVE_INST_DATA;
 
 			std::ostringstream saveStream;
-			saveStream << m_auiEncounter[0] << " " << m_auiEncounter[1];
+			saveStream << m_auiEncounter[0] << " " << m_auiEncounter[1] << " " << m_auiEncounter[2];
 
 			strInstData = saveStream.str();
 
@@ -131,6 +178,8 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 				return m_auiEncounter[0];
 			case TYPE_EDWIN:
 				return m_auiEncounter[1];
+			case TYPE_OSSIRIAN:
+				return m_auiEncounter[2];
 		}
 		return 0;
 	}
@@ -143,6 +192,8 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 				return m_uiOramusGUID;
 			case DATA_EDWIN:
 				return m_uiEdwinGUID;
+			case DATA_OSSIRIAN:
+				return m_uiOssirianGUID;
 			case GO_OCULUS_COLLISION:
 				return m_uiCollisionGUID;
 			case GO_OCULUS_GATE1:
@@ -163,6 +214,10 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 				return m_uiStatue4GUID;
 			case GO_OCULUS_STATUE5:
 				return m_uiStatue5GUID;
+			case GO_LIGHT1:
+				return m_uiLight1GUID;
+			case GO_LIGHT2:
+				return m_uiLight2GUID;
 
 		}
 		return 0;
@@ -185,7 +240,7 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 		OUT_LOAD_INST_DATA(in);
 
 		std::istringstream loadStream(in);
-		loadStream >> m_auiEncounter[0] >> m_auiEncounter[1];
+		loadStream >> m_auiEncounter[0] >> m_auiEncounter[1] >> m_auiEncounter[2];
 
 		for(uint8 i = 0; i < MAX_ENCOUNTER; ++i)
 			if (m_auiEncounter[i] == IN_PROGRESS)

@@ -7,13 +7,15 @@
 
 enum
 {
-	MAX_ENCOUNTER                   = 2,
+	MAX_ENCOUNTER                   = 3,
 
 	TYPE_ORAMUS						= 1,
 	TYPE_EDWIN						= 2,
+	TYPE_OSSIRIAN					= 3,
 
 	DATA_ORAMUS						= 10,
 	DATA_EDWIN						= 11,
+	DATA_OSSIRIAN					= 12,
 	
 	//Room1
 	GO_DATA_COLLISION				= 20,
@@ -34,6 +36,7 @@ enum
 	//---
 	NPC_ORAMUS			= 400053,
 	NPC_EDWIN			= 400054,
+	NPC_OSSIRIAN		= 400058,
 
 	//Room1
 	GO_OCULUS_CANNON	= 400005,
@@ -47,7 +50,9 @@ enum
 	GO_OCULUS_STATUE4	= 400009,
 	GO_OCULUS_STATUE5	= 400010,
 	GO_GATE2			= 400013,
-	GO_GATE2_ROOTS		= 400011
+	GO_GATE2_ROOTS		= 400011,
+	GO_LIGHT1			= 106528,
+	GO_LIGHT2			= 183948
 };
 
 #endif

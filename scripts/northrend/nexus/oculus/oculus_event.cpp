@@ -34,7 +34,6 @@ bool m_bIsStatue1Used;			//Used for Room2
 bool m_bIsStatue2Used;			//Used for Room2
 bool m_bIsStatue3Used;			//Used for Room2
 bool m_bIsStatue4Used;			//Used for Room2
-bool m_bIsStatue5Used;			//Used for Room2
                                                             /* *** ROOM 1 *** */
 
 /*######
@@ -63,12 +62,21 @@ struct MANGOS_DLL_DECL oculus_event_edwinAI : public ScriptedAI
         m_uiSummonTimmer = 15000;
         m_uiTrashTimer = 8000;
 
+		// ????
+		/*
         m_bIsStatue5Used = false;			//Used for Room2
         m_bIsStatue4Used = false;			//Used for Room2
         m_bIsStatue3Used = false;			//Used for Room2
         m_bIsStatue2Used = false;			//Used for Room2
         m_bIsStatue1Used = false;			//Used for Room2
+		*/
     }
+
+	void Aggro(Unit* pWho)
+	{
+		if (m_pInstance)
+			m_pInstance->SetData(TYPE_EDWIN, IN_PROGRESS);
+	}
 
     void JustSummoned(Creature* pSummoned)
     {
@@ -141,10 +149,6 @@ bool GOHello_go_oculus_cannon(Player* pPlayer, GameObject* pGo)
 #define NPC_GURLOC		29920
 #define NPC_GUARD		29829
 #define SPELL_FIRE		25465
-#define NPC_BOSS		400058
-
-#define GOB_LIGHT1		106528
-#define GOB_LIGHT2		183948
 
 /*  Logik
  *  Statue 3 > Statue 2 > Statue 4 > Statue 1 > Statue 5 
@@ -160,10 +164,10 @@ bool GOHello_go_oculus_event_statue1(Player* pPlayer, GameObject* pGo)
     if(!pPlayer && !pGo)
     return false;
 
-    if (!m_bIsStatue1Used && m_bIsStatue2Used && m_bIsStatue3Used && m_bIsStatue4Used && !m_bIsStatue5Used)
+    if (!m_bIsStatue1Used && m_bIsStatue2Used && m_bIsStatue3Used && m_bIsStatue4Used)
     {
-        pGo->SummonGameobject(GOB_LIGHT1, 1124.34f, 1109.79f, 433.538f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 1000);
-        pGo->SummonGameobject(GOB_LIGHT2, 1124.34f, 1109.79f, 432.88f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 1000);
+        pGo->SummonGameobject(GO_LIGHT1, 1124.34f, 1109.79f, 433.538f, TEMPSUMMON_MANUAL_DESPAWN, 0);
+        pGo->SummonGameobject(GO_LIGHT2, 1124.34f, 1109.79f, 432.88f, TEMPSUMMON_MANUAL_DESPAWN, 0);
 
         pPlayer->CastSpell(pPlayer, SPELL_FIRE, true);
 
@@ -171,8 +175,8 @@ bool GOHello_go_oculus_event_statue1(Player* pPlayer, GameObject* pGo)
     }
     else
     {
-        pGo->SummonCreature(NPC_SNAKE1, 1120.019653f, 1098.877563f, 433.075684f, 1.103422f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);
-        pGo->SummonCreature(NPC_SNAKE2, 1128.290894f, 1119.614258f, 433.024811f, 4.289958f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);
+        pGo->SummonCreature(NPC_SNAKE1, 1120.019653f, 1098.877563f, 433.075684f, 1.103422f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
+        pGo->SummonCreature(NPC_SNAKE2, 1128.290894f, 1119.614258f, 433.024811f, 4.289958f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
     }
 
     return true;
@@ -188,15 +192,15 @@ bool GOHello_go_oculus_event_statue2(Player* pPlayer, GameObject* pGo)
     if(!pPlayer && !pGo)
     return false;
 
-    if (!m_bIsStatue1Used && !m_bIsStatue2Used && m_bIsStatue3Used && !m_bIsStatue4Used && !m_bIsStatue5Used)
+    if (!m_bIsStatue1Used && !m_bIsStatue2Used && m_bIsStatue3Used && !m_bIsStatue4Used)
     {
         pPlayer->CastSpell(pPlayer, SPELL_FIRE, true);
         m_bIsStatue2Used = true;
     }
     else
     {
-        pGo->SummonCreature(NPC_GURLOC, 1120.019653f, 1098.877563f, 433.075684f, 1.103422f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);
-        pGo->SummonCreature(NPC_GURLOC, 1128.290894f, 1119.614258f, 433.024811f, 4.289958f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);
+        pGo->SummonCreature(NPC_GURLOC, 1120.019653f, 1098.877563f, 433.075684f, 1.103422f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
+        pGo->SummonCreature(NPC_GURLOC, 1128.290894f, 1119.614258f, 433.024811f, 4.289958f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
     }
 
     return true;
@@ -212,15 +216,15 @@ bool GOHello_go_oculus_event_statue3(Player* pPlayer, GameObject* pGo)
     if(!pPlayer && !pGo)
     return false;
 
-    if (!m_bIsStatue1Used && !m_bIsStatue2Used && !m_bIsStatue3Used && !m_bIsStatue4Used && !m_bIsStatue5Used)
+    if (!m_bIsStatue1Used && !m_bIsStatue2Used && !m_bIsStatue3Used && !m_bIsStatue4Used)
     {
         pPlayer->CastSpell(pPlayer, SPELL_FIRE, true);
         m_bIsStatue3Used = true;
     }
     else
     {
-        pGo->SummonCreature(NPC_GUARD, 1120.019653f, 1098.877563f, 433.075684f, 1.103422f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);
-        pGo->SummonCreature(NPC_GUARD, 1128.290894f, 1119.614258f, 433.024811f, 4.289958f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);
+        pGo->SummonCreature(NPC_GUARD, 1120.019653f, 1098.877563f, 433.075684f, 1.103422f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
+        pGo->SummonCreature(NPC_GUARD, 1128.290894f, 1119.614258f, 433.024811f, 4.289958f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
     }
 
     return true;
@@ -235,15 +239,15 @@ bool GOHello_go_oculus_event_statue4(Player* pPlayer, GameObject* pGo)
     if(!pPlayer && !pGo)
     return false;
 
-    if (!m_bIsStatue1Used && m_bIsStatue2Used && m_bIsStatue3Used && !m_bIsStatue4Used && !m_bIsStatue5Used)
+    if (!m_bIsStatue1Used && m_bIsStatue2Used && m_bIsStatue3Used && !m_bIsStatue4Used)
     {
         pPlayer->CastSpell(pPlayer, SPELL_FIRE, true);
         m_bIsStatue4Used = true;
     }
     else
     {
-        pGo->SummonCreature(NPC_GURLOC, 1120.019653f, 1098.877563f, 433.075684f, 1.103422f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);
-        pGo->SummonCreature(NPC_GUARD, 1128.290894f, 1119.614258f, 433.024811f, 4.289958f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);
+        pGo->SummonCreature(NPC_GURLOC, 1120.019653f, 1098.877563f, 433.075684f, 1.103422f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
+        pGo->SummonCreature(NPC_GUARD, 1128.290894f, 1119.614258f, 433.024811f, 4.289958f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
     }
 
     return true;
@@ -259,17 +263,26 @@ bool GOHello_go_oculus_event_statue5(Player* pPlayer, GameObject* pGo)
     if(!pPlayer && !pGo)
     return false;
 
-    if (m_bIsStatue1Used && m_bIsStatue2Used && m_bIsStatue3Used && m_bIsStatue4Used && !m_bIsStatue5Used)
+	ScriptedInstance* pInstance = (ScriptedInstance*)pGo->GetInstanceData();
+	
+	if(!pInstance)
+		return false;
+
+    if (m_bIsStatue1Used && m_bIsStatue2Used && m_bIsStatue3Used && m_bIsStatue4Used)
     {
-		// boss should only despawn out of combat...
-		pGo->SummonCreature(NPC_BOSS, 1138.088379f, 1102.544678f, 432.515320f, 2.530887f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
+		if(Creature* pOssirian = pPlayer->GetCreature(*pPlayer, pInstance->GetData64(DATA_OSSIRIAN)))
+			pOssirian->SetPhaseMask(1, true);
         pPlayer->CastSpell(pPlayer, SPELL_FIRE, true);
 
-        m_bIsStatue5Used = true;
+		//reset booleans, GO's need to be reuseable in case of group wipe...
+        m_bIsStatue1Used = false;
+		m_bIsStatue2Used = false;
+		m_bIsStatue3Used = false;
+		m_bIsStatue4Used = false;
+
     }
     else
     {
-		// same shit
         pGo->SummonCreature(NPC_SNAKE1, 1120.019653f, 1098.877563f, 433.075684f, 1.103422f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
         pGo->SummonCreature(NPC_GUARD, 1128.290894f, 1119.614258f, 433.024811f, 4.289958f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
     }
@@ -305,6 +318,7 @@ struct MANGOS_DLL_DECL oculus_event_ossirianAI : public Scripted_NoMovementAI
 	uint32 m_uiAttackTimer;
 
 	bool m_bIsPhase2;
+	bool m_bResetEventRoom2;
 
 	void Reset()
 	{
@@ -313,23 +327,76 @@ struct MANGOS_DLL_DECL oculus_event_ossirianAI : public Scripted_NoMovementAI
 		m_uiAttackTimer = 5000;
 
 		m_bIsPhase2 = false;
+		m_bResetEventRoom2 = false;
+
         m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+
+		if(!m_pInstance)
+			return;
+
+		Map* pMap = m_creature->GetMap();
+		if(pMap)
+		{
+			Map::PlayerList const &lPlayers = pMap->GetPlayers();
+			for (Map::PlayerList::const_iterator iter = lPlayers.begin(); iter != lPlayers.end(); ++iter)
+			{
+				Player* pPlayer = iter->getSource();
+
+				if(pPlayer->isAlive())
+					continue;
+
+				m_bResetEventRoom2 = true;
+			}
+		}
+
+		if(m_bResetEventRoom2)
+		{
+			// make GO's useable again
+			if (GameObject* pTemp = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_OCULUS_STATUE1)))
+				pTemp->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
+			if (GameObject* pTemp = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_OCULUS_STATUE2)))
+				pTemp->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
+			if (GameObject* pTemp = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_OCULUS_STATUE3)))
+				pTemp->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
+			if (GameObject* pTemp = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_OCULUS_STATUE4)))
+				pTemp->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
+			if (GameObject* pTemp = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_OCULUS_STATUE5)))
+				pTemp->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
+
+			// despawn lights
+			if (GameObject* pTemp = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_LIGHT1)))
+				pTemp->Delete();
+			if (GameObject* pTemp = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_LIGHT2)))
+				pTemp->Delete();
+
+			// close root door
+			if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_GATE2_ROOTS)))
+				pGate->SetGoState(GO_STATE_READY);	
+
+			m_creature->SetPhaseMask(128, true);
+		}
 	}
 	
 
     void JustDied(Unit* Killer)
     {
-		//Doesn`t work atm
-        if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_GATE2)))
-            pGate->SetGoState(GO_STATE_READY);
+		if(!m_pInstance)
+			return;
+		
+		if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_GATE2)))
+            pGate->SetGoState(GO_STATE_ACTIVE);
+
+		m_pInstance->SetData(TYPE_OSSIRIAN, DONE);
 
 		DoScriptText(SAY_GATE_PHASE2, m_creature);
     }
 
-
 	void Aggro (Unit* pWho)
 	{
 		DoScriptText(SAY_AGGRO, m_creature);
+
+		if(!m_pInstance)
+			return;
 
         if (GameObject* pTemp = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_OCULUS_STATUE1)))
             pTemp->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
@@ -341,6 +408,8 @@ struct MANGOS_DLL_DECL oculus_event_ossirianAI : public Scripted_NoMovementAI
             pTemp->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
         if (GameObject* pTemp = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_OCULUS_STATUE5)))
             pTemp->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
+
+		m_pInstance->SetData(TYPE_OSSIRIAN, IN_PROGRESS);
 	}
 
 
@@ -369,11 +438,13 @@ struct MANGOS_DLL_DECL oculus_event_ossirianAI : public Scripted_NoMovementAI
 		else 
 			m_uiCurseTimer -= uiDiff;
 
+		if (!m_pInstance)
+			return;
+
         if (!m_bIsPhase2 && (m_creature->GetHealthPercent() < 40.0f))
         {
-			//Doesn`t work atm
 			if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_GATE2_ROOTS)))
-				pGate->SetGoState(GO_STATE_READY);	
+				pGate->SetGoState(GO_STATE_ACTIVE);	
 
 			m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
 
@@ -381,12 +452,15 @@ struct MANGOS_DLL_DECL oculus_event_ossirianAI : public Scripted_NoMovementAI
 			m_bIsPhase2 = true;
         }
 
-		//Doesn`t work atm
-		if (m_bIsPhase2 && (m_uiAttackTimer < uiDiff))
+		if(m_bIsPhase2 && m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE))
 		{
-			m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-			m_uiAttackTimer = 5000;
-        }else m_uiAttackTimer -= uiDiff;
+			if (m_bIsPhase2 && (m_uiAttackTimer < uiDiff))
+			{
+				m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+			}
+			else 
+				m_uiAttackTimer -= uiDiff;
+		}
 
         DoMeleeAttackIfReady();
     }

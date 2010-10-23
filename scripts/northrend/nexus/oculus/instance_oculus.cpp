@@ -25,27 +25,6 @@ EndScriptData */
 #include "precompiled.h"
 #include "oculus.h"
 
-
-enum
-{
-	NPC_ORAMUS			= 400053,
-	NPC_EDWIN			= 400054,
-
-	//Room1
-	GO_OCULUS_CANNON	= 400005,
-	GO_OCULUS_GATE1		= 400004,
-	GO_OCULUS_COLLISION	= 192633,
-
-	//Room2
-	GO_OCULUS_STATUE1	= 400006,
-	GO_OCULUS_STATUE2	= 400007,
-	GO_OCULUS_STATUE3	= 400008,
-	GO_OCULUS_STATUE4	= 400009,
-	GO_OCULUS_STATUE5	= 400010,
-	GO_GATE2			= 400013,
-	GO_GATE2_ROOTS		= 400011,
-};
-
 struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 {
 	instance_oculus(Map* pMap) : ScriptedInstance(pMap) {Initialize();};

@@ -125,12 +125,12 @@ bool GOHello_go_oculus_cannon(Player* pPlayer, GameObject* pGo)
 {
     ScriptedInstance* m_pInstance = (ScriptedInstance*)pGo->GetInstanceData();
 
-    if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_DATA_COLLISION)))
+    if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_OCULUS_COLLISION)))
             pGate->SetGoState(GO_STATE_ACTIVE);
-    if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_DATA_GATE1)))
+    if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_OCULUS_GATE1)))
         pGate->SetPhaseMask(128, true); //better than "0"
 
-    m_pInstance->SetData(GO_DATA_CANNON, IN_PROGRESS);
+    m_pInstance->SetData(GO_DATA_CANNON, DONE);
     return false;
 
 }
@@ -261,15 +261,17 @@ bool GOHello_go_oculus_event_statue5(Player* pPlayer, GameObject* pGo)
 
     if (m_bIsStatue1Used && m_bIsStatue2Used && m_bIsStatue3Used && m_bIsStatue4Used && !m_bIsStatue5Used)
     {
-		pGo->SummonCreature(NPC_BOSS, 1138.088379f, 1102.544678f, 432.515320f, 2.530887f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);
+		// boss should only despawn out of combat...
+		pGo->SummonCreature(NPC_BOSS, 1138.088379f, 1102.544678f, 432.515320f, 2.530887f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
         pPlayer->CastSpell(pPlayer, SPELL_FIRE, true);
 
         m_bIsStatue5Used = true;
     }
     else
     {
-        pGo->SummonCreature(NPC_SNAKE1, 1120.019653f, 1098.877563f, 433.075684f, 1.103422f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);
-        pGo->SummonCreature(NPC_GUARD, 1128.290894f, 1119.614258f, 433.024811f, 4.289958f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);
+		// same shit
+        pGo->SummonCreature(NPC_SNAKE1, 1120.019653f, 1098.877563f, 433.075684f, 1.103422f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
+        pGo->SummonCreature(NPC_GUARD, 1128.290894f, 1119.614258f, 433.024811f, 4.289958f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
     }
 
     return true;

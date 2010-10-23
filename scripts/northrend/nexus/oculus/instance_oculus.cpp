@@ -106,13 +106,13 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 			case GO_OCULUS_CANNON: m_uiCannonGUID = pGo->GetGUID(); break;
 			case GO_OCULUS_GATE1: m_uiGate1GUID = pGo->GetGUID(); break;
 			case GO_OCULUS_COLLISION: m_uiCollisionGUID = pGo->GetGUID(); break;
-			case GO_DATA_GATE2_ROOTS: m_uiGate2RootsGUID = pGo->GetGUID(); break;
-			case GO_DATA_GATE2: m_uiGate2GUID = pGo->GetGUID(); break;
-			case GO_DATA_STATUE1: m_uiStatue1GUID = pGo->GetGUID(); break;
-			case GO_DATA_STATUE2: m_uiStatue2GUID = pGo->GetGUID(); break;
-			case GO_DATA_STATUE3: m_uiStatue3GUID = pGo->GetGUID(); break;
-			case GO_DATA_STATUE4: m_uiStatue4GUID = pGo->GetGUID(); break;
-			case GO_DATA_STATUE5: m_uiStatue5GUID = pGo->GetGUID(); break;
+			case GO_GATE2_ROOTS: m_uiGate2RootsGUID = pGo->GetGUID(); break;
+			case GO_GATE2: m_uiGate2GUID = pGo->GetGUID(); break;
+			case GO_OCULUS_STATUE1: m_uiStatue1GUID = pGo->GetGUID(); break;
+			case GO_OCULUS_STATUE2: m_uiStatue2GUID = pGo->GetGUID(); break;
+			case GO_OCULUS_STATUE3: m_uiStatue3GUID = pGo->GetGUID(); break;
+			case GO_OCULUS_STATUE4: m_uiStatue4GUID = pGo->GetGUID(); break;
+			case GO_OCULUS_STATUE5: m_uiStatue5GUID = pGo->GetGUID(); break;
 		}
 	}
 
@@ -164,25 +164,25 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 				return m_uiOramusGUID;
 			case DATA_EDWIN:
 				return m_uiEdwinGUID;
-			case GO_DATA_COLLISION:
+			case GO_OCULUS_COLLISION:
 				return m_uiCollisionGUID;
-			case GO_DATA_GATE1:
+			case GO_OCULUS_GATE1:
 				return m_uiGate1GUID;
-			case GO_DATA_CANNON:
+			case GO_OCULUS_CANNON:
 				return m_uiCannonGUID;
-			case GO_DATA_GATE2:
+			case GO_GATE2:
 				return m_uiGate2GUID;
-			case GO_DATA_GATE2_ROOTS:
+			case GO_GATE2_ROOTS:
 				return m_uiGate2RootsGUID;
-			case GO_DATA_STATUE1:
+			case GO_OCULUS_STATUE1:
 				return m_uiStatue1GUID;
-			case GO_DATA_STATUE2:
+			case GO_OCULUS_STATUE2:
 				return m_uiStatue2GUID;
-			case GO_DATA_STATUE3:
+			case GO_OCULUS_STATUE3:
 				return m_uiStatue3GUID;
-			case GO_DATA_STATUE4:
+			case GO_OCULUS_STATUE4:
 				return m_uiStatue4GUID;
-			case GO_DATA_STATUE5:
+			case GO_OCULUS_STATUE5:
 				return m_uiStatue5GUID;
 
 		}

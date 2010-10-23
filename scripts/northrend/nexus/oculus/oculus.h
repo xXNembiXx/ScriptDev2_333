@@ -34,7 +34,7 @@ enum
 	//---
 	//Entrys
 	//---
-	NPC_ORAMUS			= 400053,
+	NPC_ORAMUS			= 400059,
 	NPC_EDWIN			= 400054,
 	NPC_OSSIRIAN		= 400058,
 

@@ -304,7 +304,6 @@ struct MANGOS_DLL_DECL oculus_event_ossirianAI : public Scripted_NoMovementAI
 	uint32 m_uiWindTimer;
 	uint32 m_uiAttackTimer;
 
-	bool m_bIsNotAttackable;
 	bool m_bIsPhase2;
 
 	void Reset()
@@ -313,7 +312,6 @@ struct MANGOS_DLL_DECL oculus_event_ossirianAI : public Scripted_NoMovementAI
 		m_uiWindTimer = 12000;
 		m_uiAttackTimer = 5000;
 
-		m_bIsNotAttackable = false;
 		m_bIsPhase2 = false;
         m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
 	}
@@ -322,7 +320,7 @@ struct MANGOS_DLL_DECL oculus_event_ossirianAI : public Scripted_NoMovementAI
     void JustDied(Unit* Killer)
     {
 		//Doesn`t work atm
-        if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_DATA_GATE2)))
+        if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_GATE2)))
             pGate->SetGoState(GO_STATE_READY);
 
 		DoScriptText(SAY_GATE_PHASE2, m_creature);
@@ -333,17 +331,16 @@ struct MANGOS_DLL_DECL oculus_event_ossirianAI : public Scripted_NoMovementAI
 	{
 		DoScriptText(SAY_AGGRO, m_creature);
 
-		//Doesn`t work atm
-        if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_DATA_STATUE1)))
-            pGate->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-        if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_DATA_STATUE2)))
-            pGate->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-        if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_DATA_STATUE3)))
-            pGate->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-        if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_DATA_STATUE4)))
-            pGate->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-        if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_DATA_STATUE5)))
-            pGate->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        if (GameObject* pTemp = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_OCULUS_STATUE1)))
+            pTemp->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
+        if (GameObject* pTemp = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_OCULUS_STATUE2)))
+            pTemp->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
+        if (GameObject* pTemp = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_OCULUS_STATUE3)))
+            pTemp->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
+        if (GameObject* pTemp = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_OCULUS_STATUE4)))
+            pTemp->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
+        if (GameObject* pTemp = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_OCULUS_STATUE5)))
+            pTemp->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
 	}
 
 
@@ -358,7 +355,9 @@ struct MANGOS_DLL_DECL oculus_event_ossirianAI : public Scripted_NoMovementAI
                 DoCast(pTarget,SPELL_WIND);
 
             m_uiWindTimer = 12000;
-        }else m_uiWindTimer -= uiDiff;
+        }
+		else 
+			m_uiWindTimer -= uiDiff;
 
         if (m_uiCurseTimer < uiDiff)
         {
@@ -366,26 +365,26 @@ struct MANGOS_DLL_DECL oculus_event_ossirianAI : public Scripted_NoMovementAI
                 DoCast(pTarget,SPELL_CURSE);
 
             m_uiCurseTimer = 30000;
-        }else m_uiCurseTimer -= uiDiff;
+        }
+		else 
+			m_uiCurseTimer -= uiDiff;
 
-        if (!m_bIsPhase2 && !m_bIsNotAttackable && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 40))
+        if (!m_bIsPhase2 && (m_creature->GetHealthPercent() < 40.0f))
         {
 			//Doesn`t work atm
-			if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_DATA_GATE2_ROOTS)))
+			if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_GATE2_ROOTS)))
 				pGate->SetGoState(GO_STATE_READY);	
 
 			m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
 
 			DoScriptText(SAY_GATE_PHASE1, m_creature);
-			m_bIsNotAttackable = true;
 			m_bIsPhase2 = true;
         }
 
 		//Doesn`t work atm
-		if (m_bIsPhase2 && m_bIsNotAttackable && (m_uiAttackTimer < uiDiff))
+		if (m_bIsPhase2 && (m_uiAttackTimer < uiDiff))
 		{
 			m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-			m_bIsNotAttackable = false;
 			m_uiAttackTimer = 5000;
         }else m_uiAttackTimer -= uiDiff;
 

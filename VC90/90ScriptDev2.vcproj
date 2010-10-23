@@ -2014,6 +2014,10 @@
 							>
 						</File>
 						<File
+							RelativePath="..\scripts\northrend\nexus\oculus\oculus_boss.cpp"
+							>
+						</File>
+						<File
 							RelativePath="..\scripts\northrend\nexus\oculus\oculus_event.cpp"
 							>
 						</File>

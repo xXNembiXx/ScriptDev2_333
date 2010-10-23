@@ -294,7 +294,8 @@ extern void AddSC_winterspring();
 
 extern void AddSC_instance_oculus();						//Oculus
 extern void AddSC_oculus_event();							//Addition to Inferna Christmas PreEvent
-extern void AddSC_oculus_start();							//Addition to Inferna Christmas PreEvent							
+extern void AddSC_oculus_start();							//Addition to Inferna Christmas PreEvent	
+extern void AddSC_oculus_boss();							//Addition to Inferna Christmas PreEvent
 
 extern void AddSC_trial_of_the_champion();                  //trial_of_the_champion
 extern void AddSC_boss_argent_challenge(); 
@@ -815,6 +816,7 @@ void AddScripts()
     AddSC_instance_oculus();						          //Oculus
     AddSC_oculus_event();									  //Addition to Inferna Christmas PreEvent
     AddSC_oculus_start();									  //Addition to Inferna Christmas PreEvent
+    AddSC_oculus_boss();									  //Addition to Inferna Christmas PreEvent
 
     AddSC_trial_of_the_champion();                            //trial_of_the_champion
     AddSC_boss_argent_challenge();

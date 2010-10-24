@@ -40,6 +40,8 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 	uint64 m_uiCollisionGUID;
 	uint64 m_uiCannonGUID;
 	uint64 m_uiGate1GUID;
+	uint64 m_uiMeatGUID;
+	uint64 m_uiTriggerCowGUID;
 
 	uint64 m_uiGate2GUID;
 	uint64 m_uiGate2RootsGUID;
@@ -63,6 +65,8 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 		m_uiCannonGUID = 0;
 		m_uiGate1GUID = 0;
 		m_uiCollisionGUID = 0;
+		m_uiMeatGUID = 0;
+		m_uiTriggerCowGUID = 0;
 
 		m_uiGate2GUID = 0;
 		m_uiGate2RootsGUID = 0;
@@ -83,6 +87,7 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 			case NPC_EDWIN: m_uiEdwinGUID = pCreature->GetGUID(); break;
 			case NPC_OSSIRIAN: m_uiOssirianGUID = pCreature->GetGUID(); break;
 			case NPC_RAGNAROS: m_uiRagnarosGUID = pCreature->GetGUID(); break;
+			case NPC_TRIGGER_COW: m_uiTriggerCowGUID = pCreature->GetGUID(); break;
 		}
 	}
 
@@ -92,6 +97,7 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 		switch(pGo->GetEntry())
 		{
 			case GO_OCULUS_CANNON: m_uiCannonGUID = pGo->GetGUID(); break;
+			case GO_RANCID_MEAT: m_uiMeatGUID = pGo->GetGUID(); break;
 			case GO_OCULUS_GATE1: 
 				m_uiGate1GUID = pGo->GetGUID();
 				if(m_auiEncounter[1] == DONE)
@@ -199,12 +205,16 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 				return m_uiOssirianGUID;
 			case DATA_RAGNAROS:
 				return m_uiRagnarosGUID;
+			case DATA_TRIGGER_COW:
+				return m_uiTriggerCowGUID;
 			case GO_OCULUS_COLLISION:
 				return m_uiCollisionGUID;
 			case GO_OCULUS_GATE1:
 				return m_uiGate1GUID;
 			case GO_OCULUS_CANNON:
 				return m_uiCannonGUID;
+			case GO_RANCID_MEAT:
+				return m_uiMeatGUID;
 			case GO_GATE2:
 				return m_uiGate2GUID;
 			case GO_GATE2_ROOTS:

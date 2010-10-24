@@ -127,21 +127,102 @@ struct MANGOS_DLL_DECL oculus_event_edwinAI : public ScriptedAI
 ## Room 1 EndGate1
 ######*/
 
+#define NPC_COW				400061
 
-//Need: Animation!
 bool GOHello_go_oculus_cannon(Player* pPlayer, GameObject* pGo)
-{
+{ 
     ScriptedInstance* m_pInstance = (ScriptedInstance*)pGo->GetInstanceData();
-
+/*
     if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_OCULUS_COLLISION)))
             pGate->SetGoState(GO_STATE_ACTIVE);
     if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_OCULUS_GATE1)))
-        pGate->SetPhaseMask(128, true); //better than "0"
+        pGate->SetPhaseMask(128, true); //better than "0" */
+
+	pGo->SummonCreature(NPC_COW, 1088.934937f, 1103.900269f, 436.300354f, 0.839746f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);
 
     m_pInstance->SetData(GO_DATA_CANNON, DONE);
     return false;
 
 }
+
+
+
+/*######
+## Room 1 Cow
+######*/
+
+
+#define SPELL_BUMM		29949	
+#define YELL_MAMI		-2500035
+
+
+struct MANGOS_DLL_DECL oculus_event_gate1_cowAI : public ScriptedAI
+{
+    oculus_event_gate1_cowAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+		m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+        SetCombatMovement(false);
+        Reset();
+    }
+
+	ScriptedInstance* m_pInstance;
+
+	uint32 m_uiBummTimmer;
+	bool m_bIsYell;
+
+	void Reset()
+	{
+		m_uiBummTimmer = 2000;
+		m_creature->AddSplineFlag(SPLINEFLAG_FLYING);
+		m_creature->SetByteFlag(UNIT_FIELD_BYTES_1, 3, 0x02);
+
+		m_bIsYell = false;
+	}
+
+		
+	void MoveInLineOfSight(Unit *pWho) 
+	{
+		if(pWho->GetTypeId() != TYPEID_PLAYER)
+		  return;
+		m_creature->MonsterMove (1097.573364f, 1112.313354f, 438.803986f, 2000);
+        DoScriptText(YELL_MAMI, m_creature);
+		m_bIsYell = true;
+	}
+	
+
+    void UpdateAI(const uint32 uiDiff)
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+		if (m_uiBummTimmer < uiDiff)
+		{
+			DoCast(m_creature, SPELL_BUMM, true);
+
+			ScriptedInstance* m_pInstance = (ScriptedInstance*)m_creature->GetInstanceData();
+
+			if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_OCULUS_COLLISION)))
+					pGate->SetGoState(GO_STATE_ACTIVE);
+			if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_OCULUS_GATE1)))
+				pGate->SetPhaseMask(128, true); //better than "0"
+
+			m_creature->SummonGameobject (GO_RANCID_MEAT, 1097.295898f, 1112.084839f, 432.515350f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000); 
+			m_creature->ForcedDespawn();
+
+			m_uiBummTimmer = 2000;
+		}
+		else
+			m_uiBummTimmer -= uiDiff;
+
+       DoMeleeAttackIfReady();
+    }
+};
+
+
+
+
+
+
                                                             /* *** ROOM 2 *** */
 
 #define NPC_SNAKE1		29768
@@ -476,6 +557,10 @@ CreatureAI* GetAI_oculus_event_ossirian(Creature* pCreature)
     return new oculus_event_ossirianAI(pCreature);
 }
 
+CreatureAI* GetAI_oculus_event_gate1_cow(Creature* pCreature)
+{
+    return new oculus_event_gate1_cowAI(pCreature);
+}
 
 void AddSC_oculus_event()
 {
@@ -519,5 +604,10 @@ void AddSC_oculus_event()
     newscript = new Script;
     newscript->Name = "oculus_event_ossirian";
     newscript->GetAI = &GetAI_oculus_event_ossirian;
+    newscript->RegisterSelf();
+	
+    newscript = new Script;
+    newscript->Name = "oculus_event_gate1_cow";
+    newscript->GetAI = &GetAI_oculus_event_gate1_cow;
     newscript->RegisterSelf();
 }

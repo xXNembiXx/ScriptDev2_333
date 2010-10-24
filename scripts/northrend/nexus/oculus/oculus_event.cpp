@@ -182,11 +182,15 @@ struct MANGOS_DLL_DECL oculus_event_gate1_cowAI : public ScriptedAI
 		
 	void MoveInLineOfSight(Unit *pWho) 
 	{
-		if(pWho->GetTypeId() != TYPEID_PLAYER)
-		  return;
-		m_creature->MonsterMove (1097.573364f, 1112.313354f, 438.803986f, 2000);
-        DoScriptText(YELL_MAMI, m_creature);
-		m_bIsYell = true;
+		if(!m_bIsYell)
+		{
+			if(pWho->GetTypeId() != TYPEID_PLAYER)
+			  return;
+
+			m_creature->MonsterMove (1097.573364f, 1112.313354f, 438.803986f, 2000);
+			DoScriptText(YELL_MAMI, m_creature);
+			m_bIsYell = true;
+		}
 	}
 	
 

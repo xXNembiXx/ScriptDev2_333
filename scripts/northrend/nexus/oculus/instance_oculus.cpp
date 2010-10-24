@@ -35,6 +35,7 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 	uint64 m_uiOramusGUID;
 	uint64 m_uiEdwinGUID;
 	uint64 m_uiOssirianGUID;
+	uint64 m_uiRagnarosGUID;
 
 	uint64 m_uiCollisionGUID;
 	uint64 m_uiCannonGUID;
@@ -57,6 +58,7 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 
 		m_uiOramusGUID = 0;
 		m_uiEdwinGUID = 0;
+		m_uiRagnarosGUID = 0;
 
 		m_uiCannonGUID = 0;
 		m_uiGate1GUID = 0;
@@ -80,6 +82,7 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 			case NPC_ORAMUS: m_uiOramusGUID = pCreature->GetGUID(); break;
 			case NPC_EDWIN: m_uiEdwinGUID = pCreature->GetGUID(); break;
 			case NPC_OSSIRIAN: m_uiOssirianGUID = pCreature->GetGUID(); break;
+			case NPC_RAGNAROS: m_uiRagnarosGUID = pCreature->GetGUID(); break;
 		}
 	}
 
@@ -194,6 +197,8 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 				return m_uiEdwinGUID;
 			case DATA_OSSIRIAN:
 				return m_uiOssirianGUID;
+			case DATA_RAGNAROS:
+				return m_uiRagnarosGUID;
 			case GO_OCULUS_COLLISION:
 				return m_uiCollisionGUID;
 			case GO_OCULUS_GATE1:

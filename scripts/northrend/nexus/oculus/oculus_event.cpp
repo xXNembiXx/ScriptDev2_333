@@ -22,10 +22,6 @@ SDComment: Inferna Christmas PreEvent == Trial Phase 1
 SDCategory: Oculus
 EndScriptData */
 
-/* ContentData
-oculus_event_edwin			Addtion to Inferna Christmas PreEvent
-EndContentData */
-
 #include "precompiled.h"
 #include "oculus.h"
 
@@ -34,7 +30,39 @@ bool m_bIsStatue1Used;			//Used for Room2
 bool m_bIsStatue2Used;			//Used for Room2
 bool m_bIsStatue3Used;			//Used for Room2
 bool m_bIsStatue4Used;			//Used for Room2
-                                                            /* *** ROOM 1 *** */
+
+struct MANGOS_DLL_DECL oculus_event_kickerAI : public ScriptedAI
+{
+    oculus_event_kickerAI(Creature *pCreature) : ScriptedAI(pCreature)
+    {
+        Reset();
+    }
+
+    void Reset()
+    {
+    }
+
+	void MoveInLineOfSight(Unit *pWho)
+	{
+		if(!pWho)
+			return;
+
+		if(pWho->GetTypeId() == TYPEID_PLAYER)
+		{
+			if(Player* pPlayer = (Player*)m_creature->GetUnit(*m_creature, pWho->GetGUID()))
+			{
+				m_creature->MonsterSay("Die Event Instanz kann nur im heroischem Modus betreten werden!", LANG_UNIVERSAL, pPlayer->GetGUID());
+				if(!pPlayer->isGameMaster())
+					pPlayer->TeleportTo(571, 3878.91f, 6984.5f, 106.321f, 3.15665f);
+			}
+		}
+	}
+};
+
+/* ContentData
+oculus_event_edwin			Addtion to Inferna Christmas PreEvent
+EndContentData */
+													/* *** ROOM 1 *** */
 
 /*######
 ## oculus_event_edwin
@@ -61,15 +89,6 @@ struct MANGOS_DLL_DECL oculus_event_edwinAI : public ScriptedAI
     {
         m_uiSummonTimmer = 15000;
         m_uiTrashTimer = 8000;
-
-		// ????
-		/*
-        m_bIsStatue5Used = false;			//Used for Room2
-        m_bIsStatue4Used = false;			//Used for Room2
-        m_bIsStatue3Used = false;			//Used for Room2
-        m_bIsStatue2Used = false;			//Used for Room2
-        m_bIsStatue1Used = false;			//Used for Room2
-		*/
     }
 
 	void Aggro(Unit* pWho)
@@ -196,8 +215,8 @@ struct MANGOS_DLL_DECL oculus_event_gate1_cowAI : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff)
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
-            return;
+        //if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        //    return;
 
 		if (m_uiBummTimmer < uiDiff)
 		{
@@ -210,10 +229,10 @@ struct MANGOS_DLL_DECL oculus_event_gate1_cowAI : public ScriptedAI
 			if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_OCULUS_GATE1)))
 				pGate->SetPhaseMask(128, true); //better than "0"
 
-			m_creature->SummonGameobject (GO_RANCID_MEAT, 1097.295898f, 1112.084839f, 432.515350f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000); 
-			m_creature->ForcedDespawn();
+			m_creature->SummonGameobject (GO_RANCID_MEAT, 1097.295898f, 1112.084839f, 432.515350f, TEMPSUMMON_MANUAL_DESPAWN, 0); 
+			m_creature->ForcedDespawn(100);
 
-			m_uiBummTimmer = 2000;
+			//m_uiBummTimmer = 2000;
 		}
 		else
 			m_uiBummTimmer -= uiDiff;
@@ -551,6 +570,11 @@ struct MANGOS_DLL_DECL oculus_event_ossirianAI : public Scripted_NoMovementAI
     }
 };
 
+CreatureAI* GetAI_oculus_event_kicker(Creature* pCreature)
+{
+	return new oculus_event_kickerAI(pCreature);
+}
+
 CreatureAI* GetAI_oculus_event_edwin(Creature* pCreature)
 {
     return new oculus_event_edwinAI(pCreature);
@@ -569,6 +593,11 @@ CreatureAI* GetAI_oculus_event_gate1_cow(Creature* pCreature)
 void AddSC_oculus_event()
 {
     Script *newscript;
+
+	newscript = new Script;
+	newscript->Name = "oculus_event_kicker";
+	newscript->GetAI = &GetAI_oculus_event_kicker;
+	newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "oculus_event_edwin";

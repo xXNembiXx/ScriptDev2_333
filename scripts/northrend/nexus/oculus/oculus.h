@@ -7,13 +7,11 @@
 
 enum
 {
-	MAX_ENCOUNTER                   = 4,
+	MAX_ENCOUNTER                   = 3,
 
 	TYPE_ORAMUS						= 1,
 	TYPE_EDWIN						= 2,
 	TYPE_OSSIRIAN					= 3,
-	TYPE_TRIAL						= 4,
-
 
 	DATA_ORAMUS						= 10,
 	DATA_EDWIN						= 11,

@@ -91,6 +91,7 @@ struct MANGOS_DLL_DECL oculus_start_image_oramus1AI : public ScriptedAI
 	{
 		m_creature->AddSplineFlag(SPLINEFLAG_FLYING);
 		m_creature->SetByteFlag(UNIT_FIELD_BYTES_1, 3, 0x02);
+
 	}
 
 	void EnterCombat()

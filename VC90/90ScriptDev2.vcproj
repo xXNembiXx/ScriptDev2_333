@@ -2025,10 +2025,6 @@
 							RelativePath="..\scripts\northrend\nexus\oculus\oculus_start.cpp"
 							>
 						</File>
-						<File
-							RelativePath="..\scripts\northrend\nexus\oculus\oculus_trial.cpp"
-							>
-						</File>
 					</Filter>
 				</Filter>
 				<Filter

@@ -198,6 +198,10 @@ struct MANGOS_DLL_DECL oculus_trial_intro_maleAI : public ScriptedAI
 
 			if(m_creature->IsWithinDistInMap(pWho, 65.0f))
 			{
+				if(Player* pPlayer = (Player*)m_creature->GetUnit(*m_creature, pWho->GetGUID()))
+					if(pPlayer->isGameMaster())
+						return;
+
 				m_pInstance->SetData(TYPE_TRIAL, IN_PROGRESS);
 				m_uiPlayerGUID = pWho->GetGUID();
 			}

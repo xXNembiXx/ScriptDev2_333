@@ -159,6 +159,9 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 			case TYPE_OSSIRIAN:
 				m_auiEncounter[2] = uiData;
 				break;
+			case TYPE_TRIAL:
+				m_auiEncounter[3] = uiData;
+				break;
 		}
 
 		if (uiData == DONE)
@@ -166,7 +169,7 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 			OUT_SAVE_INST_DATA;
 
 			std::ostringstream saveStream;
-			saveStream << m_auiEncounter[0] << " " << m_auiEncounter[1] << " " << m_auiEncounter[2];
+			saveStream << m_auiEncounter[0] << " " << m_auiEncounter[1] << " " << m_auiEncounter[2] << " " << m_auiEncounter[3];
 
 			strInstData = saveStream.str();
 
@@ -186,6 +189,8 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 				return m_auiEncounter[1];
 			case TYPE_OSSIRIAN:
 				return m_auiEncounter[2];
+			case TYPE_TRIAL:
+				return m_auiEncounter[3];
 		}
 		return 0;
 	}
@@ -250,7 +255,7 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 		OUT_LOAD_INST_DATA(in);
 
 		std::istringstream loadStream(in);
-		loadStream >> m_auiEncounter[0] >> m_auiEncounter[1] >> m_auiEncounter[2];
+		loadStream >> m_auiEncounter[0] >> m_auiEncounter[1] >> m_auiEncounter[2] >> m_auiEncounter[3];
 
 		for(uint8 i = 0; i < MAX_ENCOUNTER; ++i)
 			if (m_auiEncounter[i] == IN_PROGRESS)

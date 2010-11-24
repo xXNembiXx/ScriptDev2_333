@@ -243,6 +243,9 @@ scripts/eastern_kingdoms/zulgurub/boss_venoxis.cpp \
 scripts/eastern_kingdoms/zulgurub/boss_wushoolay.cpp \
 scripts/eastern_kingdoms/zulgurub/instance_zulgurub.cpp \
 scripts/eastern_kingdoms/zulgurub/zulgurub.h \
+scripts/eastern_kingdoms/gnomeregan/event_boss_pucky.cpp \
+scripts/eastern_kingdoms/gnomeregan/gnomeregan.h \
+scripts/eastern_kingdoms/gnomeregan/instance_gnomeregan.cpp \
 scripts/examples/example_creature.cpp \
 scripts/examples/example_escort.cpp \
 scripts/examples/example_gossip_codebox.cpp \
@@ -425,6 +428,12 @@ scripts/northrend/nexus/nexus/commander_kolurg.cpp \
 scripts/northrend/nexus/nexus/commander_stoutbeard.cpp \
 scripts/northrend/nexus/nexus/nexus.h \
 scripts/northrend/nexus/nexus/instance_nexus.cpp \
+scripts/northrend/nexus/oculus/oculus_boss.cpp \
+scripts/northrend/nexus/oculus/oculus_event.cpp \
+scripts/northrend/nexus/oculus/oculus_start.cpp \
+scripts/northrend/nexus/oculus/oculus_trial.cpp \
+scripts/northrend/nexus/oculus/instance_oculus.cpp \
+scripts/northrend/nexus/oculus/oculus.h \
 scripts/northrend/obsidian_sanctum/boss_sartharion.cpp \
 scripts/northrend/obsidian_sanctum/instance_obsidian_sanctum.cpp \
 scripts/northrend/obsidian_sanctum/obsidian_sanctum.h \

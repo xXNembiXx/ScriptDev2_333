@@ -18,6 +18,8 @@ enum
 	DATA_EDWIN						= 11,
 	DATA_OSSIRIAN					= 12,
 	DATA_RAGNAROS					= 13,
+
+	DATA_1						= 14,
 	
 	//Room1
 	GO_DATA_COLLISION				= 20,
@@ -40,6 +42,8 @@ enum
 	NPC_EDWIN			= 400054,
 	NPC_OSSIRIAN		= 400058,
 	NPC_RAGNAROS		= 400060,
+
+	NPC_1			= 400069,
 
 	//Room1
 	GO_OCULUS_CANNON	= 400005,

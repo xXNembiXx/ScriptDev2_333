@@ -71,12 +71,18 @@ static Location WayPoints[] =
 	// fight location
 	{1027.426f, 1181.787f, 439.321f}, // 10
 	// oramus fly away
-	{900.000f, 1300.000f, 453.000f} // 11
+	{900.000f, 1300.000f, 453.000f}, // 11
+	// 1
+	{993.750f, 1209.360f, 450.000f}, // 12
+	{1020.13f, 1225.990f, 450.000f}, // 13
+	{1038.76f, 1190.340f, 450.000f}, // 14
+	{1006.35f, 1176.020f, 450.000f}  // 15
 };
 
 enum
 {
-	SPELL_SHADOW_PRISION	= 40647
+	SPELL_SHADOW_PRISION	= 40647,
+	ENTRY_1				= 400068
 };
 
 struct MANGOS_DLL_DECL oculus_trial_intro_femaleAI : public ScriptedAI
@@ -159,9 +165,6 @@ struct MANGOS_DLL_DECL oculus_trial_intro_femaleAI : public ScriptedAI
 		}
 	}
 };
-
-
-
 
 struct MANGOS_DLL_DECL oculus_trial_intro_maleAI : public ScriptedAI
 {
@@ -332,11 +335,14 @@ struct MANGOS_DLL_DECL oculus_trial_intro_oramusAI : public ScriptedAI
 						pMap = m_creature->GetMap();
 						if(pMap && pMap->IsDungeon())
 						{
+							Player *pPlayer = NULL;
 							Map::PlayerList const &lPlayers = pMap->GetPlayers();
 							for(Map::PlayerList::const_iterator iter = lPlayers.begin(); iter != lPlayers.end(); ++iter)
 							{
-								DoScriptText(EVENT11, iter->getSource());
+								pPlayer = iter->getSource();
+								break;
 							}
+							DoScriptText(EVENT11, pPlayer);
 						}
 						m_uiSpeechTimer = 7000;
 						break;
@@ -366,7 +372,8 @@ struct MANGOS_DLL_DECL oculus_trial_intro_oramusAI : public ScriptedAI
 						break;
 					case 9:
 						DoScriptText(EVENT18, m_creature);
-						// TODO: spawn the first bastard
+						if(Creature* p1 = m_creature->SummonCreature(ENTRY_1, 985.545f, 1233.076f, 438.9411f, 5.5194f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 300000))
+							p1->GetMotionMaster()->MovePoint(0, 1017.817f, 1201.022f, 439.321f);
 						m_uiSpeechTimer = 3000;
 						break;
 					case 10:
@@ -387,6 +394,354 @@ struct MANGOS_DLL_DECL oculus_trial_intro_oramusAI : public ScriptedAI
 	}
 };
 
+enum
+{
+	COMBAT_PHASE_GROUND	=	1,
+	COMBAT_PHASE_FLYING =	2,
+	COMBAT_PHASE_FINAL	=	3,
+
+	DISPLAY_IRONBIND_DRAKE	=	28953,
+
+	SPELL_DISENGAGE			=	65869,
+	SPELL_SHOOT				=	65868,
+	SPELL_WYVERN_STING		=	65877,
+	SPELL_STEADY_SHOT		=	65867,
+	SPELL_AIMED_SHOT		=	65883,
+
+	ENTRY_2		=  400069,
+
+	SPELL_BARKSKIN			=	65860,
+	SPELL_REJUVENATION		=	66065,
+	SPELL_THORNS			=	66068,
+	SPELL_NATURES_GRASP		=	66071,
+	SPELL_NOURISH			=	66066,
+	SPELL_RESURRECTION		=	9232,
+
+	SPELL_DEEPSLEEP         =   9256
+};
+
+struct MANGOS_DLL_DECL oculus_trial_boss_1AI : public ScriptedAI
+{
+    oculus_trial_boss_1AI(Creature *pCreature) : ScriptedAI(pCreature)
+    {
+        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+        Reset();
+    }
+
+	ScriptedInstance* m_pInstance;
+
+	uint32 m_uiWaypointId;
+	uint32 m_uiMovementTimer;
+
+	uint64 m_ui2GUID;
+
+	bool m_bHasDied;
+	bool m_bFakeDeath;
+	bool m_bRessurected;
+	bool m_bDoOnce;
+
+	uint32 m_uiDisengage;
+	uint32 m_uiShoot;
+	uint32 m_uiWyvernSting;
+	uint32 m_uiSteadyShot;
+	uint32 m_uiAimedShot;
+
+	uint8 m_uiCombatPhase;
+
+	void Reset()
+	{
+		m_uiWaypointId = 0;
+		m_uiMovementTimer = 0;
+		
+		if(Creature* pTemp = m_creature->GetCreature(*m_creature, m_ui2GUID))
+			pTemp->ForcedDespawn();
+
+		m_ui2GUID = 0;
+
+		m_bHasDied = false;
+		m_bFakeDeath = false;
+		m_bRessurected = false;
+		m_bDoOnce = true;
+
+		m_uiShoot = 5000;
+		m_uiAimedShot = 15000;
+		m_uiSteadyShot = 12000;
+		m_uiWyvernSting = 12000;
+		m_uiDisengage = 8000;
+
+		m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        m_creature->SetStandState(UNIT_STAND_STATE_STAND);
+
+		m_uiCombatPhase = COMBAT_PHASE_GROUND;
+
+		if(m_creature->IsMounted())
+		{
+			m_creature->Unmount();
+			m_creature->RemoveSplineFlag(SPLINEFLAG_FLYING);
+			m_creature->RemoveByteFlag(UNIT_FIELD_BYTES_1, 3, 0x02);
+		}
+	}
+
+	void Aggro(Unit* pWho)
+	{
+		m_creature->SetInCombatWithZone();
+	}
+
+	void DamageTaken(Unit* pDoneBy, uint32 &uiDamage)
+    {
+        if (uiDamage < m_creature->GetHealth() || m_bHasDied)
+            return;
+
+        if (!m_pInstance)
+            return;
+
+        if (Creature* p2 = m_creature->SummonCreature(ENTRY_2, m_creature->GetPositionX()+rand()%5, m_creature->GetPositionY()+rand()%5, m_creature->GetPositionZ()+rand()%5, m_creature->GetOrientation(), TEMPSUMMON_CORPSE_DESPAWN, 300000))
+        {
+			m_ui2GUID = p2->GetGUID();
+            p2->GetMotionMaster()->MovePoint(0, 1017.817f, 1201.022f, 439.321f);
+
+            m_creature->GetMotionMaster()->MovementExpired();
+            m_creature->GetMotionMaster()->MoveIdle();
+
+            m_creature->SetHealth(0);
+
+            if (m_creature->IsNonMeleeSpellCasted(false))
+                m_creature->InterruptNonMeleeSpells(false);
+
+            m_creature->ClearComboPointHolders();
+            m_creature->RemoveAllAuras();
+            m_creature->ClearAllReactives();
+			m_creature->Unmount();
+
+            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            m_creature->SetStandState(UNIT_STAND_STATE_DEAD);
+
+            m_bHasDied = true;
+            m_bFakeDeath = true;
+
+			m_pInstance->SetData(TYPE_TRIAL, SPECIAL);
+
+            uiDamage = 0;
+        }
+    }
+
+	// doesnt' work....
+	void SpellHit(Unit* pWho, const SpellEntry* pSpell)
+    {
+        if (pSpell->Id == SPELL_RESURRECTION)
+        {
+            // TODO? say sth.
+            m_bFakeDeath = false;
+
+            m_creature->SetHealthPercent(100.0f);
+        }
+    }
+
+	void UpdateAI(uint32 const uiDiff)
+	{
+		if (m_bFakeDeath)
+			return;
+
+		if (m_bHasDied && !m_bRessurected && m_pInstance && m_pInstance->GetData(TYPE_TRIAL) == SPECIAL)
+        {
+            m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            m_creature->SetStandState(UNIT_STAND_STATE_STAND);
+
+            if (m_creature->getVictim())
+                m_creature->GetMotionMaster()->MoveChase(m_creature->getVictim());
+
+            m_bRessurected = true;
+
+			m_pInstance->SetData(TYPE_TRIAL, IN_PROGRESS);
+        }
+
+		if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+			return;
+
+		if(m_uiShoot < uiDiff)
+		{
+			DoCast(m_creature->getVictim(), SPELL_SHOOT, true);
+			m_uiShoot = 5000;
+		}
+		else
+			m_uiShoot -= uiDiff;
+
+		switch(m_uiCombatPhase)
+		{
+			case COMBAT_PHASE_GROUND:
+				if(m_creature->GetHealthPercent() <= 60.0f)
+				{
+					m_uiCombatPhase = COMBAT_PHASE_FLYING;
+					m_creature->Mount(DISPLAY_IRONBIND_DRAKE);
+					m_creature->AddSplineFlag(SPLINEFLAG_FLYING);
+					m_creature->SetByteFlag(UNIT_FIELD_BYTES_1, 3, 0x02);
+					m_creature->SetSpeedRate(MOVE_FLIGHT, 3.1f);
+					return;
+				}
+
+				if(m_uiAimedShot < uiDiff)
+				{
+					DoCast(m_creature->getVictim(), SPELL_AIMED_SHOT, true);
+					m_uiAimedShot = 8000;
+				}
+				else
+					m_uiAimedShot -= uiDiff;
+
+				break;
+			case COMBAT_PHASE_FLYING:
+				if(m_creature->GetHealthPercent() <= 20.0f)
+				{
+					if(m_bDoOnce)
+					{
+						m_creature->GetMotionMaster()->MovePoint(0, 1017.817f, 1201.022f, 439.321f);
+						m_bDoOnce = false;
+					}
+
+					if(m_creature->GetPositionZ() < 441.0f)
+					{
+						m_creature->RemoveSplineFlag(SPLINEFLAG_FLYING);
+						m_creature->RemoveByteFlag(UNIT_FIELD_BYTES_1, 3, 0x02);
+						m_uiCombatPhase = COMBAT_PHASE_FINAL;
+						return;
+					}
+					return;
+				}
+
+				if(m_uiSteadyShot < uiDiff)
+				{
+					if(Unit *pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
+						DoCast(pTarget, SPELL_STEADY_SHOT, true);
+					m_uiSteadyShot = 12000;
+				}
+				else
+					m_uiSteadyShot -= uiDiff;
+
+				if(m_uiMovementTimer <= uiDiff)
+				{
+					switch(m_uiWaypointId)
+					{
+						case 0:
+							m_creature->GetMotionMaster()->MovePoint(0, WayPoints[12].x, WayPoints[12].y, WayPoints[12].z);
+							m_uiWaypointId++;
+							m_uiMovementTimer = 20000;
+							break;
+						case 1:
+							m_creature->GetMotionMaster()->MovePoint(0, WayPoints[13].x, WayPoints[13].y, WayPoints[13].z);
+							m_uiWaypointId++;
+							m_uiMovementTimer = 20000;
+							break;
+						case 2:
+							m_creature->GetMotionMaster()->MovePoint(0, WayPoints[14].x, WayPoints[14].y, WayPoints[14].z);
+							m_uiWaypointId++;
+							m_uiMovementTimer = 20000;
+							break;
+						case 3:
+							m_creature->GetMotionMaster()->MovePoint(0, WayPoints[15].x, WayPoints[15].y, WayPoints[15].z);
+							m_uiWaypointId = 0;
+							m_uiMovementTimer = 20000;
+							break;
+					}
+				}
+				else
+					m_uiMovementTimer -= uiDiff;
+				break;
+			case COMBAT_PHASE_FINAL:
+				if(m_uiWyvernSting < uiDiff)
+				{
+					if(Unit *pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
+						DoCast(pTarget, SPELL_WYVERN_STING, true);
+					m_uiWyvernSting = 12000;
+				}
+				else
+					m_uiWyvernSting -= uiDiff;
+
+				if(m_uiDisengage < uiDiff)
+				{
+					DoCast(m_creature->getVictim(), SPELL_DISENGAGE, true);
+					m_uiDisengage = 8000;
+				}
+				else
+					m_uiDisengage -= uiDiff;
+				
+				break;
+		}
+	}
+};
+
+struct MANGOS_DLL_DECL oculus_trial_boss_2AI : public ScriptedAI
+{
+	oculus_trial_boss_2AI(Creature* pCreature) : ScriptedAI(pCreature)
+	{
+		m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+		Reset();
+	}
+
+	ScriptedInstance* m_pInstance;
+
+	bool m_bCanResurrectCheck;
+    bool m_bCanResurrect;
+
+	uint32 m_uiWaitTimer;
+
+	void Reset()
+	{
+		m_bCanResurrectCheck = false;
+        m_bCanResurrect = false;
+
+		m_uiWaitTimer = 7000;
+	}
+
+	void MoveInLineOfSight()
+    {
+    }
+
+	void DamageTaken(Unit* pDoneBy, uint32 &uiDamage)
+    {
+        if (uiDamage < m_creature->GetHealth())
+            return;
+
+        if (!m_bCanResurrectCheck || m_bCanResurrect)
+        {
+            m_creature->SetHealth(uiDamage+1);
+        }
+    }
+
+	void UpdateAI(uint32 const uiDiff)
+	{
+		if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+			return;
+
+		if (m_bCanResurrect)
+		{
+			if (m_pInstance && m_uiWaitTimer < uiDiff)
+			{
+				if (Creature* p1 = m_pInstance->instance->GetCreature(m_pInstance->GetData64(DATA_1)))
+				{
+					DoCast(p1, SPELL_RESURRECTION, true);
+					m_bCanResurrect = false;
+				}
+			}
+			else
+				m_uiWaitTimer -= uiDiff;
+		}
+
+		if (!m_bCanResurrectCheck && m_creature->GetHealthPercent() <= 50.0f)
+		{
+			if (m_creature->IsNonMeleeSpellCasted(false))
+				m_creature->InterruptNonMeleeSpells(false);
+
+			DoCastSpellIfCan(m_creature->getVictim(), SPELL_DEEPSLEEP);
+			m_bCanResurrectCheck = true;
+			m_bCanResurrect = true;
+			return;
+		}
+
+		if (m_bCanResurrect)
+			return;
+	}
+};
+
 CreatureAI* GetAI_oculus_trial_intro_female(Creature* pCreature)
 {
     return new oculus_trial_intro_femaleAI(pCreature);
@@ -400,6 +755,16 @@ CreatureAI* GetAI_oculus_trial_intro_male(Creature* pCreature)
 CreatureAI* GetAI_oculus_trial_intro_oramus(Creature* pCreature)
 {
 	return new oculus_trial_intro_oramusAI(pCreature);
+}
+
+CreatureAI* GetAI_oculus_trial_boss_1(Creature* pCreature)
+{
+	return new oculus_trial_boss_1AI(pCreature);
+}
+
+CreatureAI* GetAI_oculus_trial_boss_2(Creature* pCreature)
+{
+	return new oculus_trial_boss_2AI(pCreature);
 }
 
 void AddSC_oculus_trial()
@@ -419,5 +784,15 @@ void AddSC_oculus_trial()
 	newscript = new Script;
 	newscript->Name = "oculus_trial_intro_oramus";
 	newscript->GetAI = &GetAI_oculus_trial_intro_oramus;
+	newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name = "oculus_trial_boss_1";
+	newscript->GetAI = &GetAI_oculus_trial_boss_1;
+	newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name = "oculus_trial_boss_2";
+	newscript->GetAI = &GetAI_oculus_trial_boss_2;
 	newscript->RegisterSelf();
 }

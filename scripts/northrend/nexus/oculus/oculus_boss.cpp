@@ -38,7 +38,7 @@ EndContentData */
 ######*/
 
 #define THE_OCULUS				578
-#define SPELL_FLAME_BREATH		18435
+#define SPELL_FLAME_BREATH		57570
 
 #define START1					-2500130
 #define START2					-2500131
@@ -47,7 +47,14 @@ EndContentData */
 #define START5					-2500134
 #define SECOND					-2500135
 #define THIRD					-2500136
-#define FOURTH					-2500137					
+#define FOURTH					-2500137
+
+#define SPELL_ARKAN				58455
+
+#define SPELL_ARMY				67761
+#define SPELL_SHADOW_PAIN		59864
+#define SPELL_CURSE				69404
+#define SPELL_SHADOW_BOLT		36972
 
 
 
@@ -65,15 +72,17 @@ static Location WayPoints[] =
 	{1088.114380f, 989.888245f, 441.605164f},  // 0 to the Players
 	{1040.636597f, 937.819885f, 470.055634f},  // 1 to Ragnaros
 	{999.482605f, 1047.853516f, 543.647217f},  // 2 to Princess
-	{1152.091187f, 1147.081421f, 545.351807f}, // 3 to Hakkar
+	{1082.609253f, 1016.369934f, 601.843323f}, // 3 to the Top Plattform
 	{1105.163574f, 1059.876343f, 510.849365f}, // 4 to the Middle
-	{1108.812012f, 1040.247070f, 607.637421f}, // 5 to the Top
+	{1108.812012f, 1040.247070f, 607.637451f}, // 5 to the Top
 	//Player Teleports
 	{1048.228760f, 925.094055f, 438.941345f},  // 6
 	{986.237976f, 997.005432f, 526.810974f},   // 7
 	{1126.063843f, 1178.769653f, 526.811707f}, // 8
 	{1065.169922f, 1046.453613f, 602.709045f}, // 9
-	{1110.735962f, 1087.392578f, 508.361786f}  // 10
+	{1058.607056f, 1048.523193f, 508.360901f}, // 10
+	//Endfight
+	{1105.947998f, 1016.980225f, 602.266113f}  // 11
 };
 
 
@@ -95,38 +104,47 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
 	uint32 m_uiSay2Point;
 	uint32 m_uiSay3Timer;
 	uint32 m_uiSay3Point;
-	uint32 m_uiSay4Timer;
-	uint32 m_uiSay4Point;
 	uint32 m_uiSay5Timer;
 	uint32 m_uiSay5Point;
+	uint32 m_uiSay6Timer;
+	uint32 m_uiSay6Point;
+
+	uint32 m_uiArmyTimer;
+	uint32 m_uiShadowPainAndCurseTimer;
+	uint32 m_uiShadowBoltTimer;
 
 
     void Reset()
     {
-       m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-       m_creature->SetStandState(UNIT_STAND_STATE_SLEEP);
+		m_uiArmyTimer = 0;
+		m_uiShadowPainAndCurseTimer = 0;
+		m_uiShadowBoltTimer = 0;
 
-	   m_uiPhase = 1;
-	   m_uiSayTimer = 1000;
-	   m_uiSayPoint = 0;
-	   m_uiSay2Timer = 3000;
-	   m_uiSay2Point = 0;
-	   m_uiSay3Timer = 3000;
-	   m_uiSay3Point = 0;
-	   m_uiSay4Timer = 3000;
-	   m_uiSay4Point = 0;
-	   m_uiSay5Timer = 1000;
-	   m_uiSay5Point = 0;
+		m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+		m_creature->SetStandState(UNIT_STAND_STATE_SLEEP);
 
+		m_uiPhase = 1;
+		m_uiSayTimer = 1000;
+		m_uiSayPoint = 0;
+		m_uiSay2Timer = 3000;
+		m_uiSay2Point = 0;
+		m_uiSay3Timer = 3000;
+		m_uiSay3Point = 0;
+		m_uiSay5Timer = 1000;
+		m_uiSay5Point = 0;
+   		m_uiSay6Timer = 2000;
+		m_uiSay6Point = 0;
 
-	   m_creature->SetFloatValue(OBJECT_FIELD_SCALE_X, 0.5);
-
-	   m_creature->GetMotionMaster()->MoveTargetedHome();
+		m_creature->SetDisplayId(26752);
+		m_creature->SetFloatValue(OBJECT_FIELD_SCALE_X, 0.5);
+		m_creature->GetMotionMaster()->MoveTargetedHome();
 
     }
 
     void JustDied(Unit* pKiller)
     {
+		if (m_pInstance)
+            m_pInstance->SetData(TYPE_ORAMUS, DONE);
     }
 
     void EnterCombat(Unit* pWho)
@@ -135,15 +153,17 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
 			pRagnaros->Respawn();
 	   if(Creature* pTheradras = m_creature->GetCreature(*pWho, m_pInstance->GetData64(DATA_THERADRAS)))
 			pTheradras->Respawn();
-	   if(Creature* pHakkar = m_creature->GetCreature(*pWho, m_pInstance->GetData64(DATA_HAKKAR)))
-			pHakkar->Respawn();
+	   if(Creature* pTrigger = m_creature->GetCreature(*pWho, m_pInstance->GetData64(DATA_TRIGGER2)))
+			pTrigger->Respawn();
+	   if(Creature* pSanta = m_creature->GetCreature(*pWho, m_pInstance->GetData64(DATA_SANTA)))
+			pSanta->Respawn();
 
 	   if(Creature* pRagnaros = m_creature->GetCreature(*pWho, m_pInstance->GetData64(DATA_RAGNAROS)))
 			pRagnaros->SetPhaseMask(1, true);
 	   if(Creature* pTheradras = m_creature->GetCreature(*pWho, m_pInstance->GetData64(DATA_THERADRAS)))
 			pTheradras->SetPhaseMask(1, true);
-	   if(Creature* pHakkar = m_creature->GetCreature(*pWho, m_pInstance->GetData64(DATA_HAKKAR)))
-			pHakkar->SetPhaseMask(1, true);
+	   if(Creature* pSanta = m_creature->GetCreature(*pWho, m_pInstance->GetData64(DATA_SANTA)))
+			pSanta->SetPhaseMask(128, true);
 
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
 		m_creature->AddSplineFlag(SPLINEFLAG_FLYING);
@@ -210,6 +230,7 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
 			}else m_uiSayTimer -= uiDiff;
 		}
 
+		//Ragnaros down
 		if (m_uiPhase == 2)
 		{
 			if(m_uiSay2Timer <= uiDiff)
@@ -220,7 +241,7 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
 				{
 					case 0:
 						DoScriptText(SECOND, m_creature);
-						m_uiSay2Timer = 5000;
+						m_uiSay2Timer = 3000;
 						break;
 					case 1:
 						m_creature->MonsterMove(WayPoints[2].x, WayPoints[2].y, WayPoints[2].z, 2000);
@@ -236,7 +257,8 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
 				}m_uiSay2Point++;
 			}else m_uiSay2Timer -= uiDiff;
 		}
-
+		
+		//Princess down
 		if (m_uiPhase == 3)
 		{
 			if(m_uiSay3Timer <= uiDiff)
@@ -246,54 +268,29 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
 				switch(m_uiSay3Point)
 				{
 					case 0:
-						DoScriptText(THIRD, m_creature);
+						DoScriptText(FOURTH, m_creature);
 						m_uiSay3Timer = 5000;
 						break;
 					case 1:
-						m_creature->MonsterMove(WayPoints[3].x, WayPoints[3].y, WayPoints[3].z, 2000);
+						m_creature->SetFloatValue(OBJECT_FIELD_SCALE_X, 0.5);
+						m_uiPhase = 4;
+						m_creature->MonsterMove(WayPoints[4].x, WayPoints[4].y, WayPoints[4].z, 800);
 						Map* pMap3 = m_creature->GetMap();
 						if (pMap3 && pMap3->IsDungeon())
 						{
 							Map::PlayerList const &players3 = pMap3->GetPlayers();
 							for (Map::PlayerList::const_iterator itr = players3.begin(); itr != players3.end(); ++itr)
-								itr->getSource()->TeleportTo (THE_OCULUS, WayPoints[8].x, WayPoints[8].y, WayPoints[8].z, 0.058313f);
+								itr->getSource()->TeleportTo (THE_OCULUS, WayPoints[10].x, WayPoints[10].y, WayPoints[10].z, 4.274161f);
 						}
-						m_uiSay3Timer = 3000;
+						m_uiSay3Timer = 1000;
+						break;
 						break;
 				}m_uiSay3Point++;
 			}else m_uiSay3Timer -= uiDiff;
 		}
 
-		if (m_uiPhase == 4)
-		{
-			if(m_uiSay4Timer <= uiDiff)
-			{
-				// must be initialized here... 
-				Map* pMap4 = NULL;
-				switch(m_uiSay4Point)
-				{
-					case 0:
-						DoScriptText(FOURTH, m_creature);
-						m_uiSay4Timer = 5000;
-						break;
-					case 1:
-						m_uiPhase = 5;
-						m_creature->MonsterMove(WayPoints[4].x, WayPoints[4].y, WayPoints[4].z, 1000);
-						m_creature->SetFloatValue(OBJECT_FIELD_SCALE_X, 0.5);
-						Map* pMap4 = m_creature->GetMap();
-						if (pMap4 && pMap4->IsDungeon())
-						{
-							Map::PlayerList const &players4 = pMap4->GetPlayers();
-							for (Map::PlayerList::const_iterator itr = players4.begin(); itr != players4.end(); ++itr)
-								itr->getSource()->TeleportTo (THE_OCULUS, WayPoints[10].x, WayPoints[10].y, WayPoints[10].z, 4.274161f);
-						}
-						m_uiSay4Timer = 1000;
-						break;
-				}m_uiSay4Point++;
-			}else m_uiSay4Timer -= uiDiff;
-		}
 
-		if (m_uiPhase == 5)
+		if (m_uiPhase == 4)
 		{
 			if(m_uiSay5Timer <= uiDiff)
 			{
@@ -302,8 +299,8 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
 				switch(m_uiSay5Point)
 				{
 				case 0:
-					m_creature->MonsterMove(WayPoints[5].x, WayPoints[5].y, WayPoints[5].z, 2000);
-					m_uiSay5Timer = 1000;
+					m_creature->MonsterMove(WayPoints[5].x, WayPoints[5].y, WayPoints[5].z, 1000);
+					m_uiSay5Timer = 500;
 					break;
 				case 1:
 						Map* pMap5 = m_creature->GetMap();
@@ -317,6 +314,133 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
 				}m_uiSay5Point++;
 			}else m_uiSay5Timer -= uiDiff;
 		}
+
+		if (m_uiPhase == 5)
+		{
+			m_creature->SetFloatValue(OBJECT_FIELD_SCALE_X, 1);
+
+			m_uiPhase = 6;
+		}
+
+		if (m_uiPhase == 6)
+		{
+			if(m_uiSay6Timer <= uiDiff)
+			{
+				switch(m_uiSay6Point)
+				{
+				case 0:
+					m_creature->MonsterMove(WayPoints[3].x, WayPoints[3].y, WayPoints[3].z, 100);
+					m_creature->RemoveSplineFlag(SPLINEFLAG_FLYING);
+					DoCast(m_creature->getVictim(), SPELL_ARKAN, true);
+					m_uiSay6Timer = 1000;
+					break;
+				case 1:
+					m_creature->SetFloatValue(OBJECT_FIELD_SCALE_X, 1);
+					m_creature->SetDisplayId(22460);
+					m_uiSay6Timer = 1000;
+					break;
+				case 2:
+					m_creature->SetFloatValue(OBJECT_FIELD_SCALE_X, 0.3f);
+					m_uiSay6Timer = 1000;
+					break;
+				case 3:
+					m_creature->SetFloatValue(OBJECT_FIELD_SCALE_X, 0.8f);
+					m_uiSay6Timer = 1000;
+					break;
+				case 4:
+					DoScriptText(THIRD, m_creature);
+					m_creature->SetFloatValue(OBJECT_FIELD_SCALE_X, 0.4f);
+					m_uiSay6Timer = 1000;
+					break;
+				case 5:
+					m_creature->SetFloatValue(OBJECT_FIELD_SCALE_X, 0.6f);
+					m_uiSay6Timer = 1000;
+					break;
+				case 6:
+					m_creature->SetDisplayId(8752);
+					m_creature->SetFloatValue(OBJECT_FIELD_SCALE_X, 3);
+					m_uiSay6Timer = 500;
+					break;
+				case 7:
+					DoCast(m_creature->getVictim(), SPELL_ARKAN, true);
+					m_uiSay6Timer = 1000;
+					break;
+				case 8:
+					m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+					SetCombatMovement(true);
+					if (m_creature->getVictim())
+						m_creature->GetMotionMaster()->MoveChase(m_creature->getVictim());
+					m_uiSay6Timer = 1000;
+					break;
+				case 9:
+					m_uiArmyTimer = 60000;
+					m_uiShadowPainAndCurseTimer = 19000;
+					m_uiShadowBoltTimer = 8000;
+					m_uiPhase = 7;
+					m_uiSay6Timer = 500;
+					break;
+				}m_uiSay6Point++;
+			}else m_uiSay6Timer -= uiDiff;
+		}
+
+		if (m_uiPhase == 7)
+		{
+
+			if (m_uiArmyTimer < uiDiff)
+			{
+				DoCastSpellIfCan(m_creature->getVictim(), SPELL_ARMY, true);
+
+				m_uiArmyTimer = 60000;
+			}else m_uiArmyTimer -= uiDiff;
+
+			if (m_uiShadowPainAndCurseTimer < uiDiff)
+			{
+				if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+					DoCastSpellIfCan(pTarget,SPELL_SHADOW_PAIN, true);
+				if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+					DoCastSpellIfCan(pTarget,SPELL_CURSE, true);
+
+				m_uiShadowPainAndCurseTimer = 19000;
+			}else m_uiShadowPainAndCurseTimer -= uiDiff;
+
+			if (m_uiShadowBoltTimer < uiDiff)
+			{
+				if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+					DoCastSpellIfCan(pTarget,SPELL_SHADOW_BOLT, true);
+
+				m_uiShadowBoltTimer = 8000;
+			}else m_uiShadowBoltTimer -= uiDiff;
+			
+			if (m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 10)
+			{
+				m_uiPhase = 8;
+				m_uiArmyTimer = 0;
+				m_uiShadowPainAndCurseTimer = 0;
+				m_uiShadowBoltTimer = 0;
+			}
+		}
+
+		if (m_uiPhase == 8)
+		{
+			m_creature->MonsterMove(WayPoints[11].x, WayPoints[11].y, WayPoints[11].z, 1000);
+            m_creature->RemoveAllAuras();
+			m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+			m_uiPhase = 9;
+		}
+
+		if (m_uiPhase == 9)
+		{
+
+			SetCombatMovement(false);
+			m_creature->GetMotionMaster()->MoveIdle();
+			m_creature->SetStandState(UNIT_STAND_STATE_KNEEL);
+
+		    if(Creature* pSanta = m_creature->GetCreature(*m_creature, m_pInstance->GetData64(DATA_SANTA)))
+				pSanta->SetPhaseMask(1, true);
+		}
+
+			
+
         DoMeleeAttackIfReady();
     }
 };
@@ -351,7 +475,6 @@ struct MANGOS_DLL_DECL oculus_boss_hakkarAI : public ScriptedAI
 
     void JustDied(Unit* pKiller)
     {
-		m_uiPhase = 4;
     }
 
 	void UpdateAI(const uint32 uiDiff)
@@ -542,6 +665,50 @@ struct MANGOS_DLL_DECL oculus_boss_ragnarosAI : public ScriptedAI
 };
 
 
+/*######
+## Oramus PHASE 5 TRIGGER
+######*/
+
+
+struct MANGOS_DLL_DECL oculus_boss_phase5_triggerAI : public ScriptedAI
+{
+    oculus_boss_phase5_triggerAI(Creature *pCreature) : ScriptedAI(pCreature)
+    {
+        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+        Reset();
+    }
+
+	ScriptedInstance* m_pInstance;
+
+	void Reset()
+	{
+	}
+
+	void MoveInLineOfSight(Unit* pWho)
+	{
+		if(!pWho)
+			return;
+
+		if(pWho->GetTypeId() != TYPEID_PLAYER)
+			return;
+
+		if(m_creature->IsWithinDistInMap(pWho, 2))
+		{
+			m_uiPhase = 5;
+			m_creature->ForcedDespawn();
+		}
+	}
+
+	void UpdateAI(const uint32 diff)
+	{
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+		DoMeleeAttackIfReady();
+	}
+};
+
+
 CreatureAI* GetAI_oculus_boss_oramus(Creature* pCreature)
 {
     return new oculus_boss_oramusAI(pCreature);
@@ -561,6 +728,11 @@ CreatureAI* GetAI_oculus_boss_theradras(Creature* pCreature)
 CreatureAI* GetAI_oculus_boss_hakkar(Creature* pCreature)
 {
     return new oculus_boss_hakkarAI(pCreature);
+}
+
+CreatureAI* GetAI_oculus_boss_phase5_trigger(Creature* pCreature)
+{
+    return new oculus_boss_phase5_triggerAI(pCreature);
 }
 
 void AddSC_oculus_boss()
@@ -585,5 +757,10 @@ void AddSC_oculus_boss()
     newscript = new Script;
     newscript->Name = "oculus_boss_hakkar";
     newscript->GetAI = &GetAI_oculus_boss_hakkar;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "oculus_boss_phase5_trigger";
+    newscript->GetAI = &GetAI_oculus_boss_phase5_trigger;
     newscript->RegisterSelf();
 }

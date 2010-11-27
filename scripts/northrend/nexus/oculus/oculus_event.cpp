@@ -389,6 +389,353 @@ bool GOHello_go_oculus_event_statue5(Player* pPlayer, GameObject* pGo)
     return true;
 }
 
+//============================================= ROOM 4 ==============================================//
+//need: mangos.npc_text 2x ID
+
+/*
+Event : 1067
+
+- SD2 cusotm text IDs: -2500140 bis -2500170 (6 Abbild von Altvater Winter - 13 Verderbter Schneemann)
+- Gob Entry Door : 400015
+- GOB GUID: 2012701 RESERVED for CJ Room 
+- NPCs: 400072 - 400078 reserved CJ Room
+- NPC GUID: 2000603
+
+
+GOB Tür HDS: 191459
+Geisteraussehen: http://www.mobmap.de/spell?id=9036
+
+
+
+<13:46:07> "l| Dev |l Nembi": NPC 13636: seltsamer schneemann
+<13:47:00> "l| Dev |l Nembi": strange snowman modelid: 13730
+
+*/
+/*######
+## Geist der zukümftigem Weinacht
+######*/
+
+//Globale Variable zur bestimmt des levels (für speak,spell,cd)
+uint32 mob_level = 0;
+bool b_schneeman = false;
+
+enum
+{
+	SCHNEEMAN_ENTRY_1		=	400073,
+	SCHNEEMAN_ENTRY_5		=	400074,
+	SCHNEEMAN_ENTRY_10		=	400075,
+	SCHNEEMAN_ENTRY_25		=	400076,
+	SCHNEEMAN_ENTRY_40		=	400077,
+};
+
+enum
+{
+    SAY_HP      = -2500140,
+	SPELL_HP    =    67973,
+    SAY_MP      = -2500141,
+	SPELL_MP    =    29166,
+    SAY_SLEEP   = -2500142,
+	SPELL_SLEEP =    28504,
+	SAY_MONY    = -2500143,
+	SAY_GIFT    = -2500144,
+	SAY_BUFF    = -2500145
+};
+
+bool GossipHello_inferna(Player* pPlayer, Creature* pCreature)
+{
+	if(b_schneeman)
+	{
+		//pPlayer->SEND_GOSSIP_MENU(100, pCreature->GetGUID());
+		pCreature->MonsterSay("AHHHHHHH, verteidigt euch $N !", LANG_UNIVERSAL, pPlayer->GetGUID());
+	}
+	else
+	{
+		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich brauche Leben.", 1, GOSSIP_ACTION_INFO_DEF+1);
+		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich brauche Mana.", 1, GOSSIP_ACTION_INFO_DEF+2);
+		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich brauche Schlaf.", 1, GOSSIP_ACTION_INFO_DEF+3);
+		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich brauche Geld.", 1, GOSSIP_ACTION_INFO_DEF+4);
+		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich will mein Geschenke!", 1, GOSSIP_ACTION_INFO_DEF+5);
+		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich brauche Buffs.", 1, GOSSIP_ACTION_INFO_DEF+6);
+		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Lass uns mal was verruecktes machen, komm wir bauen einen Schneemann.", 1, GOSSIP_ACTION_INFO_DEF+7);
+	    pPlayer->SEND_GOSSIP_MENU(724100, pCreature->GetGUID());
+	}
+    return true;
+}
+
+void summon_schneeman(int level,Player* spieler)
+{
+	mob_level = level;
+	switch(level)
+	{
+		case 0: spieler->SummonCreature(SCHNEEMAN_ENTRY_1, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000); break;
+		case 1: spieler->SummonCreature(SCHNEEMAN_ENTRY_5, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000); break;
+		case 2: spieler->SummonCreature(SCHNEEMAN_ENTRY_10, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000); break;
+		case 3: spieler->SummonCreature(SCHNEEMAN_ENTRY_25, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000); break;
+		case 4: spieler->SummonCreature(SCHNEEMAN_ENTRY_40, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000); break;
+	}
+	//spieler_guid_aktiviert = spieler->GetGUID();
+	b_schneeman = true;
+	spieler->CLOSE_GOSSIP_MENU();
+}
+bool GossipSelect_inferna(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+	switch(uiAction)
+	{
+		case GOSSIP_ACTION_INFO_DEF+1:
+			//debug_log("Ich brauche Leben.");
+			DoScriptText(SAY_HP, pCreature, pPlayer);
+			pCreature->CastSpell(pPlayer, SPELL_HP, true);
+			pPlayer->CLOSE_GOSSIP_MENU();
+		break;
+
+		case GOSSIP_ACTION_INFO_DEF+2:
+			//debug_log("Ich brauche Mana.");
+			DoScriptText(SAY_MP, pCreature, pPlayer);
+			pCreature->CastSpell(pPlayer, SPELL_MP, true);
+			pPlayer->ModifyPower(pPlayer->getPowerType(), 35000);
+			pPlayer->CLOSE_GOSSIP_MENU();
+		break;
+
+		case GOSSIP_ACTION_INFO_DEF+3:
+			//debug_log("Ich brauche Schlaf.");
+			DoScriptText(SAY_SLEEP, pCreature, pPlayer);
+			pPlayer->CastSpell(pPlayer, SPELL_SLEEP, true);
+			pPlayer->CLOSE_GOSSIP_MENU();
+		break;
+
+		case GOSSIP_ACTION_INFO_DEF+4:
+			//debug_log("Ich brauche Geld.");
+			DoScriptText(SAY_MONY, pCreature, pPlayer);
+			pPlayer->CLOSE_GOSSIP_MENU();
+		break;
+
+		case GOSSIP_ACTION_INFO_DEF+5:
+			//debug_log("Ich will mein Geschenke!");
+			DoScriptText(SAY_GIFT, pCreature, pPlayer);
+			pPlayer->CLOSE_GOSSIP_MENU();
+		break;
+
+		case GOSSIP_ACTION_INFO_DEF+6:
+			//debug_log("Ich brauche Buffs.");
+			DoScriptText(SAY_BUFF, pCreature, pPlayer);
+			pCreature->CastSpell(pPlayer, 58451, true); //+30 Bew
+			pCreature->CastSpell(pPlayer, 58449, true); //+30 Str
+			pCreature->CastSpell(pPlayer, 48100, true); //+30 Int
+			pCreature->CastSpell(pPlayer, 48104, true); //+30 Wil
+			pCreature->CastSpell(pPlayer, 48102, true); //+30 Aus
+			pCreature->CastSpell(pPlayer, 58453, true); //+750 armor
+			pPlayer->CLOSE_GOSSIP_MENU();
+		break;
+
+		case GOSSIP_ACTION_INFO_DEF+7:
+			pPlayer->PlayerTalkClass->ClearMenus();
+			//ohne diese Funktion werden die nächsten Einträge mit angehangen
+			//debug_log("Lass uns mal was verruecktes machen, komm wir bauen einen Schneemann.");
+			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT,  "1", 2, GOSSIP_ACTION_INFO_DEF+8);
+			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT,  "5", 2, GOSSIP_ACTION_INFO_DEF+9);
+			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "10", 2, GOSSIP_ACTION_INFO_DEF+10);
+			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "25", 2, GOSSIP_ACTION_INFO_DEF+11);
+			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "40", 2, GOSSIP_ACTION_INFO_DEF+12);
+			pPlayer->SEND_GOSSIP_MENU(724101, pCreature->GetGUID());
+		break;
+
+		case GOSSIP_ACTION_INFO_DEF+8:
+			//debug_log("1er");
+			summon_schneeman(0,pPlayer);
+		break;
+
+		case GOSSIP_ACTION_INFO_DEF+9:
+			//debug_log("5er");
+			summon_schneeman(1,pPlayer);
+		break;
+
+		case GOSSIP_ACTION_INFO_DEF+10:
+			//debug_log("10er");
+			summon_schneeman(2,pPlayer);
+		break;
+
+		case GOSSIP_ACTION_INFO_DEF+11:
+			//debug_log("25er");
+			summon_schneeman(3,pPlayer);
+		break;
+
+		case GOSSIP_ACTION_INFO_DEF+12:
+			//debug_log("40er");
+			summon_schneeman(4,pPlayer);
+		break;
+	}
+    return true;
+}
+
+/*######
+## Verderbter Schneemann
+######*/
+
+
+/*
+HEAL:
+28306		Große Heilung		2 s			19-21%
+54337		Große Heilung		2 s			33-37%
+
+67969: Heilt ein befreundetes Ziel um 28350 to 31650 und über 21 Sek. um weitere 45325 to 52675.
+67968: Heilt ein befreundetes Ziel um 56700 to 63300 und über 21 Sek. um weitere 129500 to 150500.
+67970: Heilt ein befreundetes Ziel um 85050 to 94950 und über 21 Sek. um weitere 194250 to 225750.
+
+//	Verjüngung:																
+//	66065: Heilt das Ziel im Verlauf von 15 Sek. um 92500 to 107500.		
+//	67972: Heilt das Ziel im Verlauf von 15 Sek. um 138750 to 161250.		
+//	67971: Heilt das Ziel im Verlauf von 15 Sek. um 277500 to 322500.		
+
+DAMAGE:
+31249		Eisblitz			inst		5000 4sek 10000
+71331		Eisgrab				1,5 s		2600/2sek + stun
+72268		Eisschuss			inst		4500 + 2sek stun
+65807: Schleudert einen Frostblitz auf den Feind, der 7863 to 9137 Frostschaden verursacht und 9 Sek. lang das Bewegungstempo um 40% reduziert.
+68003: Schleudert einen Frostblitz auf den Feind, der 8788 to 10212 Frostschaden verursacht und 9 Sek. lang das Bewegungstempo um 40% reduziert.
+68005: Schleudert einen Frostblitz auf den Feind, der 11563 to 13437 Frostschaden verursacht und 9 Sek. lang das Bewegungstempo um 40% reduziert.
+	
+Schneeball:
+65516		KnockBack 50		inst
+25995		KnockBack 200		inst
+*/
+
+#define SAY_KILLED_PLAYER	-2500159
+#define SAY_DIED			-2500160
+
+uint32 SKILL[5][3] =
+{
+//	{ SPELL_HEAL, SPELL_DAMAGE_ONE, SPELL_DAMAGE_TWO  }, //level
+    { 28306,  65516,  71331}, //1er
+    { 54337,  25995,  72268}, //5er
+    { 67969,  31249,  65807}, //10er
+    { 67968,  31249,  68003}, //25er
+    { 67970,  31249,  68005}  //40er
+};
+
+uint32 COOLDOWN[5][3] =
+{
+//	{ CD_HEAL, CD_DAMAGE_ONE, CD_DAMAGE_TWO  }, //level
+    { 60000,  10000,  20000}, //1er
+    { 60000,  10000,  25000}, //5er
+    { 60000,  20000,  30000}, //10er
+    { 60000,  20000,  30000}, //25er
+    { 60000,  20000,  30000}  //40er
+};
+
+int32 SAY[5][3] =
+{
+//	{ ID_HEAL, ID_DAMAGE_ONE, ID_DAMAGE_TWO  }, //level
+    { -2500146,  -2500147,  -2500148}, //1er
+    { -2500149,  -2500150,  -2500151}, //5er
+    { -2500152,  -2500153,  -2500154}, //10er
+    { -2500155,  -2500153,  -2500156}, //25er
+    { -2500157,  -2500153,  -2500158}  //40er
+};
+
+struct MANGOS_DLL_DECL inferna_schneemannAI : public ScriptedAI
+{
+	Unit* pTarget;
+	uint32 TIMER_HEAL, TIMER_DAMAGE_ONE, TIMER_DAMAGE_TWO;
+	//uint32 mob_level;
+	uint32 i_globalCD;
+	bool b_healing;
+
+	inferna_schneemannAI(Creature* pCreature) : ScriptedAI(pCreature)
+	{
+		m_creature->MonsterYell("Ihr werdet nie wieder Weihnachten feiern !", LANG_UNIVERSAL, pCreature->GetGUID());
+		//mob_level = 1; // 0 - 4 (+1)
+		Reset();
+	}
+	~inferna_schneemannAI()
+	{
+		b_schneeman = false;
+	}
+    void Reset()
+    {
+		TIMER_HEAL = COOLDOWN[mob_level][0];
+		TIMER_DAMAGE_ONE = COOLDOWN[mob_level][1];
+		TIMER_DAMAGE_TWO = COOLDOWN[mob_level][2];
+		i_globalCD = 4000;
+		b_healing = false;
+	}
+	void JustDied(Unit * pkiller)
+	{
+		DoScriptText(SAY_DIED, m_creature, pkiller);
+	}
+
+	void KilledUnit(Unit * pvictim)
+	{
+		DoScriptText(SAY_KILLED_PLAYER, m_creature, pvictim);
+	}
+
+    void UpdateAI(const uint32 uiDiff)
+	{
+		//Return since we have no target
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+		//debug_log("TIMER_DAMAGE_ONE: %d TIMER_DAMAGE_TWO: %d TIMER_HEAL: %d",TIMER_DAMAGE_ONE,TIMER_DAMAGE_TWO,TIMER_HEAL);
+
+		if(b_healing)
+		{
+			if( i_globalCD < uiDiff)
+			{
+				b_healing = false;
+				i_globalCD = 4000;
+				TIMER_DAMAGE_ONE = COOLDOWN[mob_level][1];
+				TIMER_DAMAGE_TWO = COOLDOWN[mob_level][2];
+			}
+			else
+				i_globalCD -= uiDiff;
+		}
+
+		if((m_creature->GetHealthPercent() < 100.0f) && (TIMER_HEAL < uiDiff))
+		{
+				//debug_log("\t\tSPELL_HEAL");
+				DoScriptText(SAY[mob_level][0], m_creature);
+				m_creature->CastStop();
+				DoCastSpellIfCan(m_creature, SKILL[mob_level][0]);
+				TIMER_HEAL = COOLDOWN[mob_level][0];
+				b_healing = true;
+		}
+		else if(TIMER_DAMAGE_ONE < uiDiff)
+		{
+			//random
+			pTarget = m_creature->SelectRandomUnfriendlyTarget(0, 60);
+			if (pTarget && pTarget->GetTypeId() == TYPEID_PLAYER)
+			{
+				//debug_log("\t\tSPELL_DAMAGE_ONE");
+				DoScriptText(SAY[mob_level][1], m_creature);
+				DoCastSpellIfCan(pTarget, SKILL[mob_level][1]);
+				TIMER_DAMAGE_ONE = COOLDOWN[mob_level][1];
+			}
+		}
+		else if(TIMER_DAMAGE_TWO < uiDiff)
+		{
+			pTarget = m_creature->SelectRandomUnfriendlyTarget(0, 60);
+			if (pTarget && pTarget->GetTypeId() == TYPEID_PLAYER)
+			{
+				//debug_log("\t\tSPELL_DAMAGE_TWO");
+				DoScriptText(SAY[mob_level][2], m_creature);
+				DoCastSpellIfCan(pTarget, SKILL[mob_level][2]);
+				TIMER_DAMAGE_TWO = COOLDOWN[mob_level][2];
+			}
+		}
+		else
+		{
+			TIMER_DAMAGE_ONE -= uiDiff;
+			TIMER_DAMAGE_TWO -= uiDiff;
+			TIMER_HEAL -= uiDiff;
+		}
+		DoMeleeAttackIfReady();
+	}
+};
+
+CreatureAI* GetAI_inferna_schneemann(Creature* pCreature)
+{
+    return new inferna_schneemannAI(pCreature);
+}
+
 
 /*######
 ## oculus_event_ossirian
@@ -628,6 +975,16 @@ void AddSC_oculus_event()
     newscript->Name = "go_oculus_event_statue5";
     newscript->pGOHello = &GOHello_go_oculus_event_statue5;
     newscript->RegisterSelf();
+
+	newscript = new Script;
+    newscript->Name = "inferna_pre_weinachten_npc_room4";
+	newscript->pGossipHello = &GossipHello_inferna;
+	newscript->pGossipSelect = &GossipSelect_inferna;
+	newscript->RegisterSelf();
+
+    newscript->Name = "inferna_pre_weinachten_boss_room4";
+	newscript->GetAI = &GetAI_inferna_schneemann;
+	newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "oculus_event_ossirian";

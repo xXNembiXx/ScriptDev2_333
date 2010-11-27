@@ -147,6 +147,11 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
             m_pInstance->SetData(TYPE_ORAMUS, DONE);
     }
 
+	void Aggro(Unit* pWho)
+	{
+		m_creature->SetInCombatWithZone();
+	}
+
     void EnterCombat(Unit* pWho)
     {
 	   if(Creature* pRagnaros = m_creature->GetCreature(*pWho, m_pInstance->GetData64(DATA_RAGNAROS)))
@@ -438,9 +443,6 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
 		    if(Creature* pSanta = m_creature->GetCreature(*m_creature, m_pInstance->GetData64(DATA_SANTA)))
 				pSanta->SetPhaseMask(1, true);
 		}
-
-			
-
         DoMeleeAttackIfReady();
     }
 };
@@ -476,6 +478,11 @@ struct MANGOS_DLL_DECL oculus_boss_hakkarAI : public ScriptedAI
     void JustDied(Unit* pKiller)
     {
     }
+
+	void Aggro(Unit* pWho)
+	{
+		m_creature->SetInCombatWithZone();
+	}
 
 	void UpdateAI(const uint32 uiDiff)
     {
@@ -543,6 +550,11 @@ struct MANGOS_DLL_DECL oculus_boss_theradrasAI : public ScriptedAI
     {
 		m_uiPhase = 3;
     }
+
+	void Aggro(Unit* pWho)
+	{
+		m_creature->SetInCombatWithZone();
+	}
 
 
     void UpdateAI(const uint32 uiDiff)
@@ -616,6 +628,11 @@ struct MANGOS_DLL_DECL oculus_boss_ragnarosAI : public ScriptedAI
     {
         DoScriptText(SAY_KILL, m_creature);
     }
+
+	void Aggro(Unit* pWho)
+	{
+		m_creature->SetInCombatWithZone();
+	}
 
     void JustDied(Unit* pKiller)
     {

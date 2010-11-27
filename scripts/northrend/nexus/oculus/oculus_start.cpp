@@ -99,6 +99,35 @@ struct MANGOS_DLL_DECL oculus_start_image_oramus1AI : public ScriptedAI
 	}
 };
 
+/*######
+## Portale || Teleports
+######*/
+
+
+bool GOHello_go_oculus_exit(Player* pPlayer, GameObject* pGo)
+{ 
+    ScriptedInstance* m_pInstance = (ScriptedInstance*)pGo->GetInstanceData();
+
+
+	pPlayer->TeleportTo(571, 3878.909f, 6984.500f, 106.320f, 3.156650f);
+    return false;
+
+}
+
+
+bool GOHello_go_oculus_port(Player* pPlayer, GameObject* pGo)
+{ 
+    ScriptedInstance* m_pInstance = (ScriptedInstance*)pGo->GetInstanceData();
+
+
+	pPlayer->TeleportTo(578, 945.987f, 1085.985f, 359.476f, 5.068471f);
+    return false;
+
+}
+
+
+
+
 CreatureAI* GetAI_oculus_start_image_oramus1_trigger1(Creature* pCreature)
 {
     return new oculus_start_image_oramus1_trigger1AI(pCreature);
@@ -121,5 +150,15 @@ void AddSC_oculus_start()
     newscript = new Script;
     newscript->Name = "oculus_start_image_oramus1";
     newscript->GetAI = &GetAI_oculus_start_image_oramus1;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_oculus_exit";
+    newscript->pGOHello = &GOHello_go_oculus_exit;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_oculus_port";
+    newscript->pGOHello = &GOHello_go_oculus_port;
     newscript->RegisterSelf();
 }

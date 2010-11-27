@@ -61,6 +61,7 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
     uint64 m_uiLight2GUID;
 
 
+
     void Initialize()
     {
         memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
@@ -267,7 +268,6 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
                 return m_uiLight1GUID;
             case GO_LIGHT2:
                 return m_uiLight2GUID;
-
         }
         return 0;
     }

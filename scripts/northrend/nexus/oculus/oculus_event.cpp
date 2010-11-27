@@ -151,11 +151,6 @@ struct MANGOS_DLL_DECL oculus_event_edwinAI : public ScriptedAI
 bool GOHello_go_oculus_cannon(Player* pPlayer, GameObject* pGo)
 { 
     ScriptedInstance* m_pInstance = (ScriptedInstance*)pGo->GetInstanceData();
-/*
-    if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_OCULUS_COLLISION)))
-            pGate->SetGoState(GO_STATE_ACTIVE);
-    if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_OCULUS_GATE1)))
-        pGate->SetPhaseMask(128, true); //better than "0" */
 
 	pGo->SummonCreature(NPC_COW, 1088.934937f, 1103.900269f, 436.300354f, 0.839746f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);
 

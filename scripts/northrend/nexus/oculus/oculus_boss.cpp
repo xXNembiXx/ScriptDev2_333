@@ -29,32 +29,47 @@ EndContentData */
 
 #include "precompiled.h"
 #include "oculus.h"
+#include "WorldPacket.h"
 
 
-	uint16 m_uiPhase;
+	uint32 m_uiPhase;
+	bool m_bIsLetsGo;
 
 /*######
 ## oculus_boss_oramus
 ######*/
 
-#define THE_OCULUS				578
-#define SPELL_FLAME_BREATH		57570
+#define THE_OCULUS						578
+#define SPELL_FLAME_BREATH				57570
 
-#define START1					-2500130
-#define START2					-2500131
-#define START3					-2500132
-#define START4					-2500133
-#define START5					-2500134
-#define SECOND					-2500135
-#define THIRD					-2500136
-#define FOURTH					-2500137
+#define START1							-2500130
+#define START2							-2500131
+#define START3							-2500132
+#define START4							-2500133
+#define START5							-2500134
+#define SECOND							-2500135
+#define THIRD							-2500136
+#define FOURTH							-2500137
 
-#define SPELL_ARKAN				58455
+#define SPELL_ARKAN						58455
+#define SPELL_DAZED						8672
+#define SPELL_DIES						29357
+#define SPELL_TOTAL_DEATH				5
 
-#define SPELL_ARMY				67761
-#define SPELL_SHADOW_PAIN		59864
-#define SPELL_CURSE				69404
-#define SPELL_SHADOW_BOLT		36972
+#define SPELL_ARMY						67761
+#define SPELL_SHADOW_PAIN				59864
+#define SPELL_CURSE						69404
+#define SPELL_SHADOW_BOLT				36972
+#define SPELL_HOT_EARTH					22191
+
+#define SANTA3							-2500172
+
+//Britzel Phase
+#define CREATURE_ARCANE_SPHERE			400082
+#define SPELL_GRAVITY_LAPSE_INITIAL		44224                 // Cast at the beginning of every Gravity Lapse
+#define SPELL_GRAVITY_LAPSE_CHANNEL		44251                 // Channeled; blue beam animation to every enemy in range
+#define SPELL_ARCANE_SPHERE_PASSIVE		44263                 // Passive auras on Arcane Spheres
+#define SPELL_POWER_FEEDBACK			44233                 // Stuns him, making him take 50% more damage for 10 seconds. Cast after Gravity Lapse
 
 
 
@@ -82,7 +97,8 @@ static Location WayPoints[] =
 	{1065.169922f, 1046.453613f, 602.709045f}, // 9
 	{1058.607056f, 1048.523193f, 508.360901f}, // 10
 	//Endfight
-	{1105.947998f, 1016.980225f, 602.266113f}  // 11
+	{1105.947998f, 1016.980225f, 602.266113f}, // 11
+	{1104.032715f, 1043.515869f, 614.740845f}  // 12
 };
 
 
@@ -110,15 +126,23 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
 	uint32 m_uiSay6Point;
 
 	uint32 m_uiArmyTimer;
-	uint32 m_uiShadowPainAndCurseTimer;
+	uint32 m_uiCurseTimer;
+	uint32 m_uiShadowTimer;
 	uint32 m_uiShadowBoltTimer;
+	uint32 m_uiHotEarthTimer;
+	uint32 m_uiSecondPhaseTimer;
+	uint32 m_uiSecondPhasePoint;
 
 
     void Reset()
     {
 		m_uiArmyTimer = 0;
-		m_uiShadowPainAndCurseTimer = 0;
+		m_uiShadowTimer = 0;
+		m_uiCurseTimer = 0;
 		m_uiShadowBoltTimer = 0;
+		m_uiHotEarthTimer = 0;
+		m_uiSecondPhaseTimer = 0;
+		m_uiSecondPhasePoint = 0;
 
 		m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
 		m_creature->SetStandState(UNIT_STAND_STATE_SLEEP);
@@ -139,6 +163,8 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
 		m_creature->SetFloatValue(OBJECT_FIELD_SCALE_X, 0.5);
 		m_creature->GetMotionMaster()->MoveTargetedHome();
 
+		m_bIsLetsGo = false;
+
     }
 
     void JustDied(Unit* pKiller)
@@ -149,7 +175,7 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
 
 	void Aggro(Unit* pWho)
 	{
-		m_creature->SetInCombatWithZone();
+		m_creature->SetInCombatWithZone();	
 	}
 
     void EnterCombat(Unit* pWho)
@@ -176,7 +202,6 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
 		SetCombatMovement(false);
 		m_creature->GetMotionMaster()->MoveIdle();
 		m_uiPhase = 1;	
-
 		m_creature->MonsterMove(WayPoints[0].x, WayPoints[0].y, WayPoints[0].z, 500);
     }
 
@@ -194,7 +219,6 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
 		{
 			if(m_uiSayTimer <= uiDiff)
 			{
-				// must be initialized here... 
 				Map* pMap = NULL;
 				switch(m_uiSayPoint)
 				{
@@ -240,13 +264,12 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
 		{
 			if(m_uiSay2Timer <= uiDiff)
 			{
-				// must be initialized here... 
 				Map* pMap2 = NULL;
 				switch(m_uiSay2Point)
 				{
 					case 0:
 						DoScriptText(SECOND, m_creature);
-						m_uiSay2Timer = 3000;
+						m_uiSay2Timer = 5000;
 						break;
 					case 1:
 						m_creature->MonsterMove(WayPoints[2].x, WayPoints[2].y, WayPoints[2].z, 2000);
@@ -267,8 +290,7 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
 		if (m_uiPhase == 3)
 		{
 			if(m_uiSay3Timer <= uiDiff)
-			{
-				// must be initialized here... 
+			{ 
 				Map* pMap3 = NULL;
 				switch(m_uiSay3Point)
 				{
@@ -299,7 +321,6 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
 		{
 			if(m_uiSay5Timer <= uiDiff)
 			{
-				// must be initialized here... 
 				Map* pMap5 = NULL;
 				switch(m_uiSay5Point)
 				{
@@ -379,17 +400,26 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
 					break;
 				case 9:
 					m_uiArmyTimer = 60000;
-					m_uiShadowPainAndCurseTimer = 19000;
+					m_uiShadowTimer = 19000;
+					m_uiCurseTimer = 19000;
 					m_uiShadowBoltTimer = 8000;
+					m_uiHotEarthTimer = 34000;
 					m_uiPhase = 7;
 					m_uiSay6Timer = 500;
 					break;
+
 				}m_uiSay6Point++;
 			}else m_uiSay6Timer -= uiDiff;
 		}
 
 		if (m_uiPhase == 7)
 		{
+			if (m_uiHotEarthTimer < uiDiff)
+			{
+				DoCastSpellIfCan(m_creature->getVictim(), SPELL_HOT_EARTH, true);
+
+				m_uiHotEarthTimer = 34000;
+			}else m_uiHotEarthTimer -= uiDiff;
 
 			if (m_uiArmyTimer < uiDiff)
 			{
@@ -398,15 +428,21 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
 				m_uiArmyTimer = 60000;
 			}else m_uiArmyTimer -= uiDiff;
 
-			if (m_uiShadowPainAndCurseTimer < uiDiff)
+			if (m_uiShadowTimer < uiDiff)
 			{
 				if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
 					DoCastSpellIfCan(pTarget,SPELL_SHADOW_PAIN, true);
+
+				m_uiShadowTimer = 19000;
+			}else m_uiShadowTimer -= uiDiff;
+
+			if (m_uiCurseTimer < uiDiff)
+			{
 				if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
 					DoCastSpellIfCan(pTarget,SPELL_CURSE, true);
 
-				m_uiShadowPainAndCurseTimer = 19000;
-			}else m_uiShadowPainAndCurseTimer -= uiDiff;
+				m_uiCurseTimer = 19000;
+			}else m_uiCurseTimer -= uiDiff;
 
 			if (m_uiShadowBoltTimer < uiDiff)
 			{
@@ -416,18 +452,49 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
 				m_uiShadowBoltTimer = 8000;
 			}else m_uiShadowBoltTimer -= uiDiff;
 			
-			if (m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 10)
+			if ((m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 15) &&(m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 10))
 			{
 				m_uiPhase = 8;
 				m_uiArmyTimer = 0;
-				m_uiShadowPainAndCurseTimer = 0;
+				m_uiCurseTimer = 0;
+				m_uiShadowTimer = 0;
 				m_uiShadowBoltTimer = 0;
+			}
+			
+			//Secondphase
+			if (m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 70)
+			{
+				m_uiArmyTimer = 0;
+				m_uiCurseTimer = 0;
+				m_uiShadowTimer = 0;
+				m_uiShadowBoltTimer = 0;
+				m_uiSecondPhaseTimer = 2000;
+				m_uiPhase = 15;
+			}
+
+			if (m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 50)
+			{
+				m_uiArmyTimer = 0;
+				m_uiCurseTimer = 0;
+				m_uiShadowTimer = 0;
+				m_uiShadowBoltTimer = 0;
+				m_uiSecondPhaseTimer = 2000;
+				m_uiPhase = 15;
+			}
+
+			if (m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 30)
+			{
+				m_uiArmyTimer = 0;
+				m_uiCurseTimer = 0;
+				m_uiShadowTimer = 0;
+				m_uiShadowBoltTimer = 0;
+				m_uiSecondPhaseTimer = 2000;
+				m_uiPhase = 15;
 			}
 		}
 
 		if (m_uiPhase == 8)
 		{
-			m_creature->MonsterMove(WayPoints[11].x, WayPoints[11].y, WayPoints[11].z, 1000);
             m_creature->RemoveAllAuras();
 			m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
 			m_uiPhase = 9;
@@ -435,16 +502,252 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
 
 		if (m_uiPhase == 9)
 		{
-
 			SetCombatMovement(false);
 			m_creature->GetMotionMaster()->MoveIdle();
-			m_creature->SetStandState(UNIT_STAND_STATE_KNEEL);
+			DoCast (m_creature, SPELL_DAZED, true);
 
 		    if(Creature* pSanta = m_creature->GetCreature(*m_creature, m_pInstance->GetData64(DATA_SANTA)))
 				pSanta->SetPhaseMask(1, true);
+
+			if(Player* pPlayer = (Player*)m_creature->getVictim())
+			{
+				pPlayer->TeleportTo(THE_OCULUS, pPlayer->GetPositionX() + 2, pPlayer->GetPositionY() + 2, pPlayer->GetPositionZ(), 5.635f);
+			}
+
+			m_uiPhase = 10;
+		}
+
+		if(m_uiPhase == 11)
+		{
+			DoScriptText(SANTA3, m_creature);
+			m_uiPhase = 12;
+		}
+
+		if(m_uiPhase == 13)
+		{
+			DoCast(m_creature, SPELL_DIES, true);
+			DoCast(m_creature, SPELL_TOTAL_DEATH, true);
+			m_uiPhase = 14;
+		}
+
+		if (m_uiPhase == 15)
+		{
+			if(m_uiSecondPhaseTimer <= uiDiff)
+			{
+				switch(m_uiSecondPhasePoint)
+				{
+				case 0:
+					SetCombatMovement(false);
+					m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+					m_creature->GetMotionMaster()->MoveIdle();
+					m_creature->SetFloatValue(OBJECT_FIELD_SCALE_X, 1);
+					m_creature->SetDisplayId(22460);
+					m_uiSecondPhaseTimer = 1000;
+					break;
+				case 1:
+					m_creature->SetDisplayId(26752);
+					m_creature->SetFloatValue(OBJECT_FIELD_SCALE_X, 0.5);
+					m_creature->AddSplineFlag(SPLINEFLAG_FLYING);
+					m_creature->SetByteFlag(UNIT_FIELD_BYTES_1, 3, 0x02);
+					m_creature->MonsterMove(WayPoints[12].x, WayPoints[12].y, WayPoints[12].z, 3000);
+					m_uiSecondPhaseTimer = 4000;
+					break;
+				case 2:
+					DoCast(m_creature, SPELL_GRAVITY_LAPSE_INITIAL, true);
+					m_uiSecondPhaseTimer = 2500;
+					break;
+				case 3:
+					for(uint8 i = 0; i < 3; ++i)
+                    {
+						if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+						{
+							if (Creature* Orb = DoSpawnCreature(CREATURE_ARCANE_SPHERE, 5, 5, 0, 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 30000))
+								Orb->AI()->AttackStart(pTarget);
+						}
+					}
+					DoCastSpellIfCan(m_creature->getVictim(), SPELL_GRAVITY_LAPSE_CHANNEL);
+					m_uiSecondPhaseTimer = 32000;
+                    break;
+				case 4:
+					m_uiPhase = 6;
+					m_uiSay6Timer = 2000;
+					m_uiSay6Point = 0;
+
+					break;
+
+				}m_uiSecondPhasePoint++;
+			}else m_uiSecondPhaseTimer -= uiDiff;
 		}
         DoMeleeAttackIfReady();
     }
+};
+
+
+
+/*######
+## oculus_arcane_sphere
+######*/
+
+#define SPELL_ARCANE_SPHERE_PASSIVE   44263   // Passive auras on Arcane Spheres 
+
+
+struct MANGOS_DLL_DECL oculus_arcane_sphereAI : public ScriptedAI
+{
+    oculus_arcane_sphereAI(Creature* pCreature) : ScriptedAI(pCreature) {Reset();}
+
+    uint32 DespawnTimer;
+    uint32 ChangeTargetTimer;
+
+    void Reset()
+	{
+		m_creature->AddSplineFlag(SPLINEFLAG_FLYING);
+		m_creature->SetByteFlag(UNIT_FIELD_BYTES_1, 3, 0x02);
+
+        DespawnTimer = 30000;
+        ChangeTargetTimer = urand(6000, 12000);
+
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        DoCastSpellIfCan(m_creature, SPELL_ARCANE_SPHERE_PASSIVE, CAST_TRIGGERED);
+    }
+
+    void UpdateAI(const uint32 diff)
+    {
+        if (DespawnTimer < diff)
+            m_creature->DealDamage(m_creature, m_creature->GetHealth(), NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
+        else DespawnTimer -= diff;
+
+        if (!m_creature->getVictim() || !m_creature->SelectHostileTarget())
+            return;
+
+        if (ChangeTargetTimer < diff)
+        {
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+            {
+                m_creature->TauntApply(pTarget);
+                AttackStart(pTarget);
+            }
+
+            ChangeTargetTimer = urand(5000, 15000);
+        }else ChangeTargetTimer -= diff;
+    }
+};
+
+
+/*######
+## oculus_boss_santa
+######*/
+
+#define SANTA1					-2500170
+#define SANTA2					-2500171
+#define SANTA4					-2500173
+#define SANTA5					-2500174
+#define SANTA6					-2500175
+#define GO_DALARAN				400016
+
+
+
+struct MANGOS_DLL_DECL oculus_boss_santaAI : public ScriptedAI
+{
+    oculus_boss_santaAI(Creature *pCreature) : ScriptedAI(pCreature){Reset();}
+
+	ScriptedInstance* m_pInstance;
+
+	uint32 m_uiMovementTimer;
+	uint8  m_uiWaypointId;
+	uint64 m_uiPlayerGUID;
+	bool   m_bIsPlayer;
+	uint64 m_uiOramusGUID;
+
+	void Reset()
+	{
+		SetCombatMovement(false);
+		m_creature->GetMotionMaster()->MoveIdle();
+		m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+		m_uiMovementTimer = 3000;
+		m_uiWaypointId = 0;
+		m_creature->setFaction(14);
+		m_bIsPlayer = false;
+		m_creature->SetStandState(UNIT_STAND_STATE_STAND);
+		m_uiOramusGUID = 0;
+	}
+
+	void MoveInLineOfSight(Unit *pWho) 
+	{
+		if(!pWho)
+			return;
+
+		if(!m_bIsLetsGo && (m_creature->IsWithinDistInMap(pWho, 120.0f)))
+		{
+			if(pWho->GetTypeId() != TYPEID_PLAYER)
+				return;
+
+			if(Player* pPlayer = (Player*)m_creature->GetUnit(*m_creature, pWho->GetGUID()))
+				if(pPlayer->isGameMaster())
+					return;
+
+		    m_creature->MonsterMove(pWho->GetPositionX()+ urand(0.2, 0.5) , pWho->GetPositionY()+ urand(0.2, 0.5), pWho->GetPositionZ(), 2000);
+			m_uiPlayerGUID = pWho->GetGUID();
+		}
+		m_bIsLetsGo = true;
+	}
+
+	void UpdateAI(uint32 const uiDiff)
+	{
+		if(m_bIsLetsGo)
+		{
+			if(m_uiMovementTimer <= uiDiff)
+			{
+				switch(m_uiWaypointId)
+				{
+					case 0:
+						DoScriptText(SANTA1, m_creature);
+						m_uiMovementTimer = 4000;
+						break;
+					case 1:
+						DoScriptText(SANTA2, m_creature);
+						m_uiMovementTimer = 4000;
+						break;
+					case 2:
+						//if(Creature* pOramus = m_creature->GetCreature(*m_creature, m_pInstance->GetData64(DATA_ORAMUS)))
+							//DoScriptText(SANTA3, pOramus);
+						m_uiPhase = 11;
+						m_uiMovementTimer = 4000;
+						break;
+					case 3:
+						DoScriptText(SANTA4, m_creature);
+						m_uiMovementTimer = 4000;
+						break;
+					case 4:
+						if(Unit* pPlayer = m_creature->GetUnit(*m_creature, m_uiPlayerGUID))
+							DoScriptText(SANTA5, pPlayer);
+						m_bIsPlayer = true;
+						m_uiMovementTimer = 4000;
+						break;
+					case 5:
+						DoScriptText(SANTA6, m_creature);
+						m_uiMovementTimer = 4000;
+						break;
+					case 6:
+						//if(Creature* pOramus = m_creature->GetCreature(*m_creature, m_pInstance->GetData64(DATA_ORAMUS)))
+							//DoCast(pOramus, SPELL_DIES, true);
+						//if(Creature* pOramus = m_creature->GetCreature(*m_creature, m_pInstance->GetData64(DATA_ORAMUS)))
+							//DoCast(pOramus, SPELL_TOTAL_DEATH, true);
+						m_uiPhase = 13;
+						m_uiMovementTimer = 4000;
+						break;
+					case 7:
+						m_creature->SummonGameobject(GO_DALARAN, 1124.058f, 1021.299f, 602.709f, TEMPSUMMON_MANUAL_DESPAWN, 0);
+						m_creature->SummonGameobject(GO_DALARAN, 1073.956f, 1049.259f, 602.709f, TEMPSUMMON_MANUAL_DESPAWN, 0);
+						m_creature->SummonGameobject(GO_DALARAN, 1120.714f, 1080.630f, 602.709f, TEMPSUMMON_MANUAL_DESPAWN, 0);
+						m_uiMovementTimer = 3000;
+					case 8:
+						m_creature->ForcedDespawn();
+						m_uiMovementTimer = 1000;
+
+				}m_uiWaypointId++;
+			}else m_uiMovementTimer -= uiDiff;
+		}
+	}
 };
 
 
@@ -752,6 +1055,16 @@ CreatureAI* GetAI_oculus_boss_phase5_trigger(Creature* pCreature)
     return new oculus_boss_phase5_triggerAI(pCreature);
 }
 
+CreatureAI* GetAI_oculus_boss_santa(Creature* pCreature)
+{
+    return new oculus_boss_santaAI(pCreature);
+}
+
+CreatureAI* GetAI_oculus_arcane_sphere(Creature* pCreature)
+{
+    return new oculus_arcane_sphereAI(pCreature);
+}
+
 void AddSC_oculus_boss()
 {
     Script *newscript;
@@ -779,5 +1092,15 @@ void AddSC_oculus_boss()
     newscript = new Script;
     newscript->Name = "oculus_boss_phase5_trigger";
     newscript->GetAI = &GetAI_oculus_boss_phase5_trigger;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "oculus_boss_santa";
+    newscript->GetAI = &GetAI_oculus_boss_santa;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "oculus_arcane_sphere";
+    newscript->GetAI = &GetAI_oculus_arcane_sphere;
     newscript->RegisterSelf();
 }

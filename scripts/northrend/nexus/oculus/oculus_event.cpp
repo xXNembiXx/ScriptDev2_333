@@ -236,11 +236,6 @@ struct MANGOS_DLL_DECL oculus_event_gate1_cowAI : public ScriptedAI
     }
 };
 
-
-
-
-
-
                                                             /* *** ROOM 2 *** */
 
 #define NPC_SNAKE1		29768
@@ -746,6 +741,7 @@ CreatureAI* GetAI_inferna_schneemann(Creature* pCreature)
 
 #define SPELL_CURSE		25195
 #define SPELL_WIND		25189
+#define SPELL_SHADOW	39026
 
 #define SAY_AGGRO			-2500032
 #define SAY_GATE_PHASE1		-2500033
@@ -765,12 +761,14 @@ struct MANGOS_DLL_DECL oculus_event_ossirianAI : public Scripted_NoMovementAI
 	uint32 m_uiCurseTimer;
 	uint32 m_uiWindTimer;
 	uint32 m_uiAttackTimer;
+	uint32 m_uiShadowTimer;
 
 	bool m_bIsPhase2;
 	bool m_bResetEventRoom2;
 
 	void Reset()
 	{
+		m_uiShadowTimer = 5000;
 		m_uiCurseTimer = 30000;
 		m_uiWindTimer = 12000;
 		m_uiAttackTimer = 5000;
@@ -873,9 +871,7 @@ struct MANGOS_DLL_DECL oculus_event_ossirianAI : public Scripted_NoMovementAI
                 DoCast(pTarget,SPELL_WIND);
 
             m_uiWindTimer = 12000;
-        }
-		else 
-			m_uiWindTimer -= uiDiff;
+        } else m_uiWindTimer -= uiDiff;
 
         if (m_uiCurseTimer < uiDiff)
         {
@@ -883,9 +879,15 @@ struct MANGOS_DLL_DECL oculus_event_ossirianAI : public Scripted_NoMovementAI
                 DoCast(pTarget,SPELL_CURSE);
 
             m_uiCurseTimer = 30000;
-        }
-		else 
-			m_uiCurseTimer -= uiDiff;
+        }else m_uiCurseTimer -= uiDiff;
+
+        if (m_uiShadowTimer < uiDiff)
+        {
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+                DoCast(pTarget,SPELL_SHADOW);
+
+            m_uiShadowTimer = 5000;
+        }else m_uiShadowTimer -= uiDiff;
 
 		if (!m_pInstance)
 			return;
@@ -906,9 +908,7 @@ struct MANGOS_DLL_DECL oculus_event_ossirianAI : public Scripted_NoMovementAI
 			if (m_bIsPhase2 && (m_uiAttackTimer < uiDiff))
 			{
 				m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-			}
-			else 
-				m_uiAttackTimer -= uiDiff;
+			}else m_uiAttackTimer -= uiDiff;
 		}
 
         DoMeleeAttackIfReady();
@@ -980,12 +980,12 @@ void AddSC_oculus_event()
     newscript->RegisterSelf();
 
 	newscript = new Script;
-    newscript->Name = "inferna_pre_weinachten_npc_room4";
+    newscript->Name = "oculus_event_christmas_room4_npc";
 	newscript->pGossipHello = &GossipHello_inferna;
 	newscript->pGossipSelect = &GossipSelect_inferna;
 	newscript->RegisterSelf();
 
-    newscript->Name = "inferna_pre_weinachten_boss_room4";
+    newscript->Name = "oculus_event_christmas_room4_boss";
 	newscript->GetAI = &GetAI_inferna_schneemann;
 	newscript->RegisterSelf();
 

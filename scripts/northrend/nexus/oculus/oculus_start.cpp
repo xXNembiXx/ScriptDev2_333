@@ -104,6 +104,17 @@ struct MANGOS_DLL_DECL oculus_start_image_oramus1AI : public ScriptedAI
 ######*/
 
 
+bool GOHello_go_oculus_dalaran(Player* pPlayer, GameObject* pGo)
+{ 
+    ScriptedInstance* m_pInstance = (ScriptedInstance*)pGo->GetInstanceData();
+
+
+	pPlayer->TeleportTo(571, 5807.797f, 588.338f, 660.939f, 1.685162f);
+    return false;
+
+}
+
+
 bool GOHello_go_oculus_exit(Player* pPlayer, GameObject* pGo)
 { 
     ScriptedInstance* m_pInstance = (ScriptedInstance*)pGo->GetInstanceData();
@@ -126,6 +137,189 @@ bool GOHello_go_oculus_port(Player* pPlayer, GameObject* pGo)
 }
 
 
+							/* ********* Gedönns ********* */
+
+
+/*######
+## Khaoz
+######*/
+
+
+#define KHAOZ_AGGRO				-2500176
+#define KHAOZ_DIED				-2500177
+#define KHAOZ_KILLED			-2500178
+#define KHAOZ_SIGHT				-2500179
+#define KHAOZ_RANDOM1			-2500180
+#define KHAOZ_RANDOM2			-2500181
+
+#define SPELL_ATTACK			16979
+#define SPELL_ALK				11009
+
+
+struct MANGOS_DLL_DECL christmas_eve_khaozAI : public ScriptedAI
+{
+    christmas_eve_khaozAI(Creature *pCreature) : ScriptedAI(pCreature)    
+	{
+        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+        Reset();
+    }
+
+    ScriptedInstance* m_pInstance;
+
+	uint32 m_uiAttackTimer;
+	uint32 m_uiAlkTimer;
+	bool m_bIsHasYelled;
+
+	
+	void Reset()
+	{
+		m_uiAttackTimer = 10000;
+		m_uiAlkTimer = 17000;
+
+		m_bIsHasYelled = false;
+	}
+
+
+	void MoveInLineOfSight(Unit *pWho) 
+	{
+		if(!pWho)
+			return;
+
+		if (!m_bIsHasYelled && (m_creature->IsWithinDistInMap(pWho, 100.0f)))
+		{
+			if(pWho->GetTypeId() != TYPEID_PLAYER)
+				return;
+
+			if(Player* pPlayer = (Player*)m_creature->GetUnit(*m_creature, pWho->GetGUID()))
+				if(pPlayer->isGameMaster())
+					return;
+
+			DoScriptText(KHAOZ_SIGHT, m_creature);
+		}
+		m_bIsHasYelled = true;
+	}
+
+
+    void JustDied(Unit* pKiller)
+    {
+		DoScriptText(KHAOZ_DIED, m_creature);
+    }
+
+	void Aggro(Unit* pWho)
+	{
+		DoScriptText(KHAOZ_AGGRO, m_creature);	
+	}
+
+	void KilledUnit (Unit* pWho)
+	{
+		DoScriptText(KHAOZ_KILLED, m_creature);
+	}
+
+
+    void UpdateAI(const uint32 uiDiff)
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+        if (m_uiAttackTimer < uiDiff)
+        {
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+                DoCast(pTarget,SPELL_ATTACK);
+			DoScriptText(KHAOZ_RANDOM1, m_creature);
+
+            m_uiAttackTimer = 10000;
+        } else m_uiAttackTimer -= uiDiff;
+
+
+        if (m_uiAlkTimer < uiDiff)
+        {
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+                DoCast(pTarget,SPELL_ALK);
+			DoScriptText(KHAOZ_RANDOM2, m_creature);
+
+            m_uiAlkTimer = 17000;
+        } else m_uiAlkTimer -= uiDiff;
+
+        DoMeleeAttackIfReady();
+    }
+};
+
+
+
+/*######
+## Marrvin
+######*/
+
+
+#define MARRVIN_RANDOM1			-2500182
+#define MARRVIN_RANDOM2			-2500183
+#define MARRVIN_AGGRO			-2500185
+#define MARRVIN_DIED			-2500184
+
+#define SPELL_SHADOWFORM		15473
+#define SPELL_SHADOWPAIN		589
+#define SPELL_FEAR				8122
+
+
+struct MANGOS_DLL_DECL christmas_eve_marrvinAI : public ScriptedAI
+{
+    christmas_eve_marrvinAI(Creature *pCreature) : ScriptedAI(pCreature)    
+	{
+        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+        Reset();
+    }
+
+    ScriptedInstance* m_pInstance;
+
+	uint32 m_uiShadowPainTimer;
+	uint32 m_uiFearTimer;
+
+
+	void Reset()
+	{
+		DoCast(m_creature, SPELL_SHADOWFORM, true);
+
+		m_uiShadowPainTimer = 10000;
+		m_uiFearTimer = 16000;
+	}
+
+    void JustDied(Unit* pKiller)
+    {
+		DoScriptText(MARRVIN_AGGRO, m_creature);
+    }
+
+	void Aggro(Unit* pWho)
+	{
+		DoScriptText(MARRVIN_DIED, m_creature);	
+		DoCast(m_creature, SPELL_SHADOWFORM, true);
+	}
+
+    void UpdateAI(const uint32 uiDiff)
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+        if (m_uiShadowPainTimer < uiDiff)
+        {
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+                DoCast(pTarget,SPELL_SHADOWPAIN, true);
+			DoScriptText(MARRVIN_RANDOM1, m_creature);
+
+            m_uiShadowPainTimer = 10000;
+        } else m_uiShadowPainTimer -= uiDiff;
+
+        if (m_uiFearTimer < uiDiff)
+        {
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+                DoCast(pTarget,SPELL_FEAR, true);
+			DoScriptText(MARRVIN_RANDOM2, m_creature);
+
+            m_uiFearTimer = 16000;
+        } else m_uiFearTimer -= uiDiff;
+
+        DoMeleeAttackIfReady();
+    }
+};
 
 
 CreatureAI* GetAI_oculus_start_image_oramus1_trigger1(Creature* pCreature)
@@ -138,9 +332,29 @@ CreatureAI* GetAI_oculus_start_image_oramus1(Creature* pCreature)
     return new oculus_start_image_oramus1AI(pCreature);
 }
 
+CreatureAI* GetAI_christmas_eve_khaoz(Creature* pCreature)
+{
+    return new christmas_eve_khaozAI(pCreature);
+}
+
+CreatureAI* GetAI_christmas_eve_marrvin(Creature* pCreature)
+{
+    return new christmas_eve_marrvinAI(pCreature);
+}
+
 void AddSC_oculus_start()
 {
     Script *newscript;
+
+	newscript = new Script;
+    newscript->Name = "christmas_eve_marrvin";
+    newscript->GetAI = &GetAI_christmas_eve_marrvin;
+    newscript->RegisterSelf();
+
+	newscript = new Script;
+    newscript->Name = "christmas_eve_khaoz";
+    newscript->GetAI = &GetAI_christmas_eve_khaoz;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "oculus_start_image_oramus1_trigger1";
@@ -160,5 +374,10 @@ void AddSC_oculus_start()
     newscript = new Script;
     newscript->Name = "go_oculus_port";
     newscript->pGOHello = &GOHello_go_oculus_port;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_oculus_dalaran";
+    newscript->pGOHello = &GOHello_go_oculus_dalaran;
     newscript->RegisterSelf();
 }

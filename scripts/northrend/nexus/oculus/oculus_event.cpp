@@ -238,10 +238,10 @@ struct MANGOS_DLL_DECL oculus_event_gate1_cowAI : public ScriptedAI
 
                                                             /* *** ROOM 2 *** */
 
-#define NPC_SNAKE1		29768
-#define NPC_SNAKE2		29774
-#define NPC_GURLOC		29920
-#define NPC_GUARD		29829
+#define NPC_SNAKE1		400084
+#define NPC_SNAKE2		400085
+#define NPC_GURLOC		400086
+#define NPC_GUARD		400087
 #define SPELL_FIRE		25465
 
 /*  Logik
@@ -415,6 +415,7 @@ uint32 mob_level = 0;
 bool b_schneeman = false;
 bool b_schneeman_beschworen = false;
 
+
 enum
 {
     SCHNEEMAN_ENTRY_1		=	400073,
@@ -461,6 +462,7 @@ bool GossipHello_inferna(Player* pPlayer, Creature* pCreature)
 		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich brauche Buffs.", 1, GOSSIP_ACTION_INFO_DEF+6);
 		if(!b_schneeman_beschworen)
 			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Lass uns mal was verruecktes machen, komm wir bauen einen Schneemann.", 1, GOSSIP_ACTION_INFO_DEF+7);
+
 		pPlayer->SEND_GOSSIP_MENU(724100, pCreature->GetGUID());
 	}
     return true;

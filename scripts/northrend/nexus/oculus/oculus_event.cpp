@@ -442,7 +442,7 @@ bool GossipHello_inferna(Player* pPlayer, Creature* pCreature)
     if(b_schneeman)
     {
         //pPlayer->SEND_GOSSIP_MENU(100, pCreature->GetGUID());
-        pCreature->MonsterSay("AHHHHHHH, verteidigt euch $N !", LANG_UNIVERSAL, pPlayer->GetGUID());
+        pCreature->MonsterSay("Wir unterhalten uns später $N, besiege zuerst diesen Schneemann dort!", LANG_UNIVERSAL, pPlayer->GetGUID());
     }
     else
     {
@@ -470,7 +470,6 @@ void summon_schneeman(int level,Player* spieler)
         case 3: spieler->SummonCreature(SCHNEEMAN_ENTRY_25, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
         case 4: spieler->SummonCreature(SCHNEEMAN_ENTRY_40, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
     }
-    //spieler_guid_aktiviert = spieler->GetGUID();
     b_schneeman = true;
     b_schneeman_summon = true;
     spieler->CLOSE_GOSSIP_MENU();
@@ -569,6 +568,7 @@ bool GossipSelect_inferna(Player* pPlayer, Creature* pCreature, uint32 uiSender,
 ## Verderbter Schneemann
 ######*/
 
+//Serverdown bei Bossfight. Nochmal möglich?
 
 /*
 HEAL:
@@ -595,39 +595,47 @@ DAMAGE:
 Schneeball:
 65516		KnockBack 50		inst
 25995		KnockBack 200		inst
+
+Aura:
+ID		TICK
+71387	1200	28531
+55799	1600
+70084	3000
+71051	4500
+71052	6000
 */
 
 #define SAY_KILLED_PLAYER	-2500159
 #define SAY_DIED			-2500160
 
-uint32 SKILL[5][3] =
+uint32 SKILL[5][4] =
 {
-//	{ SPELL_HEAL, SPELL_DAMAGE_ONE, SPELL_DAMAGE_TWO  }, //level
-    { 28306,  65516,  71331}, //1er
-    { 54337,  25995,  72268}, //5er
-    { 67969,  31249,  65807}, //10er
-    { 67968,  31249,  68003}, //25er
-    { 67970,  31249,  68005}  //40er
+//	{ SPELL_HEAL,	SPELL_DAMAGE_ONE,	SPELL_DAMAGE_TWO,	AURA  }, //level
+    { 28306,		65516,				71331,				28531}, //1er
+    { 54337,		25995,				72268,				55799}, //5er
+    { 67969,		31249,				65807,				70084}, //10er
+    { 67968,		31249,				68003,				71051}, //25er
+    { 67970,		31249,				68005,				71052}  //40er
 };
 
 uint32 COOLDOWN[5][3] =
 {
-//	{ CD_HEAL, CD_DAMAGE_ONE, CD_DAMAGE_TWO  }, //level
-    { 60000,  10000,  20000}, //1er
-    { 60000,  10000,  25000}, //5er
-    { 60000,  20000,  30000}, //10er
-    { 60000,  20000,  30000}, //25er
-    { 60000,  20000,  30000}  //40er
+//	{ CD_HEAL,		CD_DAMAGE_ONE,		CD_DAMAGE_TWO  }, //level
+    { 60000,		5000,				10000}, //1er
+    { 60000,		5000,				12500}, //5er
+    { 60000,		10000,				15000}, //10er
+    { 60000,		10000,				15000}, //25er
+    { 60000,		10000,				15000}  //40er
 };
 
 int32 SAY[5][3] =
 {
-//	{ ID_HEAL, ID_DAMAGE_ONE, ID_DAMAGE_TWO  }, //level
-    { -2500146,  -2500147,  -2500148}, //1er
-    { -2500149,  -2500150,  -2500151}, //5er
-    { -2500152,  -2500153,  -2500154}, //10er
-    { -2500155,  -2500153,  -2500156}, //25er
-    { -2500157,  -2500153,  -2500158}  //40er
+//	{ ID_HEAL,		ID_DAMAGE_ONE,		ID_DAMAGE_TWO  }, //level
+    { -2500146,		-2500147,			-2500148}, //1er
+    { -2500149,		-2500150,			-2500151}, //5er
+    { -2500152,		-2500153,			-2500154}, //10er
+    { -2500155,		-2500153,			-2500156}, //25er
+    { -2500157,		-2500153,			-2500158}  //40er
 };
 
 struct MANGOS_DLL_DECL inferna_schneemannAI : public ScriptedAI
@@ -644,24 +652,25 @@ struct MANGOS_DLL_DECL inferna_schneemannAI : public ScriptedAI
         //mob_level = 1; // 0 - 4 (+1)
         Reset();
     }
-    ~inferna_schneemannAI()
-    {
-        b_schneeman = false;
-    }
+	void JustDied(Unit * pkiller)
+	{
+		DoScriptText(SAY_DIED, m_creature, pkiller);
+		b_schneeman = false;
+	}
     void Reset()
     {
         TIMER_HEAL = COOLDOWN[mob_level][0];
         TIMER_DAMAGE_ONE = COOLDOWN[mob_level][1];
         TIMER_DAMAGE_TWO = COOLDOWN[mob_level][2];
-        i_globalCD = 4000;
+        i_globalCD = 2700;
         b_healing = false;
     }
-    void JustDied(Unit * pkiller)
+    void Aggro(Unit *who) 
     {
-        DoScriptText(SAY_DIED, m_creature, pkiller);
+		DoCast(m_creature, SKILL[mob_level][3], true);
     }
 
-    void KilledUnit(Unit * pvictim)
+    void KilledUnit(Unit* pvictim)
     {
         DoScriptText(SAY_KILLED_PLAYER, m_creature, pvictim);
     }
@@ -679,7 +688,7 @@ struct MANGOS_DLL_DECL inferna_schneemannAI : public ScriptedAI
             if( i_globalCD < uiDiff)
             {
                 b_healing = false;
-                i_globalCD = 4000;
+                i_globalCD = 2700;
                 TIMER_DAMAGE_ONE = COOLDOWN[mob_level][1];
                 TIMER_DAMAGE_TWO = COOLDOWN[mob_level][2];
             }

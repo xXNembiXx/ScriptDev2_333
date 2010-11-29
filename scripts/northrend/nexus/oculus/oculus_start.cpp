@@ -73,8 +73,29 @@ struct MANGOS_DLL_DECL oculus_start_image_oramus1_trigger1AI : public ScriptedAI
 ## Image of Oramus 1
 ######*/
 
-#define WP_START	-1000000
-#define WP_MIDDLE	-1000000
+
+
+
+
+
+struct Location
+{
+    float x, y, z;
+};
+
+
+static Location WayPoints[] =
+{
+    {1181.859f, 967.893f, 380.574f},   // 0 UP
+    {1176.782f, 1021.785f, 383.654f},  // 1	to the Players
+    {1116.272f, 1068.914f, 373.238f},  // 2 to the Middle
+    {1140.150f, 1086.526f, 369.361f},  // 3 to the Way
+    {1060.427f, 1108.907f, 385.877f},  // 4 to the End
+    {1078.778f, 1125.659f, 376.964f},  // 5 to Ende
+	{1078.149f, 1267.534f, 391.142f}   // 6	to Piss off
+};
+
+
 
 struct MANGOS_DLL_DECL oculus_start_image_oramus1AI : public ScriptedAI
 {
@@ -97,6 +118,8 @@ struct MANGOS_DLL_DECL oculus_start_image_oramus1AI : public ScriptedAI
     {
         return;
     }
+
+
 };
 
 /*######

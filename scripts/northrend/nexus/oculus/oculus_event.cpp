@@ -412,8 +412,7 @@ Geisteraussehen: http://www.mobmap.de/spell?id=9036
 
 //Globale Variable zur bestimmt des levels (für speak,spell,cd)
 uint32 mob_level = 0;
-bool b_schneeman = false;
-bool b_schneeman_summon = false;
+
 
 enum
 {
@@ -437,13 +436,19 @@ enum
     SAY_BUFF    = -2500145
 };
 
+/* 
+m_pInstance->SetData(TYPE_TRIAL, NOT_STARTED);
+m_pInstance->SetData(TYPE_TRIAL, IN_PROGRESS);
+m_pInstance->SetData(TYPE_TRIAL, FAIL);
+m_pInstance->SetData(TYPE_TRIAL, DONE);
+m_pInstance->SetData(TYPE_TRIAL, SPECIAL);
+*/
+
 bool GossipHello_inferna(Player* pPlayer, Creature* pCreature)
 {
-	ScriptedInstance* m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
-
-    if(b_schneeman)
+	ScriptedInstance* m_pInstance = (ScriptedInstance*)pPlayer->GetInstanceData();
+	if(m_pInstance->GetData(TYPE_TRIAL) == IN_PROGRESS)
     {
-        //pPlayer->SEND_GOSSIP_MENU(100, pCreature->GetGUID());
         pCreature->MonsterSay("Wir unterhalten uns später $N, besiege zuerst diesen Schneemann dort!", LANG_UNIVERSAL, pPlayer->GetGUID());
     }
     else
@@ -463,20 +468,21 @@ bool GossipHello_inferna(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-void summon_schneeman(int level,Player* spieler)
+void summon_schneeman(int level,Player* pPlayer)
 {
     mob_level = level;
     switch(level)
     {
-        case 0: spieler->SummonCreature(SCHNEEMAN_ENTRY_1, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
-        case 1: spieler->SummonCreature(SCHNEEMAN_ENTRY_5, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
-        case 2: spieler->SummonCreature(SCHNEEMAN_ENTRY_10, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
-        case 3: spieler->SummonCreature(SCHNEEMAN_ENTRY_25, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
-        case 4: spieler->SummonCreature(SCHNEEMAN_ENTRY_40, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
+        case 0: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_1, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
+        case 1: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_5, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
+        case 2: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_10, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
+        case 3: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_25, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
+        case 4: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_40, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
     }
-    b_schneeman = true;
-    b_schneeman_summon = true;
-    spieler->CLOSE_GOSSIP_MENU();
+	ScriptedInstance* m_pInstance = (ScriptedInstance*)pPlayer->GetInstanceData();
+	m_pInstance->SetData(TYPE_TRIAL, IN_PROGRESS);
+
+    pPlayer->CLOSE_GOSSIP_MENU();
 }
 bool GossipSelect_inferna(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
@@ -647,9 +653,16 @@ struct MANGOS_DLL_DECL inferna_schneemannAI : public ScriptedAI
 	inferna_schneemannAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
 		m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+
         m_creature->MonsterYell("Ihr werdet nie wieder Weihnachten feiern !", LANG_UNIVERSAL, pCreature->GetGUID());
         //mob_level = 1; // 0 - 4 (+1)
         Reset();
+    }
+
+	~inferna_schneemannAI()
+    {
+		if(m_pInstance->GetData(TYPE_TRIAL) != DONE)
+			m_pInstance->SetData(TYPE_TRIAL, FAIL);
     }
 
     ScriptedInstance* m_pInstance;
@@ -666,16 +679,14 @@ struct MANGOS_DLL_DECL inferna_schneemannAI : public ScriptedAI
         TIMER_DAMAGE_ONE = COOLDOWN[mob_level][1];
         TIMER_DAMAGE_TWO = COOLDOWN[mob_level][2];
         i_globalCD = 2700;
-        b_healing = false;
 
         if (m_pInstance)
-            m_pInstance->SetData(TYPE_TRIAL, NOT_STARTED);
-    }
+			m_pInstance->SetData(TYPE_TRIAL, IN_PROGRESS);
+	}
 
 	void JustDied(Unit * pkiller)
 	{
 		DoScriptText(SAY_DIED, m_creature, pkiller);
-		b_schneeman = false;
 
         if (m_pInstance)
             m_pInstance->SetData(TYPE_TRIAL, DONE);

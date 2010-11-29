@@ -238,10 +238,10 @@ struct MANGOS_DLL_DECL oculus_event_gate1_cowAI : public ScriptedAI
 
                                                             /* *** ROOM 2 *** */
 
-#define NPC_SNAKE1		29768
-#define NPC_SNAKE2		29774
-#define NPC_GURLOC		29920
-#define NPC_GUARD		29829
+#define NPC_SNAKE1		400084
+#define NPC_SNAKE2		400085
+#define NPC_GURLOC		400086
+#define NPC_GUARD		400087
 #define SPELL_FIRE		25465
 
 /*  Logik
@@ -446,7 +446,7 @@ m_pInstance->SetData(TYPE_TRIAL, SPECIAL);
 
 bool GossipHello_inferna(Player* pPlayer, Creature* pCreature)
 {
-	ScriptedInstance* m_pInstance = (ScriptedInstance*)pPlayer->GetInstanceData();
+	ScriptedInstance* m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
 	if(m_pInstance->GetData(TYPE_TRIAL) == IN_PROGRESS)
     {
         pCreature->MonsterSay("Wir unterhalten uns später $N, besiege zuerst diesen Schneemann dort!", LANG_UNIVERSAL, pPlayer->GetGUID());

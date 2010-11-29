@@ -16,111 +16,16 @@
 
 /* ScriptData
 SDName: Event
-SDAuthor: Nembi & Sys
+SDAuthor: Nembi
 SD%Complete: 100
 SDComment: Inferna Christmas PreEvent == Entry
 SDCategory: Oculus
 EndScriptData */
 
-/* ContentData
-oculus_start_image_oramus1				Addtion to Inferna Christmas PreEvent
-oculus_start_image_oramus1_trigger1		Addtion to Inferna Christmas PreEvent
-EndContentData */
 
 #include "precompiled.h"
 #include "oculus.h"
 
-/*######
-## Image of Oramus TRIGGER 1 WP START
-######*/
-
-#define NPC_IMAGE_ORAMUS1		400056
-
-
-struct MANGOS_DLL_DECL oculus_start_image_oramus1_trigger1AI : public ScriptedAI
-{
-    oculus_start_image_oramus1_trigger1AI(Creature *pCreature) : ScriptedAI(pCreature)
-    {
-        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
-        Reset();
-    }
-
-    ScriptedInstance* m_pInstance;
-
-    void Reset()
-    {
-    }
-
-    void MoveInLineOfSight(Unit *pWho) 
-    {
-        if(pWho->GetTypeId() != TYPEID_PLAYER)
-          return;
-        m_creature->SummonCreature(NPC_IMAGE_ORAMUS1, 1180.405029f, 969.289368f, 323.325226f, 3.053628f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 999000);
-        m_creature->ForcedDespawn();
-    }
-
-    void UpdateAI(const uint32 diff)
-    {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
-            return;
-
-        DoMeleeAttackIfReady();
-    }
-};
-
-
-/*######
-## Image of Oramus 1
-######*/
-
-
-
-
-
-
-struct Location
-{
-    float x, y, z;
-};
-
-
-static Location WayPoints[] =
-{
-    {1181.859f, 967.893f, 380.574f},   // 0 UP
-    {1176.782f, 1021.785f, 383.654f},  // 1	to the Players
-    {1116.272f, 1068.914f, 373.238f},  // 2 to the Middle
-    {1140.150f, 1086.526f, 369.361f},  // 3 to the Way
-    {1060.427f, 1108.907f, 385.877f},  // 4 to the End
-    {1078.778f, 1125.659f, 376.964f},  // 5 to Ende
-	{1078.149f, 1267.534f, 391.142f}   // 6	to Piss off
-};
-
-
-
-struct MANGOS_DLL_DECL oculus_start_image_oramus1AI : public ScriptedAI
-{
-    oculus_start_image_oramus1AI(Creature *pCreature) : ScriptedAI(pCreature)
-    {
-        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
-        Reset();
-    }
-
-    ScriptedInstance* m_pInstance;
-
-
-    void Reset()
-    {
-        m_creature->AddSplineFlag(SPLINEFLAG_FLYING);
-        m_creature->SetByteFlag(UNIT_FIELD_BYTES_1, 3, 0x02);
-    }
-
-    void EnterCombat()
-    {
-        return;
-    }
-
-
-};
 
 /*######
 ## Portale || Teleports
@@ -158,6 +63,31 @@ bool GOHello_go_oculus_port(Player* pPlayer, GameObject* pGo)
     return false;
 
 }
+
+
+//Teleporter vs Lift
+
+bool GossipHello_oculus_lift(Player* pPlayer, Creature* pCreature)
+{
+	ScriptedInstance* m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+	if(m_pInstance->GetData64(DATA_HAKKAR) != ALIVE)
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Bringt mich nach Oben!" , GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+    
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    return true;
+};
+
+bool GossipSelect_oculus_lift(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    switch(uiAction)
+    {
+        case GOSSIP_ACTION_INFO_DEF+1:
+            pPlayer->CLOSE_GOSSIP_MENU();
+            pPlayer->TeleportTo(578, 1035.594f, 1069.591f, 433.075f, 0.669807f);
+            break;
+    };
+    return true;
+};
 
 
                             /* ********* Gedönns ********* */
@@ -345,15 +275,6 @@ struct MANGOS_DLL_DECL christmas_eve_marrvinAI : public ScriptedAI
 };
 
 
-CreatureAI* GetAI_oculus_start_image_oramus1_trigger1(Creature* pCreature)
-{
-    return new oculus_start_image_oramus1_trigger1AI(pCreature);
-}
-
-CreatureAI* GetAI_oculus_start_image_oramus1(Creature* pCreature)
-{
-    return new oculus_start_image_oramus1AI(pCreature);
-}
 
 CreatureAI* GetAI_christmas_eve_khaoz(Creature* pCreature)
 {
@@ -380,16 +301,6 @@ void AddSC_oculus_start()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "oculus_start_image_oramus1_trigger1";
-    newscript->GetAI = &GetAI_oculus_start_image_oramus1_trigger1;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "oculus_start_image_oramus1";
-    newscript->GetAI = &GetAI_oculus_start_image_oramus1;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
     newscript->Name = "go_oculus_exit";
     newscript->pGOHello = &GOHello_go_oculus_exit;
     newscript->RegisterSelf();
@@ -402,5 +313,11 @@ void AddSC_oculus_start()
     newscript = new Script;
     newscript->Name = "go_oculus_dalaran";
     newscript->pGOHello = &GOHello_go_oculus_dalaran;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "oculus_lift";
+    newscript->pGossipHello = &GossipHello_oculus_lift;
+    newscript->pGossipSelect = &GossipSelect_oculus_lift;
     newscript->RegisterSelf();
 }

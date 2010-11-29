@@ -714,39 +714,33 @@ struct MANGOS_DLL_DECL oculus_boss_santaAI : public ScriptedAI
                 {
                     case 0:
                         DoScriptText(SANTA1, m_creature);
-                        m_uiMovementTimer = 4000;
+                        m_uiMovementTimer = 6000;
                         break;
                     case 1:
                         DoScriptText(SANTA2, m_creature);
-                        m_uiMovementTimer = 4000;
+                        m_uiMovementTimer = 6000;
                         break;
                     case 2:
-                        //if(Creature* pOramus = m_creature->GetCreature(*m_creature, m_pInstance->GetData64(DATA_ORAMUS)))
-                            //DoScriptText(SANTA3, pOramus);
                         m_uiPhase = 11;
-                        m_uiMovementTimer = 4000;
+                        m_uiMovementTimer = 6000;
                         break;
                     case 3:
                         DoScriptText(SANTA4, m_creature);
-                        m_uiMovementTimer = 4000;
+                        m_uiMovementTimer = 6000;
                         break;
                     case 4:
                         if(Unit* pPlayer = m_creature->GetUnit(*m_creature, m_uiPlayerGUID))
                             DoScriptText(SANTA5, pPlayer);
                         m_bIsPlayer = true;
-                        m_uiMovementTimer = 4000;
+                        m_uiMovementTimer = 6000;
                         break;
                     case 5:
                         DoScriptText(SANTA6, m_creature);
-                        m_uiMovementTimer = 4000;
+                        m_uiMovementTimer = 6000;
                         break;
                     case 6:
-                        //if(Creature* pOramus = m_creature->GetCreature(*m_creature, m_pInstance->GetData64(DATA_ORAMUS)))
-                            //DoCast(pOramus, SPELL_DIES, true);
-                        //if(Creature* pOramus = m_creature->GetCreature(*m_creature, m_pInstance->GetData64(DATA_ORAMUS)))
-                            //DoCast(pOramus, SPELL_TOTAL_DEATH, true);
                         m_uiPhase = 13;
-                        m_uiMovementTimer = 4000;
+                        m_uiMovementTimer = 6000;
                         break;
                     case 7:
                         m_creature->SummonGameobject(GO_DALARAN, 1124.058f, 1021.299f, 602.709f, TEMPSUMMON_MANUAL_DESPAWN, 0);

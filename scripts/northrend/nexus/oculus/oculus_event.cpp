@@ -414,7 +414,6 @@ Geisteraussehen: http://www.mobmap.de/spell?id=9036
 uint32 mob_level = 0;
 bool b_schneeman = false;
 bool b_schneeman_summon = false;
-bool m_bIsDead;
 
 enum
 {
@@ -440,6 +439,8 @@ enum
 
 bool GossipHello_inferna(Player* pPlayer, Creature* pCreature)
 {
+	ScriptedInstance* m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+
     if(b_schneeman)
     {
         //pPlayer->SEND_GOSSIP_MENU(100, pCreature->GetGUID());
@@ -453,7 +454,7 @@ bool GossipHello_inferna(Player* pPlayer, Creature* pCreature)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich brauche Geld.", 1, GOSSIP_ACTION_INFO_DEF+4);
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich will mein Geschenke!", 1, GOSSIP_ACTION_INFO_DEF+5);
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich brauche Buffs.", 1, GOSSIP_ACTION_INFO_DEF+6);
-        if(!m_bIsDead)
+        if(m_pInstance->GetData(TYPE_TRIAL) != DONE)
 		{
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Lass uns mal was verruecktes machen, komm wir bauen einen Schneemann.", 1, GOSSIP_ACTION_INFO_DEF+7);
 		}
@@ -666,7 +667,6 @@ struct MANGOS_DLL_DECL inferna_schneemannAI : public ScriptedAI
         TIMER_DAMAGE_TWO = COOLDOWN[mob_level][2];
         i_globalCD = 2700;
         b_healing = false;
-		m_bIsDead = false;
 
         if (m_pInstance)
             m_pInstance->SetData(TYPE_TRIAL, NOT_STARTED);
@@ -674,7 +674,6 @@ struct MANGOS_DLL_DECL inferna_schneemannAI : public ScriptedAI
 
 	void JustDied(Unit * pkiller)
 	{
-		m_bIsDead = true;
 		DoScriptText(SAY_DIED, m_creature, pkiller);
 		b_schneeman = false;
 
@@ -684,6 +683,9 @@ struct MANGOS_DLL_DECL inferna_schneemannAI : public ScriptedAI
 
     void Aggro(Unit *who) 
     {
+        if (m_pInstance)
+            m_pInstance->SetData(TYPE_TRIAL, IN_PROGRESS);
+
 		DoCast(m_creature, SKILL[mob_level][3], true);
     }
 

@@ -133,6 +133,10 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
     uint32 m_uiSecondPhaseTimer;
     uint32 m_uiSecondPhasePoint;
 
+	bool m_bIsFirstMorph;
+	bool m_bIsSecondMorph;
+	bool m_bIsThirdMorph;
+
 
     void Reset()
     {
@@ -164,6 +168,10 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
         m_creature->GetMotionMaster()->MoveTargetedHome();
 
         m_bIsLetsGo = false;
+
+		m_bIsFirstMorph = false;
+		m_bIsSecondMorph = false;
+		m_bIsThirdMorph = false;
 
     }
 
@@ -402,7 +410,7 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
                     m_uiArmyTimer = 60000;
                     m_uiShadowTimer = 19000;
                     m_uiCurseTimer = 19000;
-                    m_uiShadowBoltTimer = 8000;
+                    m_uiShadowBoltTimer = 5000;
                     m_uiHotEarthTimer = 34000;
                     m_uiPhase = 7;
                     m_uiSay6Timer = 500;
@@ -462,8 +470,9 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
             }
             
             //Secondphase
-            if (m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 70)
+            if (!m_bIsFirstMorph && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 70))
             {
+				m_bIsFirstMorph = true;
                 m_uiArmyTimer = 0;
                 m_uiCurseTimer = 0;
                 m_uiShadowTimer = 0;
@@ -472,29 +481,35 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
                 m_uiPhase = 15;
             }
 
-            if (m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 50)
+            if (!m_bIsSecondMorph && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 50))
             {
+				m_bIsSecondMorph = true;
                 m_uiArmyTimer = 0;
                 m_uiCurseTimer = 0;
                 m_uiShadowTimer = 0;
                 m_uiShadowBoltTimer = 0;
                 m_uiSecondPhaseTimer = 2000;
+				m_uiSecondPhasePoint = 0;
                 m_uiPhase = 15;
             }
 
-            if (m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 30)
+            if (!m_bIsThirdMorph && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 30))
             {
+				m_bIsThirdMorph = true;
                 m_uiArmyTimer = 0;
                 m_uiCurseTimer = 0;
                 m_uiShadowTimer = 0;
                 m_uiShadowBoltTimer = 0;
                 m_uiSecondPhaseTimer = 2000;
+				m_uiSecondPhasePoint = 0;
                 m_uiPhase = 15;
             }
         }
 
         if (m_uiPhase == 8)
         {
+            SetCombatMovement(false);
+            m_creature->GetMotionMaster()->MoveIdle();
             m_creature->RemoveAllAuras();
             m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             m_uiPhase = 9;
@@ -502,8 +517,6 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
 
         if (m_uiPhase == 9)
         {
-            SetCombatMovement(false);
-            m_creature->GetMotionMaster()->MoveIdle();
             DoCast (m_creature, SPELL_DAZED, true);
 
             if(Creature* pSanta = m_creature->GetCreature(*m_creature, m_pInstance->GetData64(DATA_SANTA)))

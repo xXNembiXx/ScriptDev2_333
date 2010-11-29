@@ -41,7 +41,7 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
     uint64 m_uiTriggerGUID;
     uint64 m_uiTrigger2GUID;
 
-	uint64 m_uiSantaGUID;
+    uint64 m_uiSantaGUID;
 
     uint64 m_ui1GUID;
 
@@ -74,7 +74,7 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
         m_uiTriggerGUID = 0;
         m_uiTrigger2GUID = 0;
 
-		m_uiSantaGUID = 0;
+        m_uiSantaGUID = 0;
 
         m_ui1GUID = 0;
 
@@ -238,8 +238,8 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
                 return m_uiTriggerGUID;
             case DATA_TRIGGER2:
                 return m_uiTrigger2GUID;
-			case DATA_SANTA:
-				return m_uiSantaGUID;
+            case DATA_SANTA:
+                return m_uiSantaGUID;
             case DATA_1:
                 return m_ui1GUID;
             case GO_OCULUS_COLLISION:

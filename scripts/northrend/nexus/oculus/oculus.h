@@ -22,8 +22,8 @@ enum
     DATA_HAKKAR						= 15,
     DATA_TRIGGER					= 16,
     DATA_1							= 17,
-	DATA_TRIGGER2					= 18,
-	DATA_SANTA						= 19,
+    DATA_TRIGGER2					= 18,
+    DATA_SANTA						= 19,
 
     //Room1
     GO_DATA_COLLISION				= 20,
@@ -50,8 +50,8 @@ enum
     NPC_HAKKAR			= 400079,
     NPC_TRIGGER			= 400068,
     NPC_1				= 400070,
-	NPC_TRIGGER2		= 400080,
-	NPC_SANTA			= 400081,
+    NPC_TRIGGER2		= 400080,
+    NPC_SANTA			= 400081,
 
     //Room1
     GO_OCULUS_CANNON	= 400005,

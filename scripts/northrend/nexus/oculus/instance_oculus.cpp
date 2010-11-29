@@ -182,10 +182,10 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
             case TYPE_OSSIRIAN:
                 m_auiEncounter[2] = uiData;
                 break;
-            case TYPE_TRIAL:
+			case TYPE_TRIAL:
                 m_auiEncounter[3] = uiData;
                 break;
-        }
+		}
 
         if (uiData == DONE)
         {

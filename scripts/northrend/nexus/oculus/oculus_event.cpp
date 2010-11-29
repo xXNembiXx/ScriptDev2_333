@@ -450,7 +450,7 @@ bool GossipHello_inferna(Player* pPlayer, Creature* pCreature)
 {
 	if(b_schneeman)
 	{
-		pCreature->MonsterSay("Wir unterhalten uns später $N, besiege zuerst diesen Schneemann dort!", LANG_UNIVERSAL, pPlayer->GetGUID());
+		pCreature->MonsterSay("Wir unterhalten uns spaeter $N, besiege zuerst diesen Schneemann dort!", LANG_UNIVERSAL, pPlayer->GetGUID());
 	}
 	else
 	{
@@ -460,7 +460,7 @@ bool GossipHello_inferna(Player* pPlayer, Creature* pCreature)
 		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich brauche Geld.", 1, GOSSIP_ACTION_INFO_DEF+4);
 		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich will mein Geschenke!", 1, GOSSIP_ACTION_INFO_DEF+5);
 		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich brauche Buffs.", 1, GOSSIP_ACTION_INFO_DEF+6);
-		if(!b_schneeman_beschworen)
+		//if(!b_schneeman_beschworen)
 			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Lass uns mal was verruecktes machen, komm wir bauen einen Schneemann.", 1, GOSSIP_ACTION_INFO_DEF+7);
 
 		pPlayer->SEND_GOSSIP_MENU(724100, pCreature->GetGUID());
@@ -473,11 +473,16 @@ void summon_schneeman(int level,Player* pPlayer)
     mob_level = level;
     switch(level)
     {
-		case 0: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_1, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
+/*		case 0: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_1, -8938.2f, -145.6f, 83.1f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
+		case 1: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_5, -8938.2f, -145.6f, 83.1f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
+		case 2: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_10, -8938.2f, -145.6f, 83.1f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
+		case 3: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_25, -8938.2f, -145.6f, 83.1f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
+		case 4: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_40, -8938.2f, -145.6f, 83.1f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
+*/		case 0: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_1, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
         case 1: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_5, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
         case 2: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_10, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
         case 3: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_25, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
-        case 4: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_40, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
+		case 4: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_40, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
     }
 	b_schneeman = true;
     pPlayer->CLOSE_GOSSIP_MENU();

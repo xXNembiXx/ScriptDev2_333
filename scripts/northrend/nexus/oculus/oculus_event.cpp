@@ -414,6 +414,7 @@ Geisteraussehen: http://www.mobmap.de/spell?id=9036
 uint32 mob_level = 0;
 bool b_schneeman = false;
 bool b_schneeman_summon = false;
+bool m_bIsDead;
 
 enum
 {
@@ -452,9 +453,11 @@ bool GossipHello_inferna(Player* pPlayer, Creature* pCreature)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich brauche Geld.", 1, GOSSIP_ACTION_INFO_DEF+4);
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich will mein Geschenke!", 1, GOSSIP_ACTION_INFO_DEF+5);
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich brauche Buffs.", 1, GOSSIP_ACTION_INFO_DEF+6);
-        if(!b_schneeman_summon)
+        if(!m_bIsDead)
+		{
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Lass uns mal was verruecktes machen, komm wir bauen einen Schneemann.", 1, GOSSIP_ACTION_INFO_DEF+7);
-        pPlayer->SEND_GOSSIP_MENU(724100, pCreature->GetGUID());
+		}
+		pPlayer->SEND_GOSSIP_MENU(724100, pCreature->GetGUID());
     }
     return true;
 }
@@ -640,23 +643,22 @@ int32 SAY[5][3] =
 
 struct MANGOS_DLL_DECL inferna_schneemannAI : public ScriptedAI
 {
+	inferna_schneemannAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+		m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+        m_creature->MonsterYell("Ihr werdet nie wieder Weihnachten feiern !", LANG_UNIVERSAL, pCreature->GetGUID());
+        //mob_level = 1; // 0 - 4 (+1)
+        Reset();
+    }
+
+    ScriptedInstance* m_pInstance;
+
     Unit* pTarget;
     uint32 TIMER_HEAL, TIMER_DAMAGE_ONE, TIMER_DAMAGE_TWO;
     //uint32 mob_level;
     uint32 i_globalCD;
     bool b_healing;
 
-    inferna_schneemannAI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        m_creature->MonsterYell("Ihr werdet nie wieder Weihnachten feiern !", LANG_UNIVERSAL, pCreature->GetGUID());
-        //mob_level = 1; // 0 - 4 (+1)
-        Reset();
-    }
-	void JustDied(Unit * pkiller)
-	{
-		DoScriptText(SAY_DIED, m_creature, pkiller);
-		b_schneeman = false;
-	}
     void Reset()
     {
         TIMER_HEAL = COOLDOWN[mob_level][0];
@@ -664,7 +666,22 @@ struct MANGOS_DLL_DECL inferna_schneemannAI : public ScriptedAI
         TIMER_DAMAGE_TWO = COOLDOWN[mob_level][2];
         i_globalCD = 2700;
         b_healing = false;
+		m_bIsDead = false;
+
+        if (m_pInstance)
+            m_pInstance->SetData(TYPE_TRIAL, NOT_STARTED);
     }
+
+	void JustDied(Unit * pkiller)
+	{
+		m_bIsDead = true;
+		DoScriptText(SAY_DIED, m_creature, pkiller);
+		b_schneeman = false;
+
+        if (m_pInstance)
+            m_pInstance->SetData(TYPE_TRIAL, DONE);
+	}
+
     void Aggro(Unit *who) 
     {
 		DoCast(m_creature, SKILL[mob_level][3], true);
@@ -677,7 +694,6 @@ struct MANGOS_DLL_DECL inferna_schneemannAI : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff)
     {
-        //Return since we have no target
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 

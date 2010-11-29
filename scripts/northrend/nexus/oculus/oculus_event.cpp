@@ -445,7 +445,7 @@ m_pInstance->SetData(TYPE_TRIAL, SPECIAL);
 
 bool GossipHello_inferna(Player* pPlayer, Creature* pCreature)
 {
-<<<<<<< .mine	ScriptedInstance* m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+	ScriptedInstance* m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
 	switch(m_pInstance->GetData(TYPE_TRIAL))
 	{
 		case IN_PROGRESS:
@@ -467,26 +467,7 @@ bool GossipHello_inferna(Player* pPlayer, Creature* pCreature)
 			pPlayer->SEND_GOSSIP_MENU(724100, pCreature->GetGUID());
 		break;
 	}
-=======	ScriptedInstance* m_pInstance = (ScriptedInstance*)pPlayer->GetInstanceData();
-	if(m_pInstance->GetData(TYPE_TRIAL) == IN_PROGRESS)
-    {
-        pCreature->MonsterSay("Wir unterhalten uns später $N, besiege zuerst diesen Schneemann dort!", LANG_UNIVERSAL, pPlayer->GetGUID());
-    }
-    else
-    {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich brauche Leben.", 1, GOSSIP_ACTION_INFO_DEF+1);
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich brauche Mana.", 1, GOSSIP_ACTION_INFO_DEF+2);
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich brauche Schlaf.", 1, GOSSIP_ACTION_INFO_DEF+3);
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich brauche Geld.", 1, GOSSIP_ACTION_INFO_DEF+4);
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich will mein Geschenke!", 1, GOSSIP_ACTION_INFO_DEF+5);
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich brauche Buffs.", 1, GOSSIP_ACTION_INFO_DEF+6);
-        if(m_pInstance->GetData(TYPE_TRIAL) != DONE)
-		{
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Lass uns mal was verruecktes machen, komm wir bauen einen Schneemann.", 1, GOSSIP_ACTION_INFO_DEF+7);
-		}
-		pPlayer->SEND_GOSSIP_MENU(724100, pCreature->GetGUID());
-    }
->>>>>>> .theirs    return true;
+    return true;
 }
 
 void summon_schneeman(int level,Player* pPlayer)
@@ -500,16 +481,8 @@ void summon_schneeman(int level,Player* pPlayer)
         case 3: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_25, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
         case 4: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_40, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
     }
-<<<<<<< .mine	Creature pCreature;
-	ScriptedInstance* m_pInstance = (ScriptedInstance*)pPlayer->GetInstanceData();
-	m_pInstance->SetData(TYPE_TRIAL, IN_PROGRESS);
-
     pPlayer->CLOSE_GOSSIP_MENU();
-=======	ScriptedInstance* m_pInstance = (ScriptedInstance*)pPlayer->GetInstanceData();
-	m_pInstance->SetData(TYPE_TRIAL, IN_PROGRESS);
-
-    pPlayer->CLOSE_GOSSIP_MENU();
->>>>>>> .theirs}
+}
 bool GossipSelect_inferna(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
     switch(uiAction)

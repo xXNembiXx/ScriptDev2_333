@@ -39,6 +39,9 @@ enum
     GO_DATA_STATUE4					= 28,
     GO_DATA_STATUE5					= 29,
 
+	//Room 4
+	GO_DATA_GATE4					= 30,
+
     //---
     //Entrys
     //---
@@ -68,7 +71,10 @@ enum
     GO_GATE2			= 400013,
     GO_GATE2_ROOTS		= 400011,
     GO_LIGHT1			= 106528,
-    GO_LIGHT2			= 183948
+    GO_LIGHT2			= 183948,
+
+	//Room4
+	GO_GATE4			= 400015
 };
 
 #endif

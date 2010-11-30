@@ -661,6 +661,7 @@ struct MANGOS_DLL_DECL inferna_schneemannAI : public ScriptedAI
 {
 	inferna_schneemannAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
+		m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
         m_creature->MonsterYell("Ihr werdet nie wieder Weihnachten feiern !", LANG_UNIVERSAL, pCreature->GetGUID());
         //mob_level = 1; // 0 - 4 (+1)
         Reset();
@@ -670,6 +671,8 @@ struct MANGOS_DLL_DECL inferna_schneemannAI : public ScriptedAI
 	{
 		b_schneeman_beschworen = false;
 	}
+
+    ScriptedInstance* m_pInstance;
 
     Unit* pTarget;
     uint32 TIMER_HEAL, TIMER_DAMAGE_ONE, TIMER_DAMAGE_TWO;
@@ -690,6 +693,9 @@ struct MANGOS_DLL_DECL inferna_schneemannAI : public ScriptedAI
 		DoScriptText(SAY_DIED, m_creature, pkiller);
 		b_schneeman_beschworen = true;
         b_schneeman = false;
+
+        if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_GATE4)))
+            pGate->SetGoState(GO_STATE_ACTIVE);
 	}
 
     void Aggro(Unit *who) 

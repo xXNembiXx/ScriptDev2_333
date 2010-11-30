@@ -429,7 +429,7 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
             if (m_uiSilenceTimer < uiDiff)
             {
                 if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
-                    DoCastSpellIfCan(pTarget,SPELL_SILENCE, true);
+                    DoCast(pTarget,SPELL_SILENCE, true);
 
                 m_uiSilenceTimer = 8000;
             }else m_uiSilenceTimer -= uiDiff;
@@ -437,14 +437,14 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
             if (m_uiHotEarthTimer < uiDiff)
             {
                 if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
-                    DoCastSpellIfCan(pTarget,SPELL_HOT_EARTH, true);
+                    DoCast(pTarget,SPELL_HOT_EARTH, true);
 
                 m_uiHotEarthTimer = 20000;
             }else m_uiHotEarthTimer -= uiDiff;
 
             if (m_uiArmyTimer < uiDiff)
             {
-                DoCastSpellIfCan(m_creature->getVictim(), SPELL_ARMY, true);
+                DoCast(m_creature->getVictim(), SPELL_ARMY, true);
 
                 m_uiArmyTimer = 40000;
             }else m_uiArmyTimer -= uiDiff;
@@ -452,7 +452,7 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
             if (m_uiShadowTimer < uiDiff)
             {
                 if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
-                    DoCastSpellIfCan(pTarget,SPELL_SHADOW_PAIN, true);
+                    DoCast(pTarget,SPELL_SHADOW_PAIN, true);
 
                 m_uiShadowTimer = 19000;
             }else m_uiShadowTimer -= uiDiff;
@@ -460,7 +460,7 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
             if (m_uiCurseTimer < uiDiff)
             {
                 if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
-                    DoCastSpellIfCan(pTarget,SPELL_CURSE, true);
+                    DoCast(pTarget,SPELL_CURSE, true);
 
                 m_uiCurseTimer = 22000;
             }else m_uiCurseTimer -= uiDiff;
@@ -468,7 +468,7 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
             if (m_uiShadowBoltTimer < uiDiff)
             {
                 if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
-                    DoCastSpellIfCan(pTarget,SPELL_SHADOW_BOLT, true);
+                    DoCast(pTarget,SPELL_SHADOW_BOLT, true);
 
                 m_uiShadowBoltTimer = 5000;
             }else m_uiShadowBoltTimer -= uiDiff;

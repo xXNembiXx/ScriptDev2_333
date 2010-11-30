@@ -61,6 +61,7 @@ EndContentData */
 #define SPELL_CURSE						69404
 #define SPELL_SHADOW_BOLT				36972
 #define SPELL_HOT_EARTH					22191
+#define SPELL_SILENCE					18278
 
 #define SANTA3							-2500172
 
@@ -132,6 +133,7 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
     uint32 m_uiHotEarthTimer;
     uint32 m_uiSecondPhaseTimer;
     uint32 m_uiSecondPhasePoint;
+	uint32 m_uiSilenceTimer;
 
 	bool m_bIsFirstMorph;
 	bool m_bIsSecondMorph;
@@ -140,6 +142,7 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
 
     void Reset()
     {
+		m_uiSilenceTimer = 0;
         m_uiArmyTimer = 0;
         m_uiShadowTimer = 0;
         m_uiCurseTimer = 0;
@@ -407,11 +410,12 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
                     m_uiSay6Timer = 1000;
                     break;
                 case 9:
-                    m_uiArmyTimer = 60000;
+					m_uiSilenceTimer = 8000;
+                    m_uiArmyTimer = 40000;
                     m_uiShadowTimer = 19000;
-                    m_uiCurseTimer = 19000;
+                    m_uiCurseTimer = 22000;
                     m_uiShadowBoltTimer = 5000;
-                    m_uiHotEarthTimer = 34000;
+                    m_uiHotEarthTimer = 20000;
                     m_uiPhase = 7;
                     m_uiSay6Timer = 500;
                     break;
@@ -422,18 +426,27 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
 
         if (m_uiPhase == 7)
         {
+            if (m_uiSilenceTimer < uiDiff)
+            {
+                if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+                    DoCastSpellIfCan(pTarget,SPELL_SILENCE, true);
+
+                m_uiSilenceTimer = 8000;
+            }else m_uiSilenceTimer -= uiDiff;
+
             if (m_uiHotEarthTimer < uiDiff)
             {
-                DoCastSpellIfCan(m_creature->getVictim(), SPELL_HOT_EARTH, true);
+                if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+                    DoCastSpellIfCan(pTarget,SPELL_HOT_EARTH, true);
 
-                m_uiHotEarthTimer = 34000;
+                m_uiHotEarthTimer = 20000;
             }else m_uiHotEarthTimer -= uiDiff;
 
             if (m_uiArmyTimer < uiDiff)
             {
                 DoCastSpellIfCan(m_creature->getVictim(), SPELL_ARMY, true);
 
-                m_uiArmyTimer = 60000;
+                m_uiArmyTimer = 40000;
             }else m_uiArmyTimer -= uiDiff;
 
             if (m_uiShadowTimer < uiDiff)
@@ -449,7 +462,7 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
                 if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                     DoCastSpellIfCan(pTarget,SPELL_CURSE, true);
 
-                m_uiCurseTimer = 19000;
+                m_uiCurseTimer = 22000;
             }else m_uiCurseTimer -= uiDiff;
 
             if (m_uiShadowBoltTimer < uiDiff)
@@ -457,7 +470,7 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
                 if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                     DoCastSpellIfCan(pTarget,SPELL_SHADOW_BOLT, true);
 
-                m_uiShadowBoltTimer = 8000;
+                m_uiShadowBoltTimer = 5000;
             }else m_uiShadowBoltTimer -= uiDiff;
             
             if ((m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 15) &&(m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 10))
@@ -906,6 +919,7 @@ struct MANGOS_DLL_DECL oculus_boss_theradrasAI : public ScriptedAI
 #define SPELL_LEGION_FLAME			66197	
 #define SPELL_FEL_LIGHTNING			46479
 #define SPELL_BURNING_SPRAY			66902
+#define SPELL_RAIN_FIRE				39024
 
 #define SAY_KILL                    -1409017
 #define SAY_MAGMABURST              -1409018
@@ -925,6 +939,7 @@ struct MANGOS_DLL_DECL oculus_boss_ragnarosAI : public ScriptedAI
     uint32 m_uiLegionFlameTimmer;
     uint32 m_uiFelLightningTimer;
     uint32 m_uiBurningSprayTimer;
+	uint32 m_uiRainFireTimer;
 
     void Reset()
     {
@@ -932,6 +947,7 @@ struct MANGOS_DLL_DECL oculus_boss_ragnarosAI : public ScriptedAI
         m_uiLegionFlameTimmer = 15000;
         m_uiFelLightningTimer = 11000;
         m_uiBurningSprayTimer = 23000;
+		m_uiRainFireTimer = 8000;
     }
 
     void KilledUnit(Unit* pVictim)
@@ -957,6 +973,16 @@ struct MANGOS_DLL_DECL oculus_boss_ragnarosAI : public ScriptedAI
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
+
+        if (m_uiRainFireTimer < uiDiff)
+        {
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+                DoCast(pTarget,SPELL_RAIN_FIRE, true);
+
+            m_uiRainFireTimer = 8000;
+        }
+        else 
+            m_uiRainFireTimer -= uiDiff;
 
         if (m_uiLegionFlameTimmer < uiDiff)
         {

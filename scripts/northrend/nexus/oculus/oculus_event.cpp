@@ -405,6 +405,9 @@ Geisteraussehen: http://www.mobmap.de/spell?id=9036
 <13:46:07> "l| Dev |l Nembi": NPC 13636: seltsamer schneemann
 <13:47:00> "l| Dev |l Nembi": strange snowman modelid: 13730
 
+
+http://www.wowhead.com/item=35557/huge-snowball
+
 */
 /*######
 ## Geist der zukümftigem Weinacht
@@ -460,8 +463,11 @@ bool GossipHello_inferna(Player* pPlayer, Creature* pCreature)
 		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich brauche Geld.", 1, GOSSIP_ACTION_INFO_DEF+4);
 		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich will mein Geschenke!", 1, GOSSIP_ACTION_INFO_DEF+5);
 		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ich brauche Buffs.", 1, GOSSIP_ACTION_INFO_DEF+6);
-		//if(!b_schneeman_beschworen)
-			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Lass uns mal was verruecktes machen, komm wir bauen einen Schneemann.", 1, GOSSIP_ACTION_INFO_DEF+7);
+		
+		if(!b_schneeman_beschworen)
+			if(Group* g = pPlayer->GetGroup())
+				if(g->IsLeader(pPlayer->GetGUID()))
+					pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Gruppenleiter: Wir wollen einen Schneemann Bauen!", 1, GOSSIP_ACTION_INFO_DEF+7);
 
 		pPlayer->SEND_GOSSIP_MENU(724100, pCreature->GetGUID());
 	}
@@ -634,11 +640,11 @@ uint32 SKILL[5][4] =
 uint32 COOLDOWN[5][3] =
 {
 //	{ CD_HEAL,		CD_DAMAGE_ONE,		CD_DAMAGE_TWO  }, //level
-    { 60000,		5000,				10000}, //1er
-    { 60000,		5000,				12500}, //5er
-    { 60000,		10000,				15000}, //10er
-    { 60000,		10000,				15000}, //25er
-    { 60000,		10000,				15000}  //40er
+    { 15000,		2000,				8000}, //1er
+    { 20000,		3000,				10000}, //5er
+    { 30000,		7500,				13000}, //10er
+    { 25000,		8500,				13000}, //25er
+    { 20000,		8500,				13000}  //40er
 };
 
 int32 SAY[5][3] =
@@ -721,7 +727,7 @@ struct MANGOS_DLL_DECL inferna_schneemannAI : public ScriptedAI
                 //debug_log("\t\tSPELL_HEAL");
                 DoScriptText(SAY[mob_level][0], m_creature);
                 m_creature->CastStop();
-                DoCastSpellIfCan(m_creature, SKILL[mob_level][0]);
+                DoCast(m_creature, SKILL[mob_level][0],true);
                 TIMER_HEAL = COOLDOWN[mob_level][0];
                 b_healing = true;
         }
@@ -733,7 +739,7 @@ struct MANGOS_DLL_DECL inferna_schneemannAI : public ScriptedAI
             {
                 //debug_log("\t\tSPELL_DAMAGE_ONE");
                 DoScriptText(SAY[mob_level][1], m_creature);
-                DoCastSpellIfCan(pTarget, SKILL[mob_level][1]);
+                DoCast(pTarget, SKILL[mob_level][1],true);
                 TIMER_DAMAGE_ONE = COOLDOWN[mob_level][1];
             }
         }
@@ -744,7 +750,7 @@ struct MANGOS_DLL_DECL inferna_schneemannAI : public ScriptedAI
             {
                 //debug_log("\t\tSPELL_DAMAGE_TWO");
                 DoScriptText(SAY[mob_level][2], m_creature);
-                DoCastSpellIfCan(pTarget, SKILL[mob_level][2]);
+                DoCast(pTarget, SKILL[mob_level][2],true);
                 TIMER_DAMAGE_TWO = COOLDOWN[mob_level][2];
             }
         }

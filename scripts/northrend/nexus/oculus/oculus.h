@@ -42,6 +42,10 @@ enum
 	//Room 4
 	GO_DATA_GATE4					= 30,
 
+	//Ednboss
+	DATA_LIFT_RAGNAROS				= 31,
+	DATA_LIFT_PRINCESS				= 32,
+
     //---
     //Entrys
     //---
@@ -74,7 +78,11 @@ enum
     GO_LIGHT2			= 183948,
 
 	//Room4
-	GO_GATE4			= 400015
+	GO_GATE4			= 400015,
+
+	//Endboss
+	GO_LIFT_RAGNAROS	= 400089,
+	GO_LIFT_PRINCESS	= 400090
 };
 
 #endif

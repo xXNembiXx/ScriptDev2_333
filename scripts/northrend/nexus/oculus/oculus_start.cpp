@@ -89,6 +89,56 @@ bool GossipSelect_oculus_lift(Player* pPlayer, Creature* pCreature, uint32 uiSen
     return true;
 };
 
+//Teleporter Ragnaros
+
+bool GossipHello_oculus_lift_ragnaros(Player* pPlayer, Creature* pCreature)
+{
+	ScriptedInstance* m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Bringt mich zur Prinzessin" , GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+    
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    return true;
+};
+
+bool GossipSelect_oculus_lift_ragnaros(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    switch(uiAction)
+    {
+        case GOSSIP_ACTION_INFO_DEF+1:
+            pPlayer->CLOSE_GOSSIP_MENU();
+            pPlayer->TeleportTo(578, 982.291f, 985.031f, 526.811f, 1.669533f);
+            break;
+    };
+    return true;
+};
+
+//Teleporter Princess
+
+bool GossipHello_oculus_lift_princess(Player* pPlayer, Creature* pCreature)
+{
+	ScriptedInstance* m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Bringt mich zu Oramus" , GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+    
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    return true;
+};
+
+bool GossipSelect_oculus_lift_princess(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    switch(uiAction)
+    {
+        case GOSSIP_ACTION_INFO_DEF+1:
+            pPlayer->CLOSE_GOSSIP_MENU();
+            pPlayer->TeleportTo(578, 1064.387f, 1045.343f, 602.261f, 0.639345f);
+            break;
+    };
+    return true;
+};
+
+
+
+
+
 
                             /* ********* Gedönns ********* */
 
@@ -319,5 +369,17 @@ void AddSC_oculus_start()
     newscript->Name = "oculus_lift";
     newscript->pGossipHello = &GossipHello_oculus_lift;
     newscript->pGossipSelect = &GossipSelect_oculus_lift;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "oculus_lift_ragnaros";
+    newscript->pGossipHello = &GossipHello_oculus_lift_ragnaros;
+    newscript->pGossipSelect = &GossipSelect_oculus_lift_ragnaros;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "oculus_lift_princess";
+    newscript->pGossipHello = &GossipHello_oculus_lift_princess;
+    newscript->pGossipSelect = &GossipSelect_oculus_lift_princess;
     newscript->RegisterSelf();
 }

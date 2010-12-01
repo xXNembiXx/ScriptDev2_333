@@ -679,13 +679,40 @@ struct MANGOS_DLL_DECL inferna_schneemannAI : public ScriptedAI
     //uint32 mob_level;
     uint32 i_globalCD;
     bool b_healing;
+	bool m_bResetEventRoom4;
 
     void Reset()
     {
+		m_bResetEventRoom4
         TIMER_HEAL = COOLDOWN[mob_level][0];
         TIMER_DAMAGE_ONE = COOLDOWN[mob_level][1];
         TIMER_DAMAGE_TWO = COOLDOWN[mob_level][2];
         i_globalCD = 2700;
+
+		Map* pMap = m_creature->GetMap();
+        if(pMap)
+        {
+            Map::PlayerList const &lPlayers = pMap->GetPlayers();
+            for (Map::PlayerList::const_iterator iter = lPlayers.begin(); iter != lPlayers.end(); ++iter)
+            {
+                Player* pPlayer = iter->getSource();
+
+                if(pPlayer->isAlive())
+                    continue;
+
+                m_bResetEventRoom4 = true;
+            }
+        }
+
+        if(m_bResetEventRoom4)
+        {
+            // close root door
+            if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_GATE4)))
+                pGate->SetGoState(GO_STATE_READY);
+
+			b_schneeman_beschworen = false;
+			b_schneeman = false;
+        }
 	}
 
 	void JustDied(Unit * pkiller)

@@ -491,6 +491,7 @@ void summon_schneeman(int level,Player* pPlayer)
 		case 4: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_40, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
     }
 	b_schneeman = true;
+	b_schneeman_beschworen = true;
     pPlayer->CLOSE_GOSSIP_MENU();
 }
 bool GossipSelect_inferna(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
@@ -664,7 +665,6 @@ struct MANGOS_DLL_DECL inferna_schneemannAI : public ScriptedAI
 		m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
         m_creature->MonsterYell("Ihr werdet nie wieder Weihnachten feiern !", LANG_UNIVERSAL, pCreature->GetGUID());
         //mob_level = 1; // 0 - 4 (+1)
-		b_schneeman_beschworen = true;
         Reset();
     }
 

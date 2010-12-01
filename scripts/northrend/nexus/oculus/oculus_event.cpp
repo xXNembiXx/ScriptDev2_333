@@ -484,11 +484,11 @@ void summon_schneeman(int level,Player* pPlayer)
 		case 2: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_10, -8938.2f, -145.6f, 83.1f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
 		case 3: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_25, -8938.2f, -145.6f, 83.1f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
 		case 4: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_40, -8938.2f, -145.6f, 83.1f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
-*/		case 0: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_1, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
-        case 1: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_5, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
-        case 2: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_10, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
-        case 3: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_25, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
-		case 4: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_40, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
+*/		case 0: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_1, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000); break;
+        case 1: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_5, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000); break;
+        case 2: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_10, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000); break;
+        case 3: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_25, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000); break;
+		case 4: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_40, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000); break;
     }
 	b_schneeman = true;
     pPlayer->CLOSE_GOSSIP_MENU();
@@ -664,12 +664,18 @@ struct MANGOS_DLL_DECL inferna_schneemannAI : public ScriptedAI
 		m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
         m_creature->MonsterYell("Ihr werdet nie wieder Weihnachten feiern !", LANG_UNIVERSAL, pCreature->GetGUID());
         //mob_level = 1; // 0 - 4 (+1)
+		b_schneeman_beschworen = true;
+		b_schneeman = true;
         Reset();
     }
 
 	~inferna_schneemannAI()
 	{
-		b_schneeman_beschworen = false;
+		if(b_schneeman)
+		{
+			b_schneeman_beschworen = false;
+			b_schneeman = false;
+		}
 	}
 
     ScriptedInstance* m_pInstance;
@@ -683,46 +689,21 @@ struct MANGOS_DLL_DECL inferna_schneemannAI : public ScriptedAI
 
     void Reset()
     {
-		m_bResetEventRoom4
         TIMER_HEAL = COOLDOWN[mob_level][0];
         TIMER_DAMAGE_ONE = COOLDOWN[mob_level][1];
         TIMER_DAMAGE_TWO = COOLDOWN[mob_level][2];
         i_globalCD = 2700;
-
-		Map* pMap = m_creature->GetMap();
-        if(pMap)
-        {
-            Map::PlayerList const &lPlayers = pMap->GetPlayers();
-            for (Map::PlayerList::const_iterator iter = lPlayers.begin(); iter != lPlayers.end(); ++iter)
-            {
-                Player* pPlayer = iter->getSource();
-
-                if(pPlayer->isAlive())
-                    continue;
-
-                m_bResetEventRoom4 = true;
-            }
-        }
-
-        if(m_bResetEventRoom4)
-        {
-            // close root door
-            if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_GATE4)))
-                pGate->SetGoState(GO_STATE_READY);
-
-			b_schneeman_beschworen = false;
-			b_schneeman = false;
-        }
 	}
 
 	void JustDied(Unit * pkiller)
 	{
 		DoScriptText(SAY_DIED, m_creature, pkiller);
-		b_schneeman_beschworen = true;
         b_schneeman = false;
 
         if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_GATE4)))
             pGate->SetGoState(GO_STATE_ACTIVE);
+		//GO_STATE_READY -> zu
+		//GO_STATE_ACTIVE -> geht auf
 	}
 
     void Aggro(Unit *who) 

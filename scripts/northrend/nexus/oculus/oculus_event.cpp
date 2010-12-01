@@ -484,11 +484,11 @@ void summon_schneeman(int level,Player* pPlayer)
 		case 2: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_10, -8938.2f, -145.6f, 83.1f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
 		case 3: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_25, -8938.2f, -145.6f, 83.1f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
 		case 4: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_40, -8938.2f, -145.6f, 83.1f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
-*/		case 0: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_1, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000); break;
-        case 1: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_5, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000); break;
-        case 2: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_10, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000); break;
-        case 3: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_25, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000); break;
-		case 4: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_40, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000); break;
+*/		case 0: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_1, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
+        case 1: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_5, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
+        case 2: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_10, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
+        case 3: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_25, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
+		case 4: pPlayer->SummonCreature(SCHNEEMAN_ENTRY_40, 1112.58f, 988.83f, 432.52f, 0.111f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000); break;
     }
 	b_schneeman = true;
     pPlayer->CLOSE_GOSSIP_MENU();
@@ -665,7 +665,6 @@ struct MANGOS_DLL_DECL inferna_schneemannAI : public ScriptedAI
         m_creature->MonsterYell("Ihr werdet nie wieder Weihnachten feiern !", LANG_UNIVERSAL, pCreature->GetGUID());
         //mob_level = 1; // 0 - 4 (+1)
 		b_schneeman_beschworen = true;
-		b_schneeman = true;
         Reset();
     }
 

@@ -63,6 +63,7 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 	uint64 m_uiGate4GUID;
 	uint64 m_uiLiftRagnarosGUID;
 	uint64 m_uiLiftPrincessGUID;
+	uint64 m_uiLiftHakkarGUID;
 
 
 
@@ -100,12 +101,14 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 		m_uiGate4GUID = 0;
 		m_uiLiftRagnarosGUID = 0;
 		m_uiLiftPrincessGUID = 0;
+		m_uiLiftHakkarGUID = 0;
     }
 
     void OnCreatureCreate(Creature* pCreature)
     {
         switch(pCreature->GetEntry())
         {
+			case GO_LIFT_HAKKAR : m_uiLiftHakkarGUID = pCreature->GetGUID(); break;
 			case GO_LIFT_RAGNAROS : m_uiLiftRagnarosGUID = pCreature->GetGUID(); break;
 			case GO_LIFT_PRINCESS : m_uiLiftPrincessGUID = pCreature->GetGUID(); break;
             case NPC_ORAMUS: m_uiOramusGUID = pCreature->GetGUID(); break;
@@ -285,6 +288,8 @@ struct MANGOS_DLL_DECL instance_oculus : public ScriptedInstance
 				return m_uiLiftRagnarosGUID;
 			case DATA_LIFT_PRINCESS:
  				return m_uiLiftPrincessGUID;
+			case DATA_LIFT_HAKKAR:
+				return m_uiLiftHakkarGUID;
         }
         return 0;
     }

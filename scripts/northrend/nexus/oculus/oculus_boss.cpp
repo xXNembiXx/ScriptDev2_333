@@ -46,7 +46,7 @@ bool m_bIsLetsGo;
 #define THIRD							-2500136
 #define FOURTH							-2500137
 
-#define SPELL_ARKAN						58455
+#define SPELL_ARKAN						68002
 #define SPELL_DAZED						8672
 #define SPELL_DIES						29357
 #define SPELL_TOTAL_DEATH				5
@@ -171,6 +171,7 @@ struct MANGOS_DLL_DECL oculus_boss_oramus_endAI : public ScriptedAI
 		m_bIsSecondMorph = false;
 		m_bIsThirdMorph = false;
 		m_bIsTheEnd = false;
+		m_uiPhase = 5;
 
     }
 
@@ -323,7 +324,7 @@ struct MANGOS_DLL_DECL oculus_boss_oramus_endAI : public ScriptedAI
                 m_uiShadowTimer = 0;
                 m_uiShadowBoltTimer = 0;
 				m_creature->RemoveAllAuras();
-				m_creature->AttackStop();
+				m_creature->AttackStop(true);
 				m_bIsTheEnd = true;
                 m_uiPhase = 8;
             }
@@ -549,29 +550,25 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
                 switch(m_uiSayPoint)
                 {
                     case 0:
-						m_creature->AttackStop();
+						m_creature->AttackStop(true);
                         DoScriptText(START1, m_creature);
                         if (Creature* pTrigger = m_creature->GetCreature(*m_creature,m_pInstance->GetData64(DATA_TRIGGER)))
                             DoCast(pTrigger,SPELL_FLAME_BREATH,true);
                         m_uiSayTimer = 5000;
                         break;
                     case 1:
-						m_creature->AttackStop();
                         DoScriptText(START2, m_creature);
                         m_uiSayTimer = 5000;
                         break;
                     case 2:
-						m_creature->AttackStop();
                         DoScriptText(START3, m_creature);
                         m_uiSayTimer = 5000;
                         break;
                     case 3:
-						m_creature->AttackStop();
                         DoScriptText(START4, m_creature);
                         m_uiSayTimer = 5000;
                         break;
                     case 4:
-						m_creature->AttackStop();
                         DoScriptText(START5, m_creature);
                         m_uiSayTimer = 2000;
                         break;
@@ -585,7 +582,7 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
                         }
 						m_creature->DeleteThreatList();
 						m_creature->CombatStop(true);
-						m_creature->AttackStop();
+						m_creature->AttackStop(true);
 						m_creature->RemoveAllAuras();
 						m_uiSayTimer = 1000;
 						m_uiSayPoint = 0;
@@ -645,6 +642,9 @@ struct MANGOS_DLL_DECL oculus_arcane_sphereAI : public ScriptedAI
         {
             if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
             {
+				if(pTarget->GetTypeId() != TYPEID_PLAYER)
+					return;
+
                 m_creature->TauntApply(pTarget);
                 AttackStart(pTarget);
             }
@@ -665,7 +665,26 @@ struct MANGOS_DLL_DECL oculus_arcane_sphereAI : public ScriptedAI
 #define SANTA5					-2500174
 #define SANTA6					-2500175
 #define GO_DALARAN				400016
+#define GO_FIRE					191790
 
+struct Spawns
+{
+    float x, y, z;
+};
+
+static Spawns GobSpawns[] =
+{
+    {1093.641f, 1025.536f, 601.840f}, //0
+	{1091.882f, 1050.173f, 602.253f}, //1
+	{1091.622f, 1074.275f, 601.839f}, //2
+	{1110.849f, 1058.160f, 602.111f}, //3
+	{1136.291f, 1051.594f, 601.840f}, //4
+	{1114.103f, 1037.081f, 602.238f}, //5
+	{1124.058f, 1021.299f, 602.709f}, //6
+	{1073.956f, 1049.259f, 602.709f}, //7
+	{1120.714f, 1080.630f, 602.709f}, //8
+	{1093.703f, 1025.102f, 601.840f}  //9
+};
 
 
 struct MANGOS_DLL_DECL oculus_boss_santaAI : public ScriptedAI
@@ -723,7 +742,7 @@ struct MANGOS_DLL_DECL oculus_boss_santaAI : public ScriptedAI
                 {
                     case 0:
 						DoCast (m_creature, SPELL_SPOTLIGHT, true);
-						m_creature->AttackStop();
+						m_creature->AttackStop(true);
                         DoScriptText(SANTA1, m_creature);
                         m_uiMovementTimer = 6000;
                         break;
@@ -754,9 +773,15 @@ struct MANGOS_DLL_DECL oculus_boss_santaAI : public ScriptedAI
                         m_uiMovementTimer = 6000;
                         break;
                     case 7:
-                        m_creature->SummonGameobject(GO_DALARAN, 1124.058f, 1021.299f, 602.709f, TEMPSUMMON_MANUAL_DESPAWN, 0);
-                        m_creature->SummonGameobject(GO_DALARAN, 1073.956f, 1049.259f, 602.709f, TEMPSUMMON_MANUAL_DESPAWN, 0);
-                        m_creature->SummonGameobject(GO_DALARAN, 1120.714f, 1080.630f, 602.709f, TEMPSUMMON_MANUAL_DESPAWN, 0);
+						m_creature->SummonGameobject(GO_FIRE, GobSpawns[1].x, GobSpawns[1].y, GobSpawns[1].z, TEMPSUMMON_MANUAL_DESPAWN, 0);
+						m_creature->SummonGameobject(GO_FIRE, GobSpawns[2].x, GobSpawns[2].y, GobSpawns[2].z, TEMPSUMMON_MANUAL_DESPAWN, 0);
+						m_creature->SummonGameobject(GO_FIRE, GobSpawns[3].x, GobSpawns[3].y, GobSpawns[3].z, TEMPSUMMON_MANUAL_DESPAWN, 0);
+						m_creature->SummonGameobject(GO_FIRE, GobSpawns[4].x, GobSpawns[4].y, GobSpawns[4].z, TEMPSUMMON_MANUAL_DESPAWN, 0);
+						m_creature->SummonGameobject(GO_FIRE, GobSpawns[5].x, GobSpawns[5].y, GobSpawns[5].z, TEMPSUMMON_MANUAL_DESPAWN, 0);
+						m_creature->SummonGameobject(GO_FIRE, GobSpawns[9].x, GobSpawns[9].y, GobSpawns[9].z, TEMPSUMMON_MANUAL_DESPAWN, 0);
+						m_creature->SummonGameobject(GO_DALARAN, GobSpawns[6].x, GobSpawns[6].y, GobSpawns[6].z, TEMPSUMMON_MANUAL_DESPAWN, 0);
+						m_creature->SummonGameobject(GO_DALARAN, GobSpawns[7].x, GobSpawns[7].y, GobSpawns[7].z, TEMPSUMMON_MANUAL_DESPAWN, 0);
+						m_creature->SummonGameobject(GO_DALARAN, GobSpawns[8].x, GobSpawns[8].y, GobSpawns[8].z, TEMPSUMMON_MANUAL_DESPAWN, 0);
                         m_uiMovementTimer = 3000;
                     case 8:
                         m_creature->ForcedDespawn();
@@ -1064,6 +1089,10 @@ struct MANGOS_DLL_DECL oculus_boss_phase5_triggerAI : public ScriptedAI
 
         if(m_creature->IsWithinDistInMap(pWho, 2))
         {
+            if(Player* pPlayer = (Player*)m_creature->GetUnit(*m_creature, pWho->GetGUID()))
+                if(pPlayer->isGameMaster())
+                    return;
+
             m_uiPhase = 5;
             m_creature->ForcedDespawn();
         }

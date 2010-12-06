@@ -488,11 +488,15 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
 	uint32 m_uiSayTimer;
     uint32 m_uiSayPoint;
 
+	bool m_bIsLetsFetz;
+
 
     void Reset()
     {        
 		m_uiSayTimer = 1000;
         m_uiSayPoint = 0;
+
+		m_bIsLetsFetz = false;
 
 		m_creature->SetStandState(UNIT_STAND_STATE_SLEEP);
 		m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -504,21 +508,17 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
 
     void EnterCombat(Unit* pWho)
     {
+	   m_bIsLetsFetz = true;
        if(Creature* pRagnaros = m_creature->GetCreature(*pWho, m_pInstance->GetData64(DATA_RAGNAROS)))
             pRagnaros->Respawn();
        if(Creature* pTheradras = m_creature->GetCreature(*pWho, m_pInstance->GetData64(DATA_THERADRAS)))
             pTheradras->Respawn();
        if(Creature* pTrigger = m_creature->GetCreature(*pWho, m_pInstance->GetData64(DATA_TRIGGER2)))
             pTrigger->Respawn();
-       if(Creature* pSanta = m_creature->GetCreature(*pWho, m_pInstance->GetData64(DATA_SANTA)))
-            pSanta->Respawn();
-
        if(Creature* pRagnaros = m_creature->GetCreature(*pWho, m_pInstance->GetData64(DATA_RAGNAROS)))
             pRagnaros->SetPhaseMask(1, true);
        if(Creature* pTheradras = m_creature->GetCreature(*pWho, m_pInstance->GetData64(DATA_THERADRAS)))
             pTheradras->SetPhaseMask(1, true);
-       if(Creature* pSanta = m_creature->GetCreature(*pWho, m_pInstance->GetData64(DATA_SANTA)))
-            pSanta->SetPhaseMask(128, true);
        if(Creature* pLiftRagnaros = m_creature->GetCreature(*pWho, m_pInstance->GetData64(DATA_LIFT_RAGNAROS)))
             pLiftRagnaros->SetPhaseMask(128, true);
        if(Creature* pLiftPrincess = m_creature->GetCreature(*pWho, m_pInstance->GetData64(DATA_LIFT_PRINCESS)))
@@ -529,7 +529,7 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
         m_creature->SetByteFlag(UNIT_FIELD_BYTES_1, 3, 0x02);
         SetCombatMovement(false);
         m_creature->GetMotionMaster()->MoveIdle();
-        m_uiPhase = 1;	
+        m_bIsLetsFetz = true;	
         m_creature->MonsterMove(WayPoints[0].x, WayPoints[0].y, WayPoints[0].z, 500);
     }
 
@@ -542,7 +542,7 @@ struct MANGOS_DLL_DECL oculus_boss_oramusAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-        if (m_uiPhase == 1)
+        if (m_bIsLetsFetz)
         {
             if(m_uiSayTimer <= uiDiff)
             {
@@ -717,7 +717,7 @@ struct MANGOS_DLL_DECL oculus_boss_santaAI : public ScriptedAI
         if(!pWho)
             return;
 
-        if(!m_bIsLetsGo && (m_creature->IsWithinDistInMap(pWho, 120.0f)))
+        if(!m_bIsLetsGo && (m_creature->IsWithinDistInMap(pWho, 100.0f)))
         {
             if(pWho->GetTypeId() != TYPEID_PLAYER)
                 return;
